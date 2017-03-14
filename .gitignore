@@ -5,3 +5,7 @@ node_modules
 # VS CODE settings
 
 .vscode
+
+# debugger logs
+
+npm-debug.log
