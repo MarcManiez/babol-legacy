@@ -20,6 +20,8 @@ const express = require('express');
 const path = require('path');
 const morgan = require('morgan');
 
+const routes = require('./routes');
+
 const app = express();
 
 const port = process.env.PORT || 8000;
@@ -27,4 +29,6 @@ const port = process.env.PORT || 8000;
 app.listen(port);
 
 app.use(morgan('dev'));
+app.use('/api', routes);
+
 app.use(express.static(path.join(__dirname, '../client')));
