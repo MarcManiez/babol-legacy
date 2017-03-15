@@ -4,7 +4,8 @@
   "description": "Share music links seamslessly across services.",
   "main": "server/server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "debug": "node --nolazy --debug-brk=9222 server/server.js"
   },
   "keywords": [
     "music",
@@ -20,5 +21,10 @@
     "eslint-plugin-jsx-a11y": "^4.0.0",
     "eslint-plugin-react": "^6.9.0",
     "nodemon": "^1.11.0"
+  },
+  "dependencies": {
+    "axios": "^0.15.3",
+    "express": "^4.15.2",
+    "morgan": "^1.8.1"
   }
 }
