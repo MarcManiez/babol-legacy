@@ -10,4 +10,7 @@ module.exports = {
     }
     return new Error('Invalid link or unsupported service.');
   },
+  searchLink(link) {
+
+  },
 };

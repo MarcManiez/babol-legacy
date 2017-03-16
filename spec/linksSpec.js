@@ -1,6 +1,6 @@
 const expect = require('chai').expect;
 
-const detectService = require('../server/controllers/urlController').detectService;
+const detectService = require('../server/controllers/linksController').detectService;
 
 describe('Link Factory', () => {
   const error = new Error('Invalid link or unsupported service.');
