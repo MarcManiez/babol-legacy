@@ -2,8 +2,12 @@ const expect = require('chai').expect;
 
 const detectService = require('../server/controllers/linksController').detectService;
 
-describe('Link Factory', () => {
+describe('Links', () => {
   const error = new Error('Invalid link or unsupported service.');
+
+  it('should return an error if no link is provided', () => {
+    expect(detectService()).to.eql(error);
+  });
 
   it('should correctly detect valid apple links', () => {
     expect(detectService('https://itun.es/us/8FRu')).to.equal('apple');
