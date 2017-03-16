@@ -14,7 +14,8 @@
         "no-underscore-dangle": 0,
         "default-case": 0,
         "guard-for-in": 0,
-        "no-continue": 0
+        "no-continue": 0,
+        "no-unused-expressions": 0
     },
     "settings": {
         "import/resolver": {
