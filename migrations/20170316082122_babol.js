@@ -1,4 +1,3 @@
-
 exports.up = (knex, Promise) => Promise.all([
   knex.schema.createTable('artists', (artists) => {
     artists.increments('id').primary();
