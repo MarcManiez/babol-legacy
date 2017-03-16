@@ -1,5 +1,10 @@
 
 exports.up = (knex, Promise) => Promise.all([
+  knex.schema.createTable('artists', (artists) => {
+    artists.increments('id').primary();
+    artists.string('name').unique().notNullable();
+    artists.timestamps();
+  }),
   knex.schema.createTable('albums', (albums) => {
     albums.increments('id').primary();
     albums.string('name').notNullable();
@@ -19,8 +24,8 @@ exports.up = (knex, Promise) => Promise.all([
   }),
   knex.schema.createTable('links', (links) => {
     links.increments('id').primary();
-    links.string('appleLink').unique();
-    links.string('spotifyLink').unique();
+    links.string('apple').unique();
+    links.string('spotify').unique();
     links.string('type').notNullable();
     links.integer('artist_id').unsigned();
     links.foreign('artist_id').references('artists.id');
@@ -38,4 +43,5 @@ exports.down = (knex, Promise) => Promise.all([
   knex.schema.dropTable('albums'),
   knex.schema.dropTable('songs'),
   knex.schema.dropTable('links'),
+  knex.schema.dropTable('artists'),
 ]);
