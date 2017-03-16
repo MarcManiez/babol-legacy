@@ -1,6 +1,6 @@
 const expect = require('chai').expect;
 
-const detectService = require('../server/factories/urlFactory');
+const detectService = require('../server/factories/urlFactory').detectService;
 
 describe('Scrubd', () => {
   const error = new Error('Invalid link or unsupported service.');
@@ -10,10 +10,10 @@ describe('Scrubd', () => {
   });
 
   it('should correctly detect valid spotify links', () => {
-    expect(detectService('https://play.spotify.com/artist/0BTfBwYC5Mw5ezDg91JBma')).to.equal('apple');
+    expect(detectService('https://play.spotify.com/artist/0BTfBwYC5Mw5ezDg91JBma')).to.equal('spotify');
   });
 
   it('should correctly detect invalid links', () => {
-    expect(detectService('https://iun.e/us/8FRu')).to.equal(error);
+    expect(detectService('https://iun.e/us/8FRu')).to.eql(error);
   });
 });
