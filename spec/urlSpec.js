@@ -1,8 +1,8 @@
 const expect = require('chai').expect;
 
-const detectService = require('../server/factories/urlFactory').detectService;
+const detectService = require('../server/controllers/urlController').detectService;
 
-describe('Scrubd', () => {
+describe('Link Factory', () => {
   const error = new Error('Invalid link or unsupported service.');
 
   it('should correctly detect valid apple links', () => {
