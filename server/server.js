@@ -29,6 +29,7 @@ const port = process.env.PORT || 8000;
 
 app.listen(port);
 
+// TODO: separate middleware into new file
 app.use(morgan('dev'));
 app.use('/api', routes);
 
