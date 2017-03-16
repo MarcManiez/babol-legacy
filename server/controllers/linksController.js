@@ -1,4 +1,5 @@
 const Link = require('../../database/models/link');
+const helpers = require('./helpers');
 
 module.exports = {
   detectService(link) {
@@ -14,20 +15,7 @@ module.exports = {
     return error;
   },
   searchLink(link, service) {
-    return new Promise((resolve, reject) => {
-      if (arguments.length <= 1) reject(new Error('Invalid link or unsupported service.'));
-      Link.where({ [service]: link }).fetch({ withRelated: ['artist', 'song', 'album'] })
-      .then((linkInstance) => {
-        // console.log(JSON.parse(JSON.stringify(linkInstance)));
-        console.log('LINK INSTANCE', linkInstance);
-        if (linkInstance === null) reject(linkInstance);
-        else {
-          resolve(linkInstance);
-        }
-      })
-      .catch((err) => {
-        reject(err);
-      });
-    });
+    return Link.where({ [service]: link }).fetch({ withRelated: ['artist', 'song', 'album'], require: true })
+    .then(linkInstance => helpers.formatLink(linkInstance));
   },
 };
