@@ -17,12 +17,12 @@ module.exports = {
     });
   },
 
-  searchLink(link, service) { // TODO: this needs to be remade into a manual promise to reject when there are too few arguments.
-    return Link.where({ [service]: link }).fetch({ withRelated: ['artist', 'song', 'album'], require: true }) // TODO: empty responses need to be thenable.
+  searchLink(link, service) {
+    return Link.where({ [service]: link }).fetch({ withRelated: ['artist', 'song', 'album'] })
     .then(linkInstance => helpers.formatLink(linkInstance));
   },
 
-  post(req, res) {
+  post(req, res) { // TODO: needs tests
     const link = req.body.link;
     return module.exports.detectService(link)
     .then(service => module.exports.searchLink(link, service))
