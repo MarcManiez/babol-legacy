@@ -26,6 +26,14 @@ module.exports = {
     getInfo(longUrl) { // TODO: needs tests
 
     },
+
+    getId(longUrl) {
+      return new Promise((resolve, reject) => {
+        if (!longUrl) reject('Error: no link provided id.');
+        const id = longUrl.match(/\d+$/g);
+        id ? resolve(id[0]) : reject('Error: id could not be extracted.');
+      });
+    },
   },
   spotify: {
     getInfo(link) {
