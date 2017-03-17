@@ -1,5 +1,4 @@
 const axios = require('axios');
-// create functions that retrieve link type + artist + (album) + (song)
 
 module.exports = {
   apple: {
@@ -23,8 +22,16 @@ module.exports = {
       });
     },
 
-    getInfo(longUrl) { // TODO: needs tests
-
+    getInfo(id) {
+      return axios.get(`https://itunes.apple.com/lookup?id=${id}`)
+      .then((response) => {
+        response = response.data.results[0];
+        const info = {};
+        info.artist = response.artistName;
+        if (response.collectionName) info.album = response.collectionName;
+        if (response.trackName) info.song = response.trackName;
+        return info;
+      });
     },
 
     getId(longUrl) {
