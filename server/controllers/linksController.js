@@ -24,11 +24,9 @@ module.exports = {
 
   post(req, res) {
     const link = req.body.link;
-    const service = module.exports.detectService(link);
-    if (service.constructor === Error) res.status(404).render('404'); // TODO: this needs to be a promise. You'll have to redo your tests.
-    return module.exports.searchLink(link, service)
+    return module.exports.detectService(link)
+    .then(service => module.exports.searchLink(link, service))
     .then((linkInstance) => {
-      console.log('LINKINSTANCE', linkInstance);
       res.render('links', linkInstance);
     })
     .catch((err) => {
