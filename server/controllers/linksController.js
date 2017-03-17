@@ -18,4 +18,17 @@ module.exports = {
     return Link.where({ [service]: link }).fetch({ withRelated: ['artist', 'song', 'album'], require: true })
     .then(linkInstance => helpers.formatLink(linkInstance));
   },
+  post(req, res) {
+    const link = req.body.link;
+    const service = module.exports.detectService(link);
+    if (service.constructor === Error) res.status(404).render('404');
+    return module.exports.searchLink(link, service)
+    .then((linkInstance) => {
+      console.log('LINKINSTANCE', linkInstance);
+      res.render('links', linkInstance);
+    })
+    .catch((err) => {
+      res.status(404).render('404');
+    });
+  },
 };
