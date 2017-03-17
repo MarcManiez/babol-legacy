@@ -1,7 +1,7 @@
 const routes = require('express').Router();
 
-routes.post('/link', (req, res, next) => {
-  res.redirect('/links.html');
-});
+const links = require('./controllers/linksController');
+
+routes.post('/link', links.post);
 
 module.exports = routes;
