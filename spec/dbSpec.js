@@ -20,17 +20,20 @@ describe('Database Controller', () => {
         expect(link.album.name).to.equal('Turning Point');
         expect(link.song.name).to.equal('Fantasy in D');
         done();
-      });
+      })
+      .catch(err => done(err));
     });
 
     it('should correctly detect if a link is being requested from the wrong service', (done) => {
       searchLink('https://open.spotify.com/track/2OWKDnQje6CyuUHtOWVuD9', 'apple')
-      .then((link) => { expect(link).to.be.falsy; done(); });
+      .then((link) => { expect(link).to.be.falsy; done(); })
+      .catch(err => done(err));
     });
 
     it('should correctly detect if a link is not inside the database', (done) => {
       searchLink('https://itun.es/us/kD24B', 'apple')
-      .then((link) => { expect(link).to.be.falsy; done(); });
+      .then((link) => { expect(link).to.be.falsy; done(); })
+      .catch(err => done(err));
     });
   });
 });
