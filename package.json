@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "axios": "^0.15.3",
+    "body-parser": "^1.17.1",
     "bookshelf": "^0.10.3",
     "express": "^4.15.2",
     "knex": "^0.12.7",
