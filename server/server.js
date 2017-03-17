@@ -1,29 +1,16 @@
-// const axios = require('axios');
-
-// // axios.get('https://itun.es/us/1sl')
-// axios.get('https://itun.es/us/DSm?i=51938')
-// .then((response) => {
-//   debugger;
-//   console.log(typeof response);
-//   // for (const prop in response) {
-//   //   if (prop !== 'data') {
-//   //     console.log(prop, response[prop]);
-//   //   }
-//   // }
-//   console.log('itunes response:', response);
-// })
-// .catch((err) => {
-//   console.log('error fetching itunes link:', err);
-// });
-
 const express = require('express');
 const path = require('path');
 const morgan = require('morgan');
+const swig = require('swig');
+const bodyParser = require('body-parser');
 
 const db = require('../connection');
 const routes = require('./routes');
 
 const app = express();
+
+app.engine('html', swig.renderFile);
+app.set('view engine', 'html');
 
 const port = process.env.PORT || 8000;
 
@@ -31,6 +18,7 @@ app.listen(port);
 
 // TODO: separate middleware into new file
 app.use(morgan('dev'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.get('/', (req, res) => res.render('index'));
 app.use('/api', routes);
-
-app.use(express.static(path.join(__dirname, '../client')));
