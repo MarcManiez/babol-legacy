@@ -41,10 +41,37 @@ module.exports = {
     });
   },
 
+  createLink(info) {
+    const instances = [];
+    console.log('CREATING LINK WITH THIS INFO', info);
+    return helpers.findOrCreate(Artist, { name: info.artist })
+    .then((artist) => {
+      instances.push(artist);
+      return info.album ? helpers.findOrCreate(Album, { name: info.album, artist_id: artist.id }) : null;
+    })
+    .then((album) => {
+      instances.push(album);
+      const properties = { name: info.song, artist_id: instances[0].id };
+      if (album) properties.album_id = album.id;
+      return info.song ? helpers.findOrCreate(Song, properties) : null;
+    })
+    .then((song) => {
+      instances.push(song);
+      const properties = { type: info.type, artist_id: instances[0].id };
+      if (instances[1]) properties.album_id = instances[1].id;
+      if (song) properties.song_id = song.id;
+      return helpers.findOrCreate(Link, properties);
+    });
+  },
+
   post(req, res) {
     const link = req.body.link;
     let service;
     let info;
+    let linkGroup;
+    let links;
+    const remainingServices = helpers.services.slice();
+    remainingServices.slice(remainingServices.indexOf(service), 1);
     return module.exports.detectService(link)
     .then((musicService) => {
       service = musicService;
@@ -57,18 +84,20 @@ module.exports = {
       return module.exports.searchLink(info);
     })
     .then((linkInstance) => {
+      linkGroup = linkInstance;
+      links = { [service]: link };
+      // you can make this whole things dryer by finding all the missing links here first
+      // store them in an object litteral
+      // use a conditional, depending on whether you've already dug up a link group
+      // don't forget that you have access to one because the user just provided you a link!
+      return Promise.all(remainingServices.map((musicService) => {
+        return services[musicService].getLink(info).then((permaLink) => { links[musicService] = permaLink; });
+      }));
+    })
+    .then(() => module.exports.createLink(info))
+    .then((linkInstance) => {
       // do we have a link instance for this item? ==> make a link controller method for this purpose only ==> need type and content name
-      if (linkInstance) {
-        // if so, find all the missing services UNCOMMENT BELOW
-        // return Promise.all(helpers.findMissingServices(linkInstance).map((musicService) => {
-        //   return services[musicService].getLink(info).then(permaLink => linkInstance.save({ [service]: permaLink }));
-        // }))
-        // .then(() => res.render('links', helpers.formatLink(linkInstance))); // add tests to reflect the newly fetched spotify link
-        res.render('links', helpers.formatLink(linkInstance));
-      }
-      // return Promise.all(...);
-      // if not, create the link instance (findOrCreate all the songs / artists / albums), get their IDs. PROBABLY make a helper method for this.
-      // populate all the missing links
+      res.render('links', helpers.formatLink(linkGroup || linkInstance));
     })
     .catch((err) => {
       res.status(404).render('404');
