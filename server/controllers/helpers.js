@@ -8,7 +8,12 @@ module.exports = {
       return result;
     });
   },
-  findMissingServices(linkInstance) {
-
+  findMissingServices(linkInstance) { // given a group of links, helps us identify which ones are missing
+    const services = module.exports.services.slice();
+    for (const column in linkInstance) {
+      const index = services.indexOf(column);
+      if (index >= 0) services.splice(index, 1);
+    }
+    return services;
   },
 };
