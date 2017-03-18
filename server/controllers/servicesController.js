@@ -28,6 +28,9 @@ module.exports = {
         response = response.data.results[0];
         const info = {};
         info.artist = response.artistName;
+        info.type = response.wrapperType;
+        if (info.type === 'collection') info.type = 'album';
+        if (info.type === 'track') info.type = 'song';
         if (response.collectionName) info.album = response.collectionName;
         if (response.trackName) info.song = response.trackName;
         return info;
