@@ -37,9 +37,25 @@ describe('Links Controler', () => {
   });
 
   describe('searchLink', () => {
-    // given a type and a name, it should try to find a matching record (with related entities), or return null if it can't
-    // example of a song that should never be in the DB, https://itun.es/us/kD24B?i=467888110 search and delete in the before hook
-    // 
+    before(() => Link.where({ type: 'song', apple: 'https://itun.es/us/kD24B?i=467888110' }).destroy());
+    after(() => Link.where({ type: 'song', apple: 'https://itun.es/us/kD24B?i=467888110' }).destroy());
+
+    it('should find a matching record (with related entities) if such a record exists', (done) => {
+      linksController.searchLink({ type: 'song', song: 'Fantasy in D', album: 'Turning Point', artist: 'Aaron Goldberg' })
+      .then((linkInstance) => {
+        expect(linkInstance.attributes.spotify).to.equal('https://open.spotify.com/track/2OWKDnQje6CyuUHtOWVuD9');
+        expect(linkInstance.attributes.apple).to.equal('https://itun.es/us/nZ-wz?i=425454830');
+        expect(linkInstance.relations.artist.attributes.name).to.equal('Aaron Goldberg');
+        expect(linkInstance.relations.album.attributes.name).to.equal('Turning Point');
+        expect(linkInstance.relations.song.attributes.name).to.equal('Fantasy in D');
+        done();
+      })
+      .catch(err => done(err));
+    });
+
+    it('should resolve to null if a matching record does not exist', () => {
+      expect(linksController.searchLink({ type: 'song', song: 'La Zoubida' })).to.eventually.be.null;
+    });
   });
 
   describe('post', () => {
