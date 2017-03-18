@@ -8,7 +8,7 @@ chai.use(chaiAsPromised);
 // TODO: refactor with chaiAsPromised
 
 describe('Services Controller', () => {
-  describe('Apple', () => {
+  xdescribe('Apple', () => {
     describe('getUrl', () => {
       it('should return the long form version of a shared url given a valid link', (done) => {
         services.apple.getUrl('https://itun.es/us/ISGKF?i=529664804')
@@ -99,6 +99,17 @@ describe('Services Controller', () => {
         services.apple.getId('https://itunes.apple.com/us/artist/aaron-goldberg/id5421052/')
         .then()
         .catch((err) => { expect(err).to.equals('Error: id could not be extracted.'); done(); });
+      });
+    });
+  });
+
+  describe('Spotify', () => {
+    describe('getLink', () => {
+      // TODO: make test ensuring that function is always called with a type property on its params argument.
+      // TODO: make test ensuring that function handles empty search results
+      it('should retrieve a permalink corresponding to the provided information, if Spotify has it in store', () => {
+        const params = { q: 'La danse des canards', type: 'song' };
+        return expect(services.spotify.getLink(params)).to.eventually.equal('https://open.spotify.com/track/2iHRw6k2TSRE9IVQ3mJ8rm');
       });
     });
   });
