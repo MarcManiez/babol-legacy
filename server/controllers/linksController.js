@@ -22,7 +22,7 @@ module.exports = {
     });
   },
 
-  searchLink(info) {
+  searchLink(info) { // searches for a group of links based on its type and its song/album/artist name
     const type = info.type;
     const foreignKeyColumn = `${type}_id`;
     return Promise.all([
@@ -44,6 +44,7 @@ module.exports = {
   post(req, res) {
     const link = req.body.link;
     let service;
+    let info;
     return module.exports.detectService(link)
     .then((musicService) => {
       service = musicService;
@@ -51,12 +52,22 @@ module.exports = {
     })
     .then(longUrl => services[service].getId(longUrl))
     .then(id => services[service].getInfo(id))
-    .then(info => module.exports.searchLink(info))
+    .then((itemInfo) => {
+      info = itemInfo;
+      return module.exports.searchLink(info);
+    })
     .then((linkInstance) => {
-      if (linkInstance) res.render('links', helpers.formatLink(linkInstance));
       // do we have a link instance for this item? ==> make a link controller method for this purpose only ==> need type and content name
-      // if so, find all the missing services
-      // if not, create the link instance
+      if (linkInstance) {
+        // if so, find all the missing services UNCOMMENT BELOW
+        // return Promise.all(helpers.findMissingServices(linkInstance).map((musicService) => {
+        //   return services[musicService].getLink(info).then(permaLink => linkInstance.save({ [service]: permaLink }));
+        // }))
+        // .then(() => res.render('links', helpers.formatLink(linkInstance))); // add tests to reflect the newly fetched spotify link
+        res.render('links', helpers.formatLink(linkInstance));
+      }
+      // return Promise.all(...);
+      // if not, create the link instance (findOrCreate all the songs / artists / albums), get their IDs. PROBABLY make a helper method for this.
       // populate all the missing links
     })
     .catch((err) => {
