@@ -8,7 +8,7 @@ chai.use(chaiAsPromised);
 // TODO: refactor with chaiAsPromised
 
 describe('Services Controller', () => {
-  xdescribe('Apple', () => {
+  describe('Apple', () => {
     describe('getUrl', () => {
       it('should return the long form version of a shared url given a valid link', (done) => {
         services.apple.getUrl('https://itun.es/us/ISGKF?i=529664804')
@@ -45,21 +45,21 @@ describe('Services Controller', () => {
 
     describe('getInfo', () => {
       it('should retrieve song information given a valid song id', (done) => {
-        const result = { artist: 'Aaron Goldberg', album: 'Turning Point', song: 'Fantasy in D' };
+        const result = { artist: 'Aaron Goldberg', album: 'Turning Point', song: 'Fantasy in D', type: 'song' };
         services.apple.getInfo('425454830')
         .then((info) => { expect(info).to.eql(result); done(); })
         .catch(err => done(err));
       });
 
       it('should retrieve album information given a valid album id', (done) => {
-        const result = { artist: 'Aaron Goldberg', album: 'Turning Point' };
+        const result = { artist: 'Aaron Goldberg', album: 'Turning Point', type: 'album' };
         services.apple.getInfo('425454797')
         .then((info) => { expect(info).to.eql(result); done(); })
         .catch(err => done(err));
       });
 
       it('should retrieve artist information given a valid artist id', (done) => {
-        const result = { artist: 'Aaron Goldberg' };
+        const result = { artist: 'Aaron Goldberg', type: 'artist' };
         services.apple.getInfo('5421052')
         .then((info) => { expect(info).to.eql(result); done(); })
         .catch(err => done(err));
