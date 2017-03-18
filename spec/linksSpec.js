@@ -3,6 +3,8 @@ const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
 const linksController = require('../server/controllers/linksController');
 const Link = require('../database/models/link');
+const Artist = require('../database/models/artist');
+const Album = require('../database/models/album');
 const Song = require('../database/models/song');
 
 const expect = chai.expect;
@@ -58,7 +60,37 @@ describe('Links Controler', () => {
     });
   });
 
-  describe('post', () => {
+  xdescribe('createLink', () => {
+    after(() => {
+      const records = [];
+      return Artist.where({ name: 'La Bande à Basile' }).fetch().then(artist => records.push(artist))
+      .then(() => Album.where({ name: 'Double d\'Or: La Bande à Basile' }).fetch().then(album => records.push(album)))
+      .then(() => Song.where({ name: 'A la queue leu leu' }).fetch().then(song => records.push(song)))
+      .then(() => Link.where({ type: 'song', song_id: records[2].id }).fetch().then(link => records.push(link)))
+      .then(() => records.pop().destroy().then(() => records.pop().destroy()).then(() => records.pop().destroy()).then(() => records.pop().destroy()));
+      // .then(() => { console.log('RECORDS YO!', records.reverse()); return Promise.all(records.reverse().map(record => record.destroy()))});
+    });
+
+    after(() => Song.where({ name: 'Turkish Moonrise' }).fetch()
+    .then(song => Link.where({ type: 'song', song_id: song.id }).destroy().then(() => song.destroy())));
+
+    // /!\ I am only testing this with songs for now. I have to hope this will also work for albums and artists
+    it('should create a new entry with completely new artist, album, and song info', (done) => {
+      const info = { type: 'song', song: 'A la queue leu leu', artist: 'La Bande à Basile', album: 'Double d\'Or: La Bande à Basile' };
+      linksController.createLink(info)
+      .then((song) => { expect(song.attributes.type).to.equals(info.type); done(); })
+      .catch(err => done(err));
+    });
+
+    it('should create a new entry with pre-existing artist, album, and song info', (done) => {
+      const info = { type: 'song', song: 'Turkish Moonrise', artist: 'Aaron Goldberg', album: 'Turning Point' };
+      linksController.createLink(info)
+      .then((song) => { expect(song.attributes.type).to.equals(info.type); done(); })
+      .catch(err => done(err));
+    });
+  });
+
+  xdescribe('post', () => {
     before(() => Link.where({ type: 'song', apple: 'https://itun.es/us/kQRMj?i=161135249' }).destroy());
     after(() => Link.where({ type: 'song', apple: 'https://itun.es/us/kQRMj?i=161135249' }).destroy());
 
@@ -88,10 +120,11 @@ describe('Links Controler', () => {
       })
       .catch(err => done(err));
     });
+
     // should fetch missing links given a brand new link
       // output on page should be correct
       // database should be populated with the right stuff
-    // should complete a missing link given a previously existing, but incomplete link
+    // should complete a missing link given a previously existing, but incomplete link ==> does this make much sense though? We'll always try to complete it.
     // should fail when xyz
   });
 });
