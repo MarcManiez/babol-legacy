@@ -41,10 +41,25 @@ module.exports = {
         id ? resolve(id[0]) : reject('Error: id could not be extracted.');
       });
     },
+
+    getLink({ artist, album, song }) {
+
+    },
   },
   spotify: {
-    getInfo(link) {
+    getId(link) {
 
+    },
+
+    getInfo(id) {
+
+    },
+
+    getLink({ artist, album, song, type, offset = 1, limit = 1 }) {
+      const params = Object.assign(arguments[0], { offset, limit });
+      if (params.type === 'song') params.type = 'track';
+      return axios.get('https://api.spotify.com/v1/search', { params })
+      .then(response => response.data.tracks.items[0].external_urls.spotify);
     },
   },
 };
