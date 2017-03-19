@@ -8,12 +8,9 @@ const expect = chai.expect;
 chai.use(chaiAsPromised);
 
 describe('Helper methods', () => {
-  describe('findOrCreate', () => {
-    after(() => {
-      const attributes = { name: 'this is a test name', artist_id: 1 };
-      return Album.where(attributes).destroy();
-    });
+  resetDb();
 
+  describe('findOrCreate', () => {
     it('should create a record if it does not exist', () => {
       const attributes = { name: 'this is a test name', artist_id: 1 };
       return expect(helpers.findOrCreate(Album, attributes).then(album => album.attributes.name)).to.eventually.equal('this is a test name');

@@ -8,6 +8,7 @@ chai.use(chaiAsPromised);
 // TODO: refactor with chaiAsPromised
 
 describe('Services Controller', () => {
+  resetDb();
   describe('Apple', () => {
     describe('getUrl', () => {
       it('should return the long form version of a shared url given a valid link', (done) => {
@@ -108,7 +109,7 @@ describe('Services Controller', () => {
       // TODO: make test ensuring that function is always called with a type property on its params argument.
       // TODO: make test ensuring that function handles empty search results
       it('should retrieve a permalink corresponding to the provided information, if Spotify has it in store', () => {
-        const params = { q: 'La danse des canards', type: 'song' };
+        const params = { song: 'La danse des canards', type: 'song' };
         return expect(services.spotify.getLink(params)).to.eventually.equal('https://open.spotify.com/track/2iHRw6k2TSRE9IVQ3mJ8rm');
       });
     });
