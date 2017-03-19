@@ -4,4 +4,4 @@ const db = require('knex')(config.development);
 
 module.exports = require('bookshelf')(db);
 
-db.migrate.latest(config);
+// db.migrate.latest(config);
