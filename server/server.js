@@ -8,13 +8,10 @@ const db = require('../connection');
 const routes = require('./routes');
 
 const app = express();
+module.exports = app;
 
 app.engine('html', swig.renderFile);
 app.set('view engine', 'html');
-
-const port = process.env.PORT || 8000;
-
-app.listen(port);
 
 // TODO: separate middleware into new file
 app.use(morgan('dev'));
