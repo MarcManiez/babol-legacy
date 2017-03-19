@@ -31,8 +31,10 @@ module.exports = {
       Song.where({ name: info.song }).fetch(),
     ])
     .then((instances) => {
+      if (!instances[0]) return null;
       if (type === 'artist') return instances[0];
       else if (type === 'album') return Album.where({ name: info.album, artist_id: instances[0].id });
+      if (!instances[1]) return null;
       return Song.where({ name: info.song, album_id: instances[1].id, artist_id: instances[0].id }).fetch();
     })
     .then((instance) => {
@@ -43,7 +45,6 @@ module.exports = {
 
   createLink(info) {
     const instances = [];
-    console.log('CREATING LINK WITH THIS INFO', info);
     return helpers.findOrCreate(Artist, { name: info.artist })
     .then((artist) => {
       instances.push(artist);
@@ -71,10 +72,10 @@ module.exports = {
     let linkGroup;
     let links;
     const remainingServices = helpers.services.slice();
-    remainingServices.slice(remainingServices.indexOf(service), 1);
     return module.exports.detectService(link)
     .then((musicService) => {
       service = musicService;
+      remainingServices.splice(remainingServices.indexOf(service), 1);
       return services[service].getUrl(link);
     })
     .then(longUrl => services[service].getId(longUrl))
@@ -85,21 +86,20 @@ module.exports = {
     })
     .then((linkInstance) => {
       linkGroup = linkInstance;
+      if (linkInstance) return linkInstance; // We've reached a fork in the road
       links = { [service]: link };
-      // you can make this whole things dryer by finding all the missing links here first
-      // store them in an object litteral
-      // use a conditional, depending on whether you've already dug up a link group
-      // don't forget that you have access to one because the user just provided you a link!
-      return Promise.all(remainingServices.map((musicService) => {
+      return Promise.all(remainingServices.map((musicService) => { // collect links from other music services
         return services[musicService].getLink(info).then((permaLink) => { links[musicService] = permaLink; });
-      }));
+      }))
+      .then(() => module.exports.createLink(info))
+      .then(newLinkInstance => newLinkInstance.save(links))
+      .then(savedLinkInstance => module.exports.searchLink(info));
     })
-    .then(() => module.exports.createLink(info))
     .then((linkInstance) => {
-      // do we have a link instance for this item? ==> make a link controller method for this purpose only ==> need type and content name
-      res.render('links', helpers.formatLink(linkGroup || linkInstance));
+      res.render('links', helpers.formatLink(linkInstance));
     })
     .catch((err) => {
+      console.log('Error in linkController.post:', err.response);
       res.status(404).render('404');
     });
   },
