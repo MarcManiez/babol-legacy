@@ -1,11 +1,11 @@
 
-exports.seed = (knex, Promise) => knex('links').del()
-  .then(() => knex('songs').del())
-  .then(() => knex('albums').del())
-  .then(() => knex('artists').del())
-  .then(() => knex('artists').insert([
+// knex('links').del()
+  // .then(() => knex('songs').del())
+  // .then(() => knex('albums').del())
+  // .then(() => knex('artists').del())
+exports.seed = (knex, Promise) => knex('artists').insert([
     { name: 'Aaron Goldberg' },
-  ]))
+  ])
   .then(() => knex('albums').insert([
     { name: 'Turning Point', artist_id: 1 },
   ]))
