@@ -59,7 +59,7 @@ module.exports = {
     },
 
     getLink({ artist, album, song, type, offset = 1, limit = 1 }) {
-      const params = Object.assign(arguments[0], { offset, limit });
+      const params = Object.assign({}, { offset, limit, type, q: arguments[0][type] });
       if (params.type === 'song') params.type = 'track';
       return axios.get('https://api.spotify.com/v1/search', { params })
       .then(response => response.data.tracks.items[0].external_urls.spotify);
