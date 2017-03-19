@@ -4,9 +4,9 @@
   "description": "Share music links seamslessly across services.",
   "main": "server/server.js",
   "scripts": {
-    "test": "mocha ./spec",
+    "test": "mocha -r ./spec/testHelpers ./spec",
     "debug": "node --nolazy --debug-brk=9222 server/server.js",
-    "start": "nodemon server/server.js"
+    "start": "nodemon server/run.js"
   },
   "keywords": [
     "music",
@@ -22,8 +22,10 @@
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-jsx-a11y": "^4.0.0",
     "eslint-plugin-react": "^6.9.0",
+    "knex-cleaner": "https://github.com/steven-ferguson/knex-cleaner#8a20155dcb79c6e12b1e68694065bbf8582701b6",
     "mocha": "^3.2.0",
-    "nodemon": "^1.11.0"
+    "nodemon": "^1.11.0",
+    "supertest": "^3.0.0"
   },
   "dependencies": {
     "axios": "^0.15.3",
