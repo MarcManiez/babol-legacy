@@ -21,4 +21,18 @@ describe('Helper methods', () => {
       return expect(helpers.findOrCreate(Song, attributes).then(song => song.attributes.name)).to.eventually.equal('Fantasy in D');
     });
   });
+
+  describe.only('isMatch', () => {
+    it('should return a match for two 80% similar strings given an 80% confidence requirement', () => {
+      expect(helpers.isMatch('Art Blakey & The Jazz Messengers', 'Art Blakey and The Jazz Messengers')).to.be.false;
+    });
+
+    it('should return a false for two < 80% similar strings given an 80% confidence requirement', () => {
+      expect(helpers.isMatch('Art Blakey & The Jazz Messengers', 'Mingus Big Band')).to.be.false;
+    });
+
+    it('should throw an error if the method doesn\'t take two strings', () => {
+      expect(helpers.isMatch).to.throw(Error, 'isMatch must take two strings');
+    });
+  });
 });
