@@ -22,13 +22,14 @@ module.exports = {
 
   isMatch(string1, string2) {
     if (!string1 || !string2 || typeof string1 !== 'string' || typeof string2 !== 'string') throw new Error('isMatch must take two strings');
-    if (string1 === string2) return true;
+    if (string1 === string2) return 1;
     let totalDifference = 0;
-    const reduced1 = module.exports.reduce(string1);
-    const reduced2 = module.exports.reduce(string2);
-    const longest = string2.length > string1.length ? reduced2 : reduced1;
-    const longestLength = string2.length > string1.length ? string2.length : string1.length;
-    const shortest = longest === reduced2 ? reduced1 : reduced2;
+    let longest = string2.length > string1.length ? string2 : string1;
+    let shortest = longest === string2 ? string1 : string2;
+    const longestLength = longest.length;
+    if (longest.indexOf(shortest >= 0)) return +((longest.length - shortest.length) / longest.length).toFixed(2);
+    longest = module.exports.reduce(longest);
+    shortest = module.exports.reduce(shortest);
     for (const letter in longest) {
       totalDifference += Math.abs((longest[letter] || 0) - (shortest[letter] || 0));
     }
