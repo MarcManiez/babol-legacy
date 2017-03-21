@@ -116,11 +116,12 @@ describe('Services Controller', () => {
       });
     });
 
-    describe('scanResponse', () => {
-      it('should scan a Sptofiy search API response and return a match when there is one to be found', () => {
+    describe.only('scan[type]', () => {
+      it('should scan a Spotifiy search API response and return a match when there is one to be found', () => {
         const parameters = { song: 'Moanin\'', album: 'Moanin\'', artist: 'Art Blakey & The Jazz Messengers', type: 'song' };
         // this must work in every case scenario: album, artist, song
-        expect(services.spotify.scanResponse(mockData.goodSpotifySearchApiResponse, parameters));
+        const answer = services.spotify.scan[parameters.type](mockData.goodSpotifySearchApiResponse, parameters);
+        expect(answer).to.equals('https://open.spotify.com/track/4Tq2fWpX1nLCkMSOPkYb1Y');
       });
 
       it('should scan a Sptofiy search API response and return null when there is no match to be found', () => {
