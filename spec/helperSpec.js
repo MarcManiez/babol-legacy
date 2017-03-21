@@ -22,13 +22,13 @@ describe('Helper methods', () => {
     });
   });
 
-  describe('isMatch', () => {
-    it('should return a match for two 80% similar strings given an 80% confidence requirement', () => {
-      expect(helpers.isMatch('Art Blakey & The Jazz Messengers', 'Art Blakey and The Jazz Messengers')).to.be.false;
+  describe.only('isMatch', () => {
+    it('should return a confidence score >= 80% for two strings that are more than 80% similar', () => {
+      expect(helpers.isMatch('Art Blakey & The Jazz Messengers', 'Art Blakey and The Jazz Messengers')).to.be.at.least(0.8);
     });
 
-    it('should return a false for two < 80% similar strings given an 80% confidence requirement', () => {
-      expect(helpers.isMatch('Art Blakey & The Jazz Messengers', 'Mingus Big Band')).to.be.false;
+    it('should return a confidence score < 80% for two strings that are less than 80% similar', () => {
+      expect(helpers.isMatch('Art Blakey & The Jazz Messengers', 'Mingus Big Band')).to.be.below(0.8);
     });
 
     it('should throw an error if the method doesn\'t take two strings', () => {

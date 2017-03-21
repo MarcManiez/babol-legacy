@@ -20,21 +20,19 @@ module.exports = {
     return services;
   },
 
-  isMatch(string1, string2, percentage = 0.8) {
-    if (percentage > 1 || percentage <= 0 || typeof percentage !== 'number') throw new Error('Percentage must be a number between 0 and 1.');
+  isMatch(string1, string2) {
     if (!string1 || !string2 || typeof string1 !== 'string' || typeof string2 !== 'string') throw new Error('isMatch must take two strings');
     if (string1 === string2) return true;
     let totalDifference = 0;
     const reduced1 = module.exports.reduce(string1);
     const reduced2 = module.exports.reduce(string2);
-    const longest = reduced2 > reduced1 ? reduced2 : reduced1;
-    const longestLength = string2.length > string2.length ? string2.length : string2.length;
+    const longest = string2.length > string1.length ? reduced2 : reduced1;
+    const longestLength = string2.length > string1.length ? string2.length : string1.length;
     const shortest = longest === reduced2 ? reduced1 : reduced2;
     for (const letter in longest) {
-      totalDifference += Math.abs(longest[letter] || 0 - shortest[letter] || 0);
-      if (totalDifference > longestLength * (1 - percentage).toFixed(2)) return false;
+      totalDifference += Math.abs((longest[letter] || 0) - (shortest[letter] || 0));
     }
-    return true;
+    return +((longestLength - totalDifference) / longestLength).toFixed(2);
   },
 
   reduce(string) {
