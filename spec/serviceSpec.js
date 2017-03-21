@@ -2,6 +2,8 @@ const chai = require('chai');
 const services = require('../server/controllers/servicesController');
 const chaiAsPromised = require('chai-as-promised');
 
+const mockData = require('./mockData');
+
 const expect = chai.expect;
 chai.use(chaiAsPromised);
 
@@ -84,7 +86,7 @@ describe('Services Controller', () => {
         .catch(err => done(err));
       });
 
-      it('should retrieve a artist id given a valid long form url', (done) => {
+      it('should retrieve an artist id given a valid long form url', (done) => {
         services.apple.getId('https://itunes.apple.com/us/artist/aaron-goldberg/id5421052')
         .then((id) => { expect(id).to.equal('5421052'); done(); })
         .catch(err => done(err));
@@ -109,8 +111,20 @@ describe('Services Controller', () => {
       // TODO: make test ensuring that function is always called with a type property on its params argument.
       // TODO: make test ensuring that function handles empty search results
       it('should retrieve a permalink corresponding to the provided information, if Spotify has it in store', () => {
-        const params = { song: 'La danse des canards', type: 'song' };
+        const params = { song: 'La danse des canards', type: 'song', album: 'La danse des canards - Single', artist: 'JJ Lionel' };
         return expect(services.spotify.getLink(params)).to.eventually.equal('https://open.spotify.com/track/2iHRw6k2TSRE9IVQ3mJ8rm');
+      });
+    });
+
+    describe('scanResponse', () => {
+      it('should scan a Sptofiy search API response and return a match when there is one to be found', () => {
+        const parameters = { song: 'Moanin\'', album: 'Moanin\'', artist: 'Art Blakey & The Jazz Messengers', type: 'song' };
+        // this must work in every case scenario: album, artist, song
+        expect(services.spotify.scanResponse(mockData.goodSpotifySearchApiResponse, parameters));
+      });
+
+      it('should scan a Sptofiy search API response and return null when there is no match to be found', () => {
+
       });
     });
   });
