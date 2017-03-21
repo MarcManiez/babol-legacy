@@ -22,7 +22,7 @@ describe('Helper methods', () => {
     });
   });
 
-  describe.only('isMatch', () => {
+  describe('isMatch', () => {
     it('should return a confidence score >= 80% for two strings that are more than 80% similar', () => {
       expect(helpers.isMatch('Art Blakey & The Jazz Messengers', 'Art Blakey and The Jazz Messengers')).to.be.at.least(0.8);
     });
