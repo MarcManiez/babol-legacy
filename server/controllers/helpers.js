@@ -23,17 +23,23 @@ module.exports = {
   isMatch(string1, string2) {
     if (!string1 || !string2 || typeof string1 !== 'string' || typeof string2 !== 'string') throw new Error('isMatch must take two strings');
     if (string1 === string2) return 1;
+    const string1Reduced = module.exports.reduce(string1);
+    const string2Reduced = module.exports.reduce(string2);
     let totalDifference = 0;
-    let longest = string2.length > string1.length ? string2 : string1;
-    let shortest = longest === string2 ? string1 : string2;
-    const longestLength = longest.length;
-    if (longest.indexOf(shortest >= 0)) return +((longest.length - shortest.length) / longest.length).toFixed(2);
-    longest = module.exports.reduce(longest);
-    shortest = module.exports.reduce(shortest);
+    let contained = null;
+    let longest = string2.length > string1.length ? string2Reduced : string1Reduced;
+    if (string1.length === string2.length) {
+      longest = Object.keys(string1Reduced) > Object.keys(string2Reduced) ? string1Reduced : string2Reduced;
+    }
+    const shortest = longest === string2Reduced ? string1Reduced : string2Reduced;
+    const longestLength = string2.length > string1.length ? string2.length : string1.length;
+    if (string1.indexOf(string2 >= 0)) contained = +((string1.length - string2.length) / string1.length).toFixed(2);
+    if (string2.indexOf(string1 >= 0)) contained = +((string2.length - string1.length) / string2.length).toFixed(2);
     for (const letter in longest) {
       totalDifference += Math.abs((longest[letter] || 0) - (shortest[letter] || 0));
     }
-    return +((longestLength - totalDifference) / longestLength).toFixed(2);
+    const score = +((longestLength - totalDifference) / longestLength).toFixed(2);
+    return score > contained ? score : contained;
   },
 
   reduce(string) {
