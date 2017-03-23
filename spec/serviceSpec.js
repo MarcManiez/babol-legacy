@@ -116,7 +116,7 @@ describe('Services Controller', () => {
       });
     });
 
-    describe.only('scan[type]', () => {
+    describe('scan[type]', () => {
       it('should scan a Spotifiy search API response and return a match when there is one to be found', () => {
         const parameters = { song: 'Moanin\'', album: 'Moanin\'', artist: 'Art Blakey & The Jazz Messengers', type: 'song' };
         // this must work in every case scenario: album, artist, song
