@@ -33,13 +33,13 @@ module.exports = {
     }
     const shortest = longest === string2Reduced ? string1Reduced : string2Reduced;
     const longestLength = string2.length > string1.length ? string2.length : string1.length;
-    if (string1.indexOf(string2 >= 0)) contained = +((string1.length - string2.length) / string1.length).toFixed(2);
-    if (string2.indexOf(string1 >= 0)) contained = +((string2.length - string1.length) / string2.length).toFixed(2);
+    if (string1.indexOf(string2) >= 0) contained = +(string2.length / string1.length).toFixed(2);
+    if (string2.indexOf(string1) >= 0) contained = +(string1.length / string2.length).toFixed(2);
     for (const letter in longest) {
       totalDifference += Math.abs((longest[letter] || 0) - (shortest[letter] || 0));
     }
     const score = +((longestLength - totalDifference) / longestLength).toFixed(2);
-    return score > contained ? score : contained;
+    return score >= contained ? score : contained;
   },
 
   reduce(string) {
