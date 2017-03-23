@@ -79,26 +79,22 @@ module.exports = {
 
       },
 
-      song(response, parameters, artistBar = 0.9, albumBar = 0.2, songBar = 0.8) {
+      song(response, parameters) {
         if (!response || !parameters) throw new Error('scan.song must take a response and parameters.');
-        let highScore = null;
         let link = null;
+        let highScore = null;
         const { artist, album, song } = parameters;
         const songs = response.tracks.items;
         for (let i = 0; i < songs.length; i += 1) {
           let totalScore = 0;
           const artistScore = helpers.isMatch(songs[i].artists[0].name, artist);
-          if (artistScore < artistBar) continue;
           totalScore += artistScore;
           const albumScore = helpers.isMatch(songs[i].album.name, album);
-          if (albumScore < albumBar) continue;
           totalScore += albumScore;
           const songScore = helpers.isMatch(songs[i].name, song);
-          if (songScore < songBar) continue;
           totalScore += songScore;
-          const score = +(totalScore / 3).toFixed(3);
-          if (score > highScore) {
-            highScore = score;
+          if (totalScore > highScore) {
+            highScore = totalScore;
             link = songs[i].external_urls.spotify;
           }
         }
