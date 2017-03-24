@@ -117,18 +117,41 @@ describe('Services Controller', () => {
     });
 
     describe.only('scan[type]', () => {
-      it('should scan a Spotifiy search API response and return a match when there is one to be found', () => {
+      it('should scan a Spotifiy search API response and return a song when there is one to be found', () => {
         const parameters = { song: 'Moanin\'', album: 'Moanin\'', artist: 'Art Blakey & The Jazz Messengers', type: 'song' };
-        // this must work in every case scenario: album, artist, song
-        const answer = services.spotify.scan[parameters.type](mockData.goodSpotifySearchApiResponse, parameters);
+        const answer = services.spotify.scan[parameters.type](mockData.goodSpotifySongSearch, parameters);
         expect(answer).to.equals('https://open.spotify.com/track/4Tq2fWpX1nLCkMSOPkYb1Y');
       });
 
       it('should scan a Sptofiy search API response and return null when there is no match to be found', () => {
         const parameters = { song: '22', album: 'Red', artist: 'Taylor Swift', type: 'song' };
-        const answer = services.spotify.scan[parameters.type](mockData.failedSpotifySearchApiResponse, parameters);
+        const answer = services.spotify.scan[parameters.type](mockData.failedSpotifySongSearch, parameters);
         expect(answer).to.be.null;
       });
+
+      it('should scan a Spotifiy search API response and return an album when there is one to be found', () => {
+        const parameters = { album: 'Moanin\'', artist: 'Art Blakey & The Jazz Messengers', type: 'album' };
+        const answer = services.spotify.scan[parameters.type](mockData.goodSpotifyAlbumSearch, parameters);
+        expect(answer).to.equals('https://open.spotify.com/album/5PzlTnVafjgt5RtjTdIKoC');
+      });
+
+      it('should scan a Sptofiy search API response and return null when there is no album to be found', () => {
+        const parameters = { album: 'Red', artist: 'Taylor Swift', type: 'album' };
+        const answer = services.spotify.scan[parameters.type](mockData.failedSpotifyAlbumSearch, parameters);
+        expect(answer).to.be.null;
+      });
+
+      it('should scan a Spotifiy search API response and return an artist when there is one to be found', () => {
+        const parameters = { artist: 'Art Blakey & The Jazz Messengers', type: 'artist' };
+        const answer = services.spotify.scan[parameters.type](mockData.goodSpotifyArtistSearch, parameters);
+        expect(answer).to.equals('https://open.spotify.com/artist/6ykfXAed2KOLOMI3R0TZdz');
+      });
+
+      // it('should scan a Sptofiy search API response and return null when there is no artist to be found', () => {
+      //   const parameters = { artist: 'Taylor Swift', type: 'artist' };
+      //   const answer = services.spotify.scan[parameters.type](mockData.failedSpotifyArtistSearch, parameters);
+      //   expect(answer).to.be.null;
+      // });
     });
   });
 });

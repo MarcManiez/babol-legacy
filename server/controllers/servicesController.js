@@ -59,7 +59,7 @@ module.exports = {
 
     },
 
-    getLink({ artist, album, song, type, offset = 1, limit = 1 }) {
+    getLink({ artist, album, song, type, offset = 1, limit = 1 }) { // remove offset, add artist / song / album when possible
       const params = Object.assign({}, { offset, limit, type, q: arguments[0][type] });
       if (params.type === 'song') params.type = 'track';
       return axios.get('https://api.spotify.com/v1/search', { params })
@@ -71,12 +71,41 @@ module.exports = {
         // loop though an array of scores and
       },
 
-      artist() {
-
+      artist(response, parameters, benchmark = 0.5) {
+        if (!response || !parameters) throw new Error('scan.artist must take a response and parameters.');
+        let link = null;
+        let highScore = null;
+        const { artist, album, song } = parameters;
+        const artists = response.artists.items;
+        for (let i = 0; i < artists.length; i += 1) {
+          const artistScore = helpers.isMatch(artists[i].name, artist);
+          if (artistScore > highScore) {
+            highScore = artistScore;
+            link = artists[i].external_urls.spotify;
+          }
+        }
+        return highScore >= benchmark ? link : null;
       },
 
-      album() {
-
+      album(response, parameters, benchmark = 0.5) {
+        if (!response || !parameters) throw new Error('scan.album must take a response and parameters.');
+        let link = null;
+        let highScore = null;
+        const { artist, album, song } = parameters;
+        const albums = response.albums.items;
+        for (let i = 0; i < albums.length; i += 1) {
+          let totalScore = 0;
+          const artistScore = helpers.isMatch(albums[i].artists[0].name, artist);
+          totalScore += artistScore;
+          const albumScore = helpers.isMatch(albums[i].name, album);
+          totalScore += albumScore;
+          if (totalScore > highScore) {
+            highScore = totalScore;
+            link = albums[i].external_urls.spotify;
+          }
+        }
+        const score = highScore / 2;
+        return score >= benchmark ? link : null;
       },
 
       song(response, parameters, benchmark = 0.5) { // we can set a benchmark under which a result will not be considered a match
