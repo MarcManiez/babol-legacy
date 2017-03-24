@@ -116,7 +116,7 @@ describe('Services Controller', () => {
       });
     });
 
-    describe('scan[type]', () => {
+    describe.only('scan[type]', () => {
       it('should scan a Spotifiy search API response and return a match when there is one to be found', () => {
         const parameters = { song: 'Moanin\'', album: 'Moanin\'', artist: 'Art Blakey & The Jazz Messengers', type: 'song' };
         // this must work in every case scenario: album, artist, song
@@ -125,7 +125,9 @@ describe('Services Controller', () => {
       });
 
       it('should scan a Sptofiy search API response and return null when there is no match to be found', () => {
-
+        const parameters = { song: '22', album: 'Red', artist: 'Taylor Swift', type: 'song' };
+        const answer = services.spotify.scan[parameters.type](mockData.failedSpotifySearchApiResponse, parameters);
+        expect(answer).to.be.null;
       });
     });
   });

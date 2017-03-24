@@ -79,7 +79,7 @@ module.exports = {
 
       },
 
-      song(response, parameters) {
+      song(response, parameters, benchmark = 0.5) { // we can set a benchmark under which a result will not be considered a match
         if (!response || !parameters) throw new Error('scan.song must take a response and parameters.');
         let link = null;
         let highScore = null;
@@ -98,7 +98,8 @@ module.exports = {
             link = songs[i].external_urls.spotify;
           }
         }
-        return link;
+        const score = highScore / 3;
+        return score >= benchmark ? link : null;
       },
     },
   },
