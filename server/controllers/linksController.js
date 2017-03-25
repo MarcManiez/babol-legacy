@@ -27,8 +27,8 @@ module.exports = {
     const foreignKeyColumn = `${type}_id`;
     return Promise.all([
       Artist.where({ name: info.artist }).fetch(),
-      Album.where({ name: info.album }).fetch(),
-      Song.where({ name: info.song }).fetch(),
+      Album.where({ name: info.album || '' }).fetch(),
+      Song.where({ name: info.song || '' }).fetch(),
     ])
     .then((instances) => {
       if (!instances[0]) return null;
@@ -40,6 +40,9 @@ module.exports = {
     .then((instance) => {
       if (!instance) return null;
       return Link.where({ [foreignKeyColumn]: instance.id, type }).fetch({ withRelated: ['artist', 'song', 'album'] });
+    })
+    .catch((err) => {
+      console.log(err);
     });
   },
 
@@ -88,9 +91,8 @@ module.exports = {
       linkGroup = linkInstance;
       if (linkInstance) return linkInstance; // We've reached a fork in the road
       links = { [service]: link };
-      return Promise.all(remainingServices.map((musicService) => { // collect links from other music services
-        return services[musicService].getLink(info).then((permaLink) => { links[musicService] = permaLink; });
-      }))
+      return Promise.all(remainingServices.map(musicService =>  // collect links from other music services
+         services[musicService].getLink(info).then((permaLink) => { links[musicService] = permaLink; })))
       .then(() => module.exports.createLink(info))
       .then(newLinkInstance => newLinkInstance.save(links))
       .then(savedLinkInstance => module.exports.searchLink(info));
