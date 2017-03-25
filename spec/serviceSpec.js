@@ -95,7 +95,7 @@ describe('Services Controller', () => {
       it('should return an error message given no arguments', (done) => {
         services.apple.getId()
         .then()
-        .catch((err) => { expect(err).to.equals('Error: no link provided id.'); done(); });
+        .catch((err) => { expect(err).to.equals('Error: no link provided.'); done(); });
       });
 
       it('should return an error message if the id could not be extracted', (done) => {
@@ -116,7 +116,6 @@ describe('Services Controller', () => {
       });
 
       it('should retrieve a permalink corresponding to the provided artist, if Spotify has it in store', () => {
-      // https://itun.es/us/pCH link for the beatles in iTunes
         const params = { song: '', type: 'artist', album: '', artist: 'The Beatles' };
         return expect(services.spotify.getLink(params)).to.eventually.equal('https://open.spotify.com/artist/3WrFJ7ztbogyGnTHbHJFl2');
       });
@@ -158,6 +157,31 @@ describe('Services Controller', () => {
       //   const answer = services.spotify.scan[parameters.type](mockData.failedSpotifyArtistSearch, parameters);
       //   expect(answer).to.be.null;
       // });
+    });
+
+    describe('getId', () => {
+      it('should retrieve a song id given a valid long form url', () => {
+        expect(services.spotify.getId('https://open.spotify.com/track/45yEy5WJywhJ3sDI28ajTm'))
+        .to.eventually.equal('45yEy5WJywhJ3sDI28ajTm');
+      });
+
+      it('should retrieve a album id given a valid long form url', () => {
+        expect(services.spotify.getId('https://open.spotify.com/album/5XfJmldgWzrc1AIdbBaVZn'))
+        .to.eventually.equal('5XfJmldgWzrc1AIdbBaVZn');
+      });
+
+      it('should retrieve an artist id given a valid long form url', () => {
+        expect(services.spotify.getId('https://open.spotify.com/artist/3WrFJ7ztbogyGnTHbHJFl2'))
+        .to.eventually.equal('3WrFJ7ztbogyGnTHbHJFl2');
+      });
+
+      it('should return an error message given no arguments', () => {
+        expect(services.spotify.getId()).to.eventually.be.rejected;
+      });
+
+      it('should return an error message if the id could not be extracted', () => {
+        expect(services.spotify.getId('https://itunes.apple.com/us/artist/aaron-goldberg/id5421052/')).to.eventually.be.rejected;
+      });
     });
   });
 });

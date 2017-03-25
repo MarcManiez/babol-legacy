@@ -1,6 +1,15 @@
 const axios = require('axios');
 
 module.exports = {
+    // retrieves the id for a piece of content based on its long form url
+  getId(longUrl) {
+    return new Promise((resolve, reject) => {
+      if (!longUrl) reject('Error: no link provided.');
+      const id = longUrl.match(/\d+$/g);
+      id ? resolve(id[0]) : reject('Error: id could not be extracted.');
+    });
+  },
+
     // returns the long form url from a shortened url, needed to derive content information
   getUrl(link) {
     return axios.get(link)
@@ -42,14 +51,6 @@ module.exports = {
       });
   },
 
-    // retrieves the id for a piece of content based on its long form url
-  getId(longUrl) {
-    return new Promise((resolve, reject) => {
-      if (!longUrl) reject('Error: no link provided id.');
-      const id = longUrl.match(/\d+$/g);
-      id ? resolve(id[0]) : reject('Error: id could not be extracted.');
-    });
-  },
 
     // retrieves the permalink given a set of search criteria
   getLink({ artist, album, song, type }) {
