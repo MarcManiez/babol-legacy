@@ -38,9 +38,9 @@ module.exports = {
       if (info.type === 'album') {
         info.album = response.name;
       } else {
-        info.album = response.album ? response.album.name : '';
+        info.album = response.album ? response.album.name : null;
       }
-      info.song = info.type === 'song' ? response.name : '';
+      info.song = info.type === 'song' ? response.name : null;
       return info;
     });
   },

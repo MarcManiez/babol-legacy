@@ -184,19 +184,19 @@ describe('Services Controller', () => {
       });
     });
 
-    describe.only('getInfo', () => {
+    describe('getInfo', () => {
       it('should retrieve song information given a valid song id', () => {
         const result = { artist: 'The Beatles', album: 'Abbey Road (Remastered)', song: 'Here Comes The Sun - Remastered 2009', type: 'song' };
         expect(services.spotify.getInfo({ id: '45yEy5WJywhJ3sDI28ajTm', type: 'track' })).to.eventually.eql(result);
       });
 
       it('should retrieve album information given a valid album id', () => {
-        const result = { artist: 'The Beatles', album: 'Live At The Hollywood Bowl', song: '', type: 'album' };
+        const result = { artist: 'The Beatles', album: 'Live At The Hollywood Bowl', song: null, type: 'album' };
         expect(services.spotify.getInfo({ type: 'album', id: '5XfJmldgWzrc1AIdbBaVZn' })).to.eventually.eql(result);
       });
 
       it('should retrieve artist information given a valid artist id', () => {
-        const result = { artist: 'The Beatles', album: '', song: '', type: 'artist' };
+        const result = { artist: 'The Beatles', album: null, song: null, type: 'artist' };
         expect(services.spotify.getInfo({ type: 'artist', id: '3WrFJ7ztbogyGnTHbHJFl2' })).to.eventually.eql(result);
       });
 

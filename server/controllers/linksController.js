@@ -26,9 +26,9 @@ module.exports = {
     const type = info.type;
     const foreignKeyColumn = `${type}_id`;
     return Promise.all([
-      Artist.where({ name: info.artist || '' }).fetch(),
-      Album.where({ name: info.album || '' }).fetch(),
-      Song.where({ name: info.song || '' }).fetch(),
+      Artist.where({ name: info.artist || null }).fetch(),
+      Album.where({ name: info.album || null }).fetch(),
+      Song.where({ name: info.song || null }).fetch(),
     ])
     .then((instances) => {
       if (!instances[0]) return null;
