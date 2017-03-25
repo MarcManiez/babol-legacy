@@ -2,20 +2,27 @@ const axios = require('axios');
 const helpers = require('../helpers');
 
 module.exports = {
-    // retrieves content id based on url
-  getId(link) {
-
+  // retrieves content id based on url
+  getId(longUrl) {
+    return new Promise((resolve, reject) => {
+      if (!longUrl) reject('Error: no link provided.');
+      const id = longUrl.match(/\w+$/g);
+      id ? resolve(id[0]) : reject('Error: id could not be extracted.');
+      // https://open.spotify.com/artist/3WrFJ7ztbogyGnTHbHJFl2
+      // https://open.spotify.com/track/45yEy5WJywhJ3sDI28ajTm
+      // https://open.spotify.com/album/5XfJmldgWzrc1AIdbBaVZn
+    });
   },
 
-    // retrieves content information based on id
+  // retrieves content information based on id
   getInfo(id) {
 
   },
 
-    // Spotify has no shortened urls, therefore we simply return the input url.
+  // Spotify has no shortened urls, therefore we simply return the input url.
   getUrl: link => link,
 
-    // retrieves Spotify link based on search criteria
+  // retrieves Spotify link based on search criteria
   getLink({ artist, album, song, type }) { // remove offset, add artist / song / album when possible
     let q;
     if (type === 'song') q = `track:${song} artist:${artist} album:${album}`;
@@ -28,7 +35,7 @@ module.exports = {
   },
 
   scan: {
-      // retrieves the artist search result with the highest score
+    // retrieves the artist search result with the highest score
     artist(response, parameters, benchmark = 0.5) {
       if (!response || !parameters) throw new Error('scan.artist must take a response and parameters.');
       let link = null;
@@ -45,7 +52,7 @@ module.exports = {
       return highScore >= benchmark ? link : null;
     },
 
-      // retrieves the album search result with the highest score
+    // retrieves the album search result with the highest score
     album(response, parameters, benchmark = 0.5) {
       if (!response || !parameters) throw new Error('scan.album must take a response and parameters.');
       let link = null;
@@ -67,7 +74,7 @@ module.exports = {
       return score >= benchmark ? link : null;
     },
 
-      // retrieves the song search result with the highest score
+    // retrieves the song search result with the highest score
     song(response, parameters, benchmark = 0.5) { // we can set a benchmark under which a result will not be considered a match
       if (!response || !parameters) throw new Error('scan.song must take a response and parameters.');
       let link = null;
