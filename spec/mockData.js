@@ -6489,7 +6489,9 @@ module.exports = {
         total: 19,
       },
     },
-    goodSpotifyArtistSearch: {
+  },
+  goodSpotifyArtistSearch: {
+    data: {
       artists: {
         href: 'https://api.spotify.com/v1/search?query=Art&type=artist&offset=0&limit=20',
         items: [

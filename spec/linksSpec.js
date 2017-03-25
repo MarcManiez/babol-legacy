@@ -46,7 +46,6 @@ describe('Links Controler', () => {
   });
 
   describe('searchLink', () => {
-
     it('should find a matching record (with related entities) if such a record exists', (done) => {
       linksController.searchLink({ type: 'song', song: 'Fantasy in D', album: 'Turning Point', artist: 'Aaron Goldberg' })
       .then((linkInstance) => {
@@ -98,10 +97,10 @@ describe('Links Controler', () => {
       request(server).post('/api/link').send({ link: 'https://itun.es/us/kQRMj?i=161135249' })
       .then((response) => {
         const page = response.text;
-        const outcome = page.indexOf('La danse des canards') >= 0 && page.indexOf('La danse des canards - Single') >= 0 && page.indexOf('JJ Lionel') >= 0;
+        const outcome = page.indexOf('La danse des canards') >= 0 && page.indexOf('La danse des canards') >= 0 && page.indexOf('JJ Lionel') >= 0;
         expect(outcome).to.be.true;
         return Link.where({ type: 'song', apple: 'https://itun.es/us/kQRMj?i=161135249' }).fetch()
-        .then((link) => { expect(link.attributes.spotify).to.truthy; done(); })
+        .then((link) => { expect(link.attributes.spotify).to.truthy; done(); });
       })
       .catch(err => done(err));
     });

@@ -110,9 +110,15 @@ describe('Services Controller', () => {
     describe('getLink', () => {
       // TODO: make test ensuring that function is always called with a type property on its params argument.
       // TODO: make test ensuring that function handles empty search results
-      it('should retrieve a permalink corresponding to the provided information, if Spotify has it in store', () => {
+      it('should retrieve a permalink corresponding to the provided song, if Spotify has it in store', () => {
         const params = { song: 'La danse des canards', type: 'song', album: 'La danse des canards', artist: 'JJ Lionel' };
         return expect(services.spotify.getLink(params)).to.eventually.equal('https://open.spotify.com/track/6R5tQlnUOLzZkeInNoes1c');
+      });
+
+      it('should retrieve a permalink corresponding to the provided artist, if Spotify has it in store', () => {
+      // https://itun.es/us/pCH link for the beatles in iTunes
+        const params = { song: '', type: 'artist', album: '', artist: 'The Beatles' };
+        return expect(services.spotify.getLink(params)).to.eventually.equal('https://open.spotify.com/artist/3WrFJ7ztbogyGnTHbHJFl2');
       });
     });
 
