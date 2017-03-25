@@ -32,7 +32,10 @@ module.exports = {
         info.type = response.wrapperType;
         if (info.type === 'collection') info.type = 'album';
         if (info.type === 'track') info.type = 'song';
-        if (response.collectionName) info.album = response.collectionName;
+        if (response.collectionName) {
+          info.album = response.collectionName;
+          info.album = info.album.replace(/( - Single)$/, '');
+        }
         if (response.trackName) info.song = response.trackName;
         return info;
       });
@@ -59,18 +62,18 @@ module.exports = {
 
     },
 
-    getLink({ artist, album, song, type, offset = 1, limit = 1 }) { // remove offset, add artist / song / album when possible
-      const params = Object.assign({}, { offset, limit, type, q: arguments[0][type] });
+    getLink({ artist, album, song, type }) { // remove offset, add artist / song / album when possible
+      let q;
+      if (type === 'song') q = `track:${song} artist:${artist} album:${album}`;
+      if (type === 'album') q = `artist:${artist} album:${album}`;
+      if (type === 'artist') q = `artist:${artist}`;
+      const params = Object.assign({}, { type, q });
       if (params.type === 'song') params.type = 'track';
       return axios.get('https://api.spotify.com/v1/search', { params })
-      .then(response => response.data.tracks.items[0].external_urls.spotify); // return scan[type](response)
+      .then(response => module.exports.spotify.scan[type](response, arguments[0])); // return scan[type](response)
     },
 
     scan: {
-      Response(response) {
-        // loop though an array of scores and
-      },
-
       artist(response, parameters, benchmark = 0.5) {
         if (!response || !parameters) throw new Error('scan.artist must take a response and parameters.');
         let link = null;
@@ -113,7 +116,7 @@ module.exports = {
         let link = null;
         let highScore = null;
         const { artist, album, song } = parameters;
-        const songs = response.tracks.items;
+        const songs = response.data.tracks.items;
         for (let i = 0; i < songs.length; i += 1) {
           let totalScore = 0;
           const artistScore = helpers.isMatch(songs[i].artists[0].name, artist);
