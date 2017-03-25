@@ -79,7 +79,7 @@ module.exports = {
         let link = null;
         let highScore = null;
         const { artist, album, song } = parameters;
-        const artists = response.artists.items;
+        const artists = response.data.artists.items;
         for (let i = 0; i < artists.length; i += 1) {
           const artistScore = helpers.isMatch(artists[i].name, artist);
           if (artistScore > highScore) {
@@ -95,7 +95,7 @@ module.exports = {
         let link = null;
         let highScore = null;
         const { artist, album, song } = parameters;
-        const albums = response.albums.items;
+        const albums = response.data.albums.items;
         for (let i = 0; i < albums.length; i += 1) {
           let totalScore = 0;
           const artistScore = helpers.isMatch(albums[i].artists[0].name, artist);
