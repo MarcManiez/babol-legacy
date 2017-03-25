@@ -162,17 +162,17 @@ describe('Services Controller', () => {
     describe('getId', () => {
       it('should retrieve a song id given a valid long form url', () => {
         expect(services.spotify.getId('https://open.spotify.com/track/45yEy5WJywhJ3sDI28ajTm'))
-        .to.eventually.equal('45yEy5WJywhJ3sDI28ajTm');
+        .to.eventually.eql({ id: '45yEy5WJywhJ3sDI28ajTm', type: 'track' });
       });
 
       it('should retrieve a album id given a valid long form url', () => {
         expect(services.spotify.getId('https://open.spotify.com/album/5XfJmldgWzrc1AIdbBaVZn'))
-        .to.eventually.equal('5XfJmldgWzrc1AIdbBaVZn');
+        .to.eventually.eql({ type: 'album', id: '5XfJmldgWzrc1AIdbBaVZn' });
       });
 
       it('should retrieve an artist id given a valid long form url', () => {
         expect(services.spotify.getId('https://open.spotify.com/artist/3WrFJ7ztbogyGnTHbHJFl2'))
-        .to.eventually.equal('3WrFJ7ztbogyGnTHbHJFl2');
+        .to.eventually.eql({ type: 'artist', id: '3WrFJ7ztbogyGnTHbHJFl2' });
       });
 
       it('should return an error message given no arguments', () => {
