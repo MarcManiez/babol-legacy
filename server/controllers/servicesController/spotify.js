@@ -27,25 +27,22 @@ module.exports = {
   },
 
   // retrieves content information based on id
-  getInfo(id) {
-    return axios.get(`https://itunes.apple.com/lookup?id=${id}`)
+  getInfo({ type, id }) {
+    return axios.get(`https://api.spotify.com/v1/${type}s/${id}`)
     .then((response) => {
-      response = response.data.results[0];
+      response = response.data;
       const info = {};
-      info.artist = response.artistName;
-      info.type = response.wrapperType;
-      if (info.type === 'collection') info.type = 'album';
+      info.type = response.type;
       if (info.type === 'track') info.type = 'song';
-      if (response.collectionName) {
-        info.album = response.collectionName;
-        info.album = info.album.replace(/( - Single)$/, '');
+      info.artist = info.type === 'artist' ? response.name : response.artists[0].name;
+      if (info.type === 'album') {
+        info.album = response.name;
+      } else {
+        info.album = response.album ? response.album.name : '';
       }
-      if (response.trackName) info.song = response.trackName;
+      info.song = info.type === 'song' ? response.name : '';
       return info;
     });
-    // https://open.spotify.com/artist/3WrFJ7ztbogyGnTHbHJFl2
-    // https://open.spotify.com/track/45yEy5WJywhJ3sDI28ajTm
-    // https://open.spotify.com/album/5XfJmldgWzrc1AIdbBaVZn
   },
 
   // Spotify has no shortened urls, therefore we simply return the input url.
