@@ -183,5 +183,26 @@ describe('Services Controller', () => {
         expect(services.spotify.getId('https://itunes.apple.com/us/artist/aaron-goldberg/id5421052/')).to.eventually.be.rejected;
       });
     });
+
+    describe.only('getInfo', () => {
+      it('should retrieve song information given a valid song id', () => {
+        const result = { artist: 'The Beatles', album: 'Abbey Road (Remastered)', song: 'Here Comes The Sun - Remastered 2009', type: 'song' };
+        expect(services.spotify.getInfo({ id: '45yEy5WJywhJ3sDI28ajTm', type: 'track' })).to.eventually.eql(result);
+      });
+
+      it('should retrieve album information given a valid album id', () => {
+        const result = { artist: 'The Beatles', album: 'Live At The Hollywood Bowl', song: '', type: 'album' };
+        expect(services.spotify.getInfo({ type: 'album', id: '5XfJmldgWzrc1AIdbBaVZn' })).to.eventually.eql(result);
+      });
+
+      it('should retrieve artist information given a valid artist id', () => {
+        const result = { artist: 'The Beatles', album: '', song: '', type: 'artist' };
+        expect(services.spotify.getInfo({ type: 'artist', id: '3WrFJ7ztbogyGnTHbHJFl2' })).to.eventually.eql(result);
+      });
+
+      it('should reject requests with invalid ids', () => expect(services.spotify.getInfo({ id: '5421052abc' })).to.eventually.be.rejected);
+
+      it('should reject requests with non existant ids', () => expect(services.spotify.getInfo({})).to.eventually.be.rejected);
+    });
   });
 });
