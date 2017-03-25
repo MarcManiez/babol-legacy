@@ -6,17 +6,46 @@ module.exports = {
   getId(longUrl) {
     return new Promise((resolve, reject) => {
       if (!longUrl) reject('Error: no link provided.');
-      const id = longUrl.match(/\w+$/g);
-      id ? resolve(id[0]) : reject('Error: id could not be extracted.');
-      // https://open.spotify.com/artist/3WrFJ7ztbogyGnTHbHJFl2
-      // https://open.spotify.com/track/45yEy5WJywhJ3sDI28ajTm
-      // https://open.spotify.com/album/5XfJmldgWzrc1AIdbBaVZn
+      const result = {
+        id: longUrl.match(/\w+$/g)[0],
+        type: module.exports.getType(longUrl),
+      };
+      result ? resolve(result) : reject('Error: id could not be extracted.');
     });
+  },
+
+  getType(longUrl) {
+    const typeRegex = {
+      track: /\/track\//g,
+      album: /\/album\//g,
+      artist: /\/artist\//g,
+    };
+    for (const type in typeRegex) {
+      if (longUrl.match(typeRegex[type])) return type;
+    }
+    throw new Error('Could not derive type based on provided url.');
   },
 
   // retrieves content information based on id
   getInfo(id) {
-
+    return axios.get(`https://itunes.apple.com/lookup?id=${id}`)
+    .then((response) => {
+      response = response.data.results[0];
+      const info = {};
+      info.artist = response.artistName;
+      info.type = response.wrapperType;
+      if (info.type === 'collection') info.type = 'album';
+      if (info.type === 'track') info.type = 'song';
+      if (response.collectionName) {
+        info.album = response.collectionName;
+        info.album = info.album.replace(/( - Single)$/, '');
+      }
+      if (response.trackName) info.song = response.trackName;
+      return info;
+    });
+    // https://open.spotify.com/artist/3WrFJ7ztbogyGnTHbHJFl2
+    // https://open.spotify.com/track/45yEy5WJywhJ3sDI28ajTm
+    // https://open.spotify.com/album/5XfJmldgWzrc1AIdbBaVZn
   },
 
   // Spotify has no shortened urls, therefore we simply return the input url.
