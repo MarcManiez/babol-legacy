@@ -3,12 +3,14 @@ const helpers = require('./helpers');
 
 module.exports = {
   apple: {
+    // returns the long form url from a shortened url, needed to derive content information
     getUrl(link) {
       return axios.get(link)
       .then(response => response.headers['x-apple-orig-url'])
       .catch(err => console.log('Error feching apple long form url', err));
     },
 
+    // returns the type of content being shared
     getType(longUrl) {
       return new Promise((resolve, reject) => {
         const typeRegex = {
@@ -23,6 +25,7 @@ module.exports = {
       });
     },
 
+    // fetches the content's information
     getInfo(id) {
       return axios.get(`https://itunes.apple.com/lookup?id=${id}`)
       .then((response) => {
@@ -41,6 +44,7 @@ module.exports = {
       });
     },
 
+    // retrieves the id for a piece of content based on its long form url
     getId(longUrl) {
       return new Promise((resolve, reject) => {
         if (!longUrl) reject('Error: no link provided id.');
@@ -49,19 +53,26 @@ module.exports = {
       });
     },
 
-    getLink({ artist, album, song }) {
+    // retrieves the permalink given a set of search criteria
+    getLink({ artist, album, song, type }) {
 
     },
   },
   spotify: {
+    // retrieves content id based on url
     getId(link) {
 
     },
 
+    // retrieves content information based on id
     getInfo(id) {
 
     },
 
+    // Spotify has no shortened urls, therefore we simply return the input url.
+    getUrl: link => link,
+
+    // retrieves Spotify link based on search criteria
     getLink({ artist, album, song, type }) { // remove offset, add artist / song / album when possible
       let q;
       if (type === 'song') q = `track:${song} artist:${artist} album:${album}`;
@@ -74,6 +85,7 @@ module.exports = {
     },
 
     scan: {
+      // retrieves the artist search result with the highest score
       artist(response, parameters, benchmark = 0.5) {
         if (!response || !parameters) throw new Error('scan.artist must take a response and parameters.');
         let link = null;
@@ -90,6 +102,7 @@ module.exports = {
         return highScore >= benchmark ? link : null;
       },
 
+      // retrieves the album search result with the highest score
       album(response, parameters, benchmark = 0.5) {
         if (!response || !parameters) throw new Error('scan.album must take a response and parameters.');
         let link = null;
@@ -111,6 +124,7 @@ module.exports = {
         return score >= benchmark ? link : null;
       },
 
+      // retrieves the song search result with the highest score
       song(response, parameters, benchmark = 0.5) { // we can set a benchmark under which a result will not be considered a match
         if (!response || !parameters) throw new Error('scan.song must take a response and parameters.');
         let link = null;
