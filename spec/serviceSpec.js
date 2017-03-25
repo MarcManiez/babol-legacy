@@ -1,5 +1,5 @@
 const chai = require('chai');
-const services = require('../server/controllers/servicesController');
+const services = require('../server/controllers/servicesController/servicesController');
 const chaiAsPromised = require('chai-as-promised');
 
 const mockData = require('./mockData');

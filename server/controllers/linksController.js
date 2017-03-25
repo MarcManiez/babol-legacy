@@ -4,7 +4,7 @@ const Album = require('../../database/models/album');
 const Song = require('../../database/models/song');
 const helpers = require('./helpers');
 
-const services = require('./servicesController');
+const services = require('./servicesController/servicesController');
 
 module.exports = {
   detectService(link) {
