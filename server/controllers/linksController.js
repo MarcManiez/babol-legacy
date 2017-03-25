@@ -33,16 +33,13 @@ module.exports = {
     .then((instances) => {
       if (!instances[0]) return null;
       if (type === 'artist') return instances[0];
-      else if (type === 'album') return Album.where({ name: info.album, artist_id: instances[0].id });
+      else if (type === 'album') return Album.where({ name: info.album, artist_id: instances[0].id }).fetch();
       if (!instances[1]) return null;
       return Song.where({ name: info.song, album_id: instances[1].id, artist_id: instances[0].id }).fetch();
     })
     .then((instance) => {
       if (!instance) return null;
       return Link.where({ [foreignKeyColumn]: instance.id, type }).fetch({ withRelated: ['artist', 'song', 'album'] });
-    })
-    .catch((err) => {
-      console.log(err);
     });
   },
 
@@ -101,7 +98,7 @@ module.exports = {
       res.render('links', helpers.formatLink(linkInstance));
     })
     .catch((err) => {
-      console.log('Error in linkController.post:', err.response);
+      console.log('Error in linkController.post:', err);
       res.status(404).render('404');
     });
   },
