@@ -19,29 +19,26 @@ describe('Links Controler', () => {
   resetDb();
 
   const error = new Error('Invalid link or unsupported service.');
-  describe('detectService', () => {
+  describe.only('detectService', () => {
     const detectService = linksController.detectService;
-    it('should return an error if no link is provided', (done) => {
-      detectService().then()
-      .catch((err) => { expect(err).to.eql(error); done(); });
+    it('should return an error if no link is provided', () => {
+      expect(detectService()).to.eventually.be.rejected;
     });
 
-    it('should correctly detect valid apple links', (done) => {
-      detectService('https://itun.es/us/8FRu')
-      .then((service) => { expect(service).to.equal('apple'); done(); })
-      .catch(done);
+    it('should correctly detect valid apple links', () => {
+      expect(detectService('https://itun.es/us/8FRu')).to.eventually.equal('apple');
     });
 
-    it('should correctly detect valid spotify links', (done) => {
-      detectService('https://play.spotify.com/artist/0BTfBwYC5Mw5ezDg91JBma')
-      .then((service) => { expect(service).to.equal('spotify'); done(); })
-      .catch(err => done(err));
+    it('should correctly detect valid play.spotify links', () => {
+      expect(detectService('https://play.spotify.com/artist/0BTfBwYC5Mw5ezDg91JBma')).to.eventually.equal('spotify');
     });
 
-    it('should correctly detect invalid links', (done) => {
-      detectService('https://iun.e/us/8FRu').then()
-      .catch((err) => { expect(err).to.eql(error); done(); })
-      .catch(err => done(err));
+    it('should correctly detect valid play.spotify links', () => {
+      expect(detectService('https://open.spotify.com/track/4JehYebiI9JE8sR8MisGVb')).to.eventually.equal('spotify');
+    });
+
+    it('should correctly detect invalid links', () => {
+      expect(detectService('https://iun.e/us/8FRu')).to.eventually.be.rejected;
     });
   });
 
@@ -104,6 +101,18 @@ describe('Links Controler', () => {
       })
       .catch(err => done(err));
     });
+
+    // it('should fetch missing links given a brand new spotify link', (done) => {
+    //   request(server).post('/api/link').send({ link: 'https://itun.es/us/kQRMj?i=161135249' })
+    //   .then((response) => {
+    //     const page = response.text;
+    //     const outcome = page.indexOf('La danse des canards') >= 0 && page.indexOf('La danse des canards') >= 0 && page.indexOf('JJ Lionel') >= 0;
+    //     expect(outcome).to.be.true;
+    //     return Link.where({ type: 'song', apple: 'https://itun.es/us/kQRMj?i=161135249' }).fetch()
+    //     .then((link) => { expect(link.attributes.spotify).to.truthy; done(); });
+    //   })
+    //   .catch(err => done(err));
+    // });
 
     // should fetch missing links given a brand new link
       // output on page should be correct

@@ -13,7 +13,7 @@ module.exports = {
       if (!link) reject(error);
       const serviceRegexes = {
         apple: /^https?:\/\/itun\.es\/\S+/g,
-        spotify: /^https?:\/\/play\.spotify\.com\/\S+/g,
+        spotify: /^https?:\/\/(play|open)\.spotify\.com\/\S+/g,
       };
       for (const service in serviceRegexes) {
         if (link.match(serviceRegexes[service])) resolve(service);
