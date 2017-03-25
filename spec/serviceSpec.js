@@ -111,12 +111,12 @@ describe('Services Controller', () => {
       // TODO: make test ensuring that function is always called with a type property on its params argument.
       // TODO: make test ensuring that function handles empty search results
       it('should retrieve a permalink corresponding to the provided information, if Spotify has it in store', () => {
-        const params = { song: 'La danse des canards', type: 'song', album: 'La danse des canards - Single', artist: 'JJ Lionel' };
-        return expect(services.spotify.getLink(params)).to.eventually.equal('https://open.spotify.com/track/2iHRw6k2TSRE9IVQ3mJ8rm');
+        const params = { song: 'La danse des canards', type: 'song', album: 'La danse des canards', artist: 'JJ Lionel' };
+        return expect(services.spotify.getLink(params)).to.eventually.equal('https://open.spotify.com/track/6R5tQlnUOLzZkeInNoes1c');
       });
     });
 
-    describe.only('scan[type]', () => {
+    describe('scan[type]', () => {
       it('should scan a Spotifiy search API response and return a song when there is one to be found', () => {
         const parameters = { song: 'Moanin\'', album: 'Moanin\'', artist: 'Art Blakey & The Jazz Messengers', type: 'song' };
         const answer = services.spotify.scan[parameters.type](mockData.goodSpotifySongSearch, parameters);
