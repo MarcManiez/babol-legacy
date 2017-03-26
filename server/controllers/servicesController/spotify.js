@@ -61,70 +61,7 @@ module.exports = {
       .then(response => module.exports.scan(response, arguments[0]));
   },
 
-  // scan: {
-  //   // retrieves the artist search result with the highest score
-  //   artist(response, parameters, benchmark = 0.5) {
-  //     if (!response || !parameters) throw new Error('scan.artist must take a response and parameters.');
-  //     let link = null;
-  //     let highScore = null;
-  //     const { artist, album, song } = parameters;
-  //     const artists = response.data.artists.items;
-  //     for (let i = 0; i < artists.length; i += 1) {
-  //       const artistScore = helpers.isMatch(artists[i].name, artist);
-  //       if (artistScore > highScore) {
-  //         highScore = artistScore;
-  //         link = artists[i].external_urls.spotify;
-  //       }
-  //     }
-  //     return highScore >= benchmark ? link : null;
-  //   },
-
-  //   // retrieves the album search result with the highest score
-  //   album(response, parameters, benchmark = 0.5) {
-  //     if (!response || !parameters) throw new Error('scan.album must take a response and parameters.');
-  //     let link = null;
-  //     let highScore = null;
-  //     const { artist, album, song } = parameters;
-  //     const albums = response.data.albums.items;
-  //     for (let i = 0; i < albums.length; i += 1) {
-  //       let totalScore = 0;
-  //       const artistScore = helpers.isMatch(albums[i].artists[0].name, artist);
-  //       totalScore += artistScore;
-  //       const albumScore = helpers.isMatch(albums[i].name, album);
-  //       totalScore += albumScore;
-  //       if (totalScore > highScore) {
-  //         highScore = totalScore;
-  //         link = albums[i].external_urls.spotify;
-  //       }
-  //     }
-  //     const score = highScore / 2;
-  //     return score >= benchmark ? link : null;
-  //   },
-
-  //   // retrieves the song search result with the highest score
-  //   song(response, parameters, benchmark = 0.5) { // we can set a benchmark under which a result will not be considered a match
-  //     if (!response || !parameters) throw new Error('scan.song must take a response and parameters.');
-  //     let link = null;
-  //     let highScore = null;
-  //     const { artist, album, song } = parameters;
-  //     const songs = response.data.tracks.items;
-  //     for (let i = 0; i < songs.length; i += 1) {
-  //       let totalScore = 0;
-  //       const artistScore = helpers.isMatch(songs[i].artists[0].name, artist);
-  //       totalScore += artistScore;
-  //       const albumScore = helpers.isMatch(songs[i].album.name, album);
-  //       totalScore += albumScore;
-  //       const songScore = helpers.isMatch(songs[i].name, song);
-  //       totalScore += songScore;
-  //       if (totalScore > highScore) {
-  //         highScore = totalScore;
-  //         link = songs[i].external_urls.spotify;
-  //       }
-  //     }
-  //     const score = highScore / 3;
-  //     return score >= benchmark ? link : null;
-  //   },
-  // },
+  // analyze a Spotify search API response object and return item with the highest score
   scan(response, parameters, benchmark = 0.5) {
     if (!response || !parameters) throw new Error('scan.song must take a response and parameters.');
     const { artist, album, song, type } = parameters;
