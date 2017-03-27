@@ -104,6 +104,26 @@ describe('Services Controller', () => {
         .catch((err) => { expect(err).to.equals('Error: id could not be extracted.'); done(); });
       });
     });
+
+    describe('scan', () => {
+      it('should scan an apple search API response and return a song when there is one to be found', () => {
+        const parameters = { song: 'Moanin\'', album: 'Moanin\'', artist: 'Art Blakey & The Jazz Messengers', type: 'song' };
+        const answer = services.apple.scan(mockData.goodAppleSongSearch, parameters);
+        expect(answer).to.equals('https://itunes.apple.com/us/album/moanin/id725816184?i=725816540&uo=4');
+      });
+
+      it('should scan an apple search API response and return an album when there is one to be found', () => {
+        const parameters = { song: null, album: 'Moanin\'', artist: 'Art Blakey & The Jazz Messengers', type: 'album' };
+        const answer = services.apple.scan(mockData.goodAppleAlbumSearch, parameters);
+        expect(answer).to.equals('https://itunes.apple.com/us/album/moanin-remastered/id725816184?uo=4');
+      });
+
+      it('should scan an apple search API response and return an artist when there is one to be found', () => {
+        const parameters = { song: null, album: null, artist: 'Art Blakey & The Jazz Messengers', type: 'artist' };
+        const answer = services.apple.scan(mockData.goodAppleArtistSearch, parameters);
+        expect(answer).to.equals('https://itunes.apple.com/us/artist/art-blakey-the-jazz-messengers/id999447?uo=4');
+      });
+    });
   });
 
   describe('Spotify', () => {
@@ -115,17 +135,22 @@ describe('Services Controller', () => {
         return expect(services.spotify.getLink(params)).to.eventually.equal('https://open.spotify.com/track/6R5tQlnUOLzZkeInNoes1c');
       });
 
+      it('should fall back to alternate search patterns if initial search returns no results', () => {
+        const params = { song: 'Are You Real', type: 'song', album: 'Moanin\'', artist: 'Art Blakey & The Jazz Messengers' };
+        return expect(services.spotify.getLink(params)).to.eventually.equal('https://open.spotify.com/track/1OGwtlps3T1Fo70q6zZUAs');
+      });
+
       it('should retrieve a permalink corresponding to the provided artist, if Spotify has it in store', () => {
-        const params = { song: '', type: 'artist', album: '', artist: 'The Beatles' };
+        const params = { song: null, type: 'artist', album: null, artist: 'The Beatles' };
         return expect(services.spotify.getLink(params)).to.eventually.equal('https://open.spotify.com/artist/3WrFJ7ztbogyGnTHbHJFl2');
       });
     });
 
-    describe('scan[type]', () => {
+    describe('scan', () => {
       it('should scan a Spotifiy search API response and return a song when there is one to be found', () => {
         const parameters = { song: 'Moanin\'', album: 'Moanin\'', artist: 'Art Blakey & The Jazz Messengers', type: 'song' };
         const answer = services.spotify.scan(mockData.goodSpotifySongSearch, parameters);
-        expect(answer).to.equals('https://open.spotify.com/track/4Tq2fWpX1nLCkMSOPkYb1Y');
+        expect(answer).to.equals('https://open.spotify.com/track/4Vkk3iD1VrENHJEACNddvt');
       });
 
       it('should scan a Sptofiy search API response and return null when there is no match to be found', () => {
@@ -140,7 +165,7 @@ describe('Services Controller', () => {
         expect(answer).to.equals('https://open.spotify.com/album/5PzlTnVafjgt5RtjTdIKoC');
       });
 
-      it('should scan a Sptofiy search API response and return null when there is no album to be found', () => {
+      it('should scan a Spotifiy search API response and return null when there is no album to be found', () => {
         const parameters = { album: 'Red', artist: 'Taylor Swift', type: 'album' };
         const answer = services.spotify.scan(mockData.failedSpotifyAlbumSearch, parameters);
         expect(answer).to.be.null;
