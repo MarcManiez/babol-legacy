@@ -25,6 +25,7 @@
     "knex-cleaner": "https://github.com/steven-ferguson/knex-cleaner#8a20155dcb79c6e12b1e68694065bbf8582701b6",
     "mocha": "^3.2.0",
     "nodemon": "^1.11.0",
+    "prettyjson": "^1.2.1",
     "supertest": "^3.0.0"
   },
   "dependencies": {
