@@ -1,4 +1,5 @@
 const axios = require('axios');
+const helpers = require('../helpers');
 
 module.exports = {
     // retrieves the id for a piece of content based on its long form url
@@ -54,6 +55,46 @@ module.exports = {
 
     // retrieves the permalink given a set of search criteria
   getLink({ artist, album, song, type }) {
+    let entity = type;
+    if (type === 'song') entity = 'musicTrack';
+    else if (type === 'artist') entity = 'musicArtist';
+    const attribute = `${type}Term`;
+    const params = { media: 'music', term: arguments[0][type], entity, attribute };
+    return axios.get('https://api.spotify.com/v1/search', { params })
+      .then(response => module.exports.scan(response, arguments[0]));
+  },
 
+  scan(response, parameters, benchmark = 0.5) {
+    if (!response || !parameters) throw new Error('scan.song must take a response and parameters.');
+    const { artist, album, song, type } = parameters;
+    let link = null;
+    let highScore = null;
+    const coefficientMap = { song: 3, album: 2, artist: 1 };
+    const coefficient = coefficientMap[type];
+    const items = response.results;
+    for (let i = 0; i < items.length; i += 1) {
+      let totalScore = 0;
+      const artistScore = helpers.isMatch(items[i].artistName, artist);
+      totalScore += artistScore * 1.5; // artitrarily giving artist matches a higher corefficient to correct certain results
+      if (album) {
+        const albumScore = helpers.isMatch(items[i].collectionName, album);
+        totalScore += albumScore;
+      }
+      if (song) {
+        const songScore = helpers.isMatch(items[i].trackName, song);
+        totalScore += songScore;
+      }
+      if (totalScore > highScore) {
+        highScore = totalScore;
+        const linkMap = {
+          song: 'trackViewUrl',
+          album: 'collectionViewUrl',
+          artist: 'artistLinkUrl',
+        };
+        link = items[i][linkMap[type]];
+      }
+    }
+    const score = highScore / coefficient;
+    return score >= benchmark ? link : null;
   },
 };
