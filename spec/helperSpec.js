@@ -43,8 +43,8 @@ describe('Helper methods', () => {
       expect(helpers.isMatch('12345', '67890')).to.equal(0);
     });
 
-    it('should return a confidence score of 80% for two strings that are more than 80% similar', () => {
-      expect(helpers.isMatch('1111', '11111')).to.equal(0.8);
+    it('should return a confidence score of 96% for two strings that are more than 96% similar', () => {
+      expect(helpers.isMatch('1111', '11111')).to.equal(0.96);
     });
 
     it('should return a confidence score of 60% for two strings that are more than 60% similar', () => {
