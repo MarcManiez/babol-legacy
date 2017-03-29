@@ -1,10 +1,5 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8">
-    <title>Babol</title>
-  </head>
-  <body>
+{% extends 'layout.html' %}
+{% block content %}
     <div>{{ artist.name }}</div>
     {% if album %}
     <div>{{ album.name }}</div>
@@ -18,3 +13,4 @@
     </ul>
   </body>
 </html>
+{% endblock %}
