@@ -94,9 +94,7 @@ module.exports = {
       .then(newLinkInstance => newLinkInstance.save(links))
       .then(savedLinkInstance => module.exports.searchLink(info));
     })
-    .then((linkInstance) => {
-      res.render('links', helpers.formatLink(linkInstance));
-    })
+    .then(linkInstance => res.json(linkInstance))
     .catch((err) => {
       console.log('Error in linkController.post:', err);
       res.status(404).render('404');
