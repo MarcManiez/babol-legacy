@@ -1,16 +1,8 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8">
-    <title>Babol</title>
-  </head>
-  <body>
-    <form method="post">
-      <label for="link">Enter a link:</label>
-      <input name="link" type="url" id="link">
-      <input name="submit" value="submit" type="submit">
-    </form>
-    <script src="../frontend-js/index.js"></script>
-    <script src="../frontend-js/event-listeners.js"></script>
-  </body>
-</html>
+{% extends 'layout.html' %}
+{% block content %}
+<form method="post">
+  <label for="link">Enter a link:</label>
+  <input name="link" type="url" id="link">
+  <input name="submit" value="submit" type="submit">
+</form>
+{% endblock %}
