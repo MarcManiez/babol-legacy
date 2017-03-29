@@ -1,8 +1,8 @@
 {% extends 'layout.html' %}
 {% block content %}
-<form method="post">
-  <label for="link">Enter a link:</label>
-  <input name="link" type="url" id="link">
-  <input name="submit" value="submit" type="submit">
-</form>
+<div class="row search-bar">
+  <form method="post" class="column">
+    <input name="link" type="url" id="link" placeholder="Paste a link">
+  </form>
+</div>
 {% endblock %}

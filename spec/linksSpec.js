@@ -19,7 +19,7 @@ describe('Links Controler', () => {
   resetDb();
 
   const error = new Error('Invalid link or unsupported service.');
-  describe.only('detectService', () => {
+  describe('detectService', () => {
     const detectService = linksController.detectService;
     it('should return an error if no link is provided', () => {
       expect(detectService()).to.eventually.be.rejected;
