@@ -17,5 +17,6 @@ app.set('view engine', 'html');
 app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use('/frontend-js', express.static(path.join(__dirname, '../frontend-js')));
 app.get('/', (req, res) => res.render('index'));
 app.use('/api', routes);
