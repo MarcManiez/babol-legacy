@@ -47,6 +47,21 @@ table {
 	border-spacing: 0;
 }
 
+/* =========== layout ===========*/
+
+body {
+	height: 92vh;
+	font: 300 3em "Lato", "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+main {
+	height: 100%;
+}
+
+.nav-offset {
+	height: 8vh;
+}
+
 /* ============ grid ============*/
 
 .row {
@@ -57,4 +72,27 @@ table {
   display: 1;
 }
 
-/* ============ //// ============*/
+/* ============ nav =============*/
+
+nav {
+	/*display: block;*/
+	width: 100%;
+	height: 8vh;
+	position: fixed;
+	border-bottom: 1px solid black;
+	background-color: rgba(255,255,255,1);
+}
+
+/* =========== index ============*/
+
+.search-bar {
+	justify-content: center;
+	align-items: center;
+	height: 100%;
+	transform: translateY(-7%);
+}
+
+.search-bar input {
+	outline: blue solid 0.5px;
+	font-size: 1em;
+}
