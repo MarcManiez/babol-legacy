@@ -135,6 +135,19 @@ describe('Services Controller', () => {
         return expect(services.spotify.getLink(params)).to.eventually.equal('https://open.spotify.com/track/6R5tQlnUOLzZkeInNoes1c');
       });
 
+      it('should retrieve a permalink corresponding to the provided song, if Spotify has it in store', () => {
+        const params = {
+          song: 'The Loss of a Moment',
+          type: 'song',
+          album: 'Wanton Spirit',
+          artist: 'Kenny Barron, Roy Haynes & Charlie Haden',
+        };
+        return expect(services.spotify.getLink(params)).to.eventually.equal('https://open.spotify.com/track/0BXjhKdnnRaab6WTk9ZMyY');
+      });
+
+      // https://itun.es/us/zzHh?i=1971785
+      // https://open.spotify.com/track/64pz2X3L5RNavzhNs5H7eE
+
       it('should fall back to alternate search patterns if initial search returns no results', () => {
         const params = { song: 'Are You Real', type: 'song', album: 'Moanin\'', artist: 'Art Blakey & The Jazz Messengers' };
         return expect(services.spotify.getLink(params)).to.eventually.equal('https://open.spotify.com/track/1OGwtlps3T1Fo70q6zZUAs');
