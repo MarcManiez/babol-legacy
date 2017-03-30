@@ -103,7 +103,7 @@ module.exports = {
 
   get(req, res) {
     const { id } = req.params;
-    Link.where({ id }).fetch()
+    return Link.where({ id }).fetch({ withRelated: ['artist', 'song', 'album'] })
     .then((link) => {
       res.render('links', helpers.formatLink(link));
     })
@@ -111,6 +111,5 @@ module.exports = {
       console.log(err);
       res.status(404).render('404');
     });
-    // find a given id inside the database, render links.html using the response object
   },
 };
