@@ -37,10 +37,16 @@ module.exports = {
     const longestLength = string2.length > string1.length ? string2.length : string1.length;
     if (string1.includes(string2) || string2.includes(string1)) {
       alternateScore = string1.includes(string2) ? string2.length / string1.length : string1.length / string2.length;
+      const containing = string1.includes(string2) ? string1 : string2;
+      const contained = containing === string1 ? string2 : string1;
       let remainder = 1 - alternateScore;
       alternateScore *= 1 + remainder;
       remainder = 1 - alternateScore;
-      if (string1.includes('edition') || string1.includes('remastered')) {
+      if (containing.includes('edition') || containing.includes('remastered')) {
+        alternateScore *= 1 + remainder;
+        remainder = 1 - alternateScore;
+      }
+      if (containing.indexOf(contained) === 0) {
         alternateScore *= 1 + remainder;
         remainder = 1 - alternateScore;
       }
