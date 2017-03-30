@@ -22,6 +22,7 @@ const app = {
     for (const type in app.content) {
       app.content[type] = response[type].name;
     }
+    document.getElementById('permalink').textContent = `Babol link: ${app.links.babol.slice(7)}`;
   },
   content: {
     artist: null,
