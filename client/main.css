@@ -51,7 +51,7 @@ table {
 
 body {
 	height: 92vh;
-	font: 300 3em "Lato", "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font: 300 2em "Lato", "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 main {
@@ -93,6 +93,10 @@ nav {
 }
 
 .search-bar input {
-	outline: blue solid 0.5px;
 	font-size: 1em;
+	width: 33vw;
+}
+
+.search-bar input:focus {
+	outline: blue solid 0.5px;
 }
