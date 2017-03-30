@@ -100,4 +100,17 @@ module.exports = {
       res.status(404).render('404');
     });
   },
+
+  get(req, res) {
+    const { id } = req.params;
+    Link.where({ id }).fetch()
+    .then((link) => {
+      res.render('links', helpers.formatLink(link));
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(404).render('404');
+    });
+    // find a given id inside the database, render links.html using the response object
+  },
 };

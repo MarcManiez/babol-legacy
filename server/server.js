@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 
 const db = require('../connection');
 const routes = require('./routes');
+const getLink = require('./controllers/linksController').get;
 
 const app = express();
 module.exports = app;
@@ -22,4 +23,5 @@ if (process.env.ENV !== 'production') {
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/client', express.static(path.join(__dirname, '../client')));
 app.get('/', (req, res) => res.render('index'));
+app.get('/:id', getLink);
 app.use('/api', routes);
