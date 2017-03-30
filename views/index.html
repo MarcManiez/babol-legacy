@@ -1,8 +1,11 @@
 {% extends 'layout.html' %}
 {% block content %}
 <div class="row search-bar">
-  <form method="post" class="column">
-    <input name="link" type="url" id="link" placeholder="Paste a link">
-  </form>
+  <div class="column">
+    <form method="post">
+      <input name="link" type="url" id="link" placeholder="Paste a music link" autofocus>
+    </form>
+    <div id="permalink">Babol link: </div>
+  </div>
 </div>
 {% endblock %}
