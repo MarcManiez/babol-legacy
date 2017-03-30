@@ -50,19 +50,12 @@ module.exports = {
 
   // retrieves Spotify link based on search criteria
   getLink({ artist, album, song, type }) { // remove offset, add artist / song / album when possible
-    let q;
-    if (type === 'song') q = `track:${JSON.stringify(song)} artist:${JSON.stringify(artist)} album:${JSON.stringify(album)}`;
-    if (type === 'album') q = `artist:${artist} album:${album}`;
-    if (type === 'artist') q = `artist:${artist}`;
-    const params = Object.assign({}, { type, q });
-    if (params.type === 'song') params.type = 'track';
     return module.exports.search(arguments[0])
-    // return axios.get('https://api.spotify.com/v1/search', { params })
     .then(response => module.exports.scan(response, arguments[0]));
   },
 
   // analyze a Spotify search API response object and return item with the highest score
-  scan(response, parameters, benchmark = 0.66) {
+  scan(response, parameters, benchmark = 0.75) {
     if (!response || !parameters) throw new Error('scan.song must take a response and parameters.');
     const { artist, album, song, type } = parameters;
     let link = null;
