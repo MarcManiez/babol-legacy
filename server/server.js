@@ -23,5 +23,5 @@ if (process.env.ENV !== 'production') {
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/client', express.static(path.join(__dirname, '../client')));
 app.get('/', (req, res) => res.render('index'));
-app.get('/:id', getLink);
+app.get('/link/:id', getLink);
 app.use('/api', routes);
