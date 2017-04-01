@@ -6,6 +6,7 @@ const app = {
     httpRequest.onreadystatechange = () => {
       if (httpRequest.readyState === XMLHttpRequest.DONE && httpRequest.status === 200) {
         app.update(JSON.parse(httpRequest.responseText));
+        // slide();
       } else if (httpRequest.status !== 200 && httpRequest.readyState !== 1) {
         console.error(httpRequest);
       }
@@ -22,7 +23,7 @@ const app = {
     for (const type in app.content) {
       app.content[type] = response[type].name;
     }
-    document.getElementById('permalink').textContent = `Babol link: ${app.links.babol.slice(7)}`;
+    document.getElementById('permalink').children[0].value = app.links.babol.slice(7);
   },
   content: {
     artist: null,
