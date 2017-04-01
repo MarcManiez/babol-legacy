@@ -79,10 +79,6 @@ nav > .logo {
   height: 4vh;
 }
 
-.copy:hover {
-  height: 4vh;
-}
-
 #permalink {
 	position: relative;
 	overflow: hidden;
@@ -94,6 +90,7 @@ nav > .logo {
 }
 
 #permalink input {
+	border: none;
 	font-size: 100%;
 	width: 90%;
 }
@@ -120,4 +117,12 @@ nav > .logo {
 	height: 100px;
 	-webkit-animation: slide 0.5s forwards;
 	animation: slide 0.5s forwards;
+}
+
+/* ======== media query ==========*/
+
+@media (min-width: 600px) and (orientation: portrait){
+  .copy {
+    height: 2vh;
+  }
 }
