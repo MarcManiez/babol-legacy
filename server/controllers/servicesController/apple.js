@@ -60,7 +60,7 @@ module.exports = {
     else if (type === 'artist') entity = 'musicArtist';
     const attribute = `${type}Term`;
     const params = { media: 'music', term: arguments[0][type], entity, attribute };
-    return axios.get('https://api.spotify.com/v1/search', { params })
+    return axios.get('https://itunes.apple.com/search', { params })
       .then(response => module.exports.scan(response, arguments[0]));
   },
 
@@ -71,11 +71,11 @@ module.exports = {
     let highScore = null;
     const coefficientMap = { song: 3, album: 2, artist: 1 };
     const coefficient = coefficientMap[type];
-    const items = response.results;
+    const items = response.data.results;
     for (let i = 0; i < items.length; i += 1) {
       let totalScore = 0;
       const artistScore = helpers.isMatch(items[i].artistName, artist);
-      totalScore += artistScore * 1.5; // artitrarily giving artist matches a higher corefficient to correct certain results
+      totalScore += artistScore * 1.5; // arbitrarily giving artist matches a higher corefficient to correct certain results
       if (album) {
         const albumScore = helpers.isMatch(items[i].collectionName, album);
         totalScore += albumScore;
