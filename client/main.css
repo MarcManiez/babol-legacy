@@ -1,52 +1,3 @@
-/* http://meyerweb.com/eric/tools/css/reset/ 
-   v2.0 | 20110126
-   License: none (public domain)
-*/
-
-html, body, div, span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address, big, cite, code,
-del, dfn, em, img, ins, kbd, q, s, samp,
-small, strike, strong, sub, sup, tt, var,
-b, u, i, center,
-dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend,
-table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed, 
-figure, figcaption, footer, header, hgroup, 
-menu, nav, output, ruby, section, summary,
-time, mark, audio, video {
-	margin: 0;
-	padding: 0;
-	border: 0;
-	font-size: 100%;
-	font: inherit;
-	vertical-align: baseline;
-}
-/* HTML5 display-role reset for older browsers */
-article, aside, details, figcaption, figure, 
-footer, header, hgroup, menu, nav, section {
-	display: block;
-}
-body {
-	line-height: 1;
-}
-ol, ul {
-	list-style: none;
-}
-blockquote, q {
-	quotes: none;
-}
-blockquote:before, blockquote:after,
-q:before, q:after {
-	content: '';
-	content: none;
-}
-table {
-	border-collapse: collapse;
-	border-spacing: 0;
-}
-
 /* =========== layout ===========*/
 
 body {
@@ -62,20 +13,31 @@ main {
 	height: 8vh;
 }
 
+@-webkit-keyframes slide {
+    100% { left: 0; }
+}
+
+@keyframes slide {
+    100% { left: 0; }
+}
+
 /* ============ grid ============*/
 
 .row {
   display: flex;
 }
 
+.spread {
+	justify-content: space-between;
+}
+
 .column {
-  display: 1;
+  flex: 1;
 }
 
 /* ============ nav =============*/
 
 nav {
-	/*display: block;*/
 	width: 100%;
 	height: 8vh;
 	position: fixed;
@@ -83,20 +45,79 @@ nav {
 	background-color: rgba(255,255,255,1);
 }
 
+nav > .logo {
+	font-size: 7vh;
+}
+
 /* =========== index ============*/
 
-.search-bar {
+.flex-center {
 	justify-content: center;
 	align-items: center;
 	height: 100%;
 	transform: translateY(-7%);
 }
 
-.search-bar input {
-	font-size: 1em;
-	width: 33vw;
+.search-module {
+	width: 40%;
 }
 
-.search-bar input:focus {
-	outline: blue solid 0.5px;
+#link {
+	width: 100%;
+	font-size: 100%;
+}
+
+#link:focus {
+	outline: #4099FF solid 0.5px;
+}
+
+.parent {
+	position: relative;
+}
+
+.copy {
+  height: 4vh;
+}
+
+.copy:hover {
+  height: 4vh;
+}
+
+#permalink {
+	position: relative;
+	overflow: hidden;
+	width: 101.5%;
+}
+
+#permalink div {
+	vertical-align: middle
+}
+
+#permalink input {
+	font-size: 100%;
+	width: 90%;
+}
+
+#permalink button {
+	width: 10%;
+	cursor: pointer;
+	display: block;
+	padding: 1px 0;
+	border: none;
+	background-color: #FFF;
+}
+
+#permalink button:focus {
+	outline: #d3d3d3 solid 0.5px;
+}
+
+/* ========= animation ===========*/
+
+.slide {
+	position: absolute;
+	left: -100px;
+	width: 100px;
+	height: 100px;
+	-webkit-animation: slide 0.5s forwards;
+	animation: slide 0.5s forwards;
 }
