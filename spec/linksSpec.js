@@ -102,17 +102,12 @@ describe('Links Controler', () => {
       .catch(err => done(err));
     });
 
-    // it('should fetch missing links given a brand new spotify link', (done) => {
-    //   request(server).post('/api/link').send({ link: 'https://itun.es/us/kQRMj?i=161135249' })
-    //   .then((response) => {
-    //     const page = response.text;
-    //     const outcome = page.indexOf('La danse des canards') >= 0 && page.indexOf('La danse des canards') >= 0 && page.indexOf('JJ Lionel') >= 0;
-    //     expect(outcome).to.be.true;
-    //     return Link.where({ type: 'song', apple: 'https://itun.es/us/kQRMj?i=161135249' }).fetch()
-    //     .then((link) => { expect(link.attributes.spotify).to.truthy; done(); });
-    //   })
-    //   .catch(err => done(err));
-    // });
+    it('should fetch missing links given a brand new spotify link', (done) => {
+      request(server).post('/api/link').send({ link: 'https://open.spotify.com/track/0IDoJJD5rea4Em9JZA8Wh2' })
+      .then(response => Link.where({ type: 'song', spotify: 'https://open.spotify.com/track/0IDoJJD5rea4Em9JZA8Wh2' }).fetch()
+        .then((link) => { expect(link.attributes.apple).to.equals('https://itunes.apple.com/us/album/el-negro-del-blanco/id448538868?i=448538886&uo=4'); done(); }))
+      .catch(err => done(err));
+    });
 
     // should fetch missing links given a brand new link
       // output on page should be correct
