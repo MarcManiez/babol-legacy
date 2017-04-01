@@ -1,12 +1,13 @@
 {% extends 'layout.html' %}
 {% block content %}
-<div class="row search-bar">
-  <div class="column">
+<div class="row flex-center">
+  <div class="search-module">
     <form method="post">
       <input name="link" type="url" id="link" placeholder="Paste a music link" autofocus>
     </form>
-    <div class="row spread">
-      <span id="permalink">Babol link: </span><div><img src="client/assets/copy.png" alt=""></div>
+    <div class="row spread" id="permalink">
+      <input type="url">
+      <button aria-label="copy to clipboard"><img class="copy" src="client/assets/copy.png" alt="copy link to Babol clipboard"></button>
     </div>
   </div>
 </div>
