@@ -105,6 +105,7 @@ module.exports = {
     const { id } = req.params;
     return Link.where({ id }).fetch({ withRelated: ['artist', 'song', 'album'] })
     .then((link) => {
+      link.attributes.url = req.url;
       res.render('links', helpers.formatLink(link));
     })
     .catch((err) => {
