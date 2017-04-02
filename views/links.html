@@ -1,16 +1,14 @@
 {% extends 'layout.html' %}
 {% block content %}
-    <div>{{ artist.name }}</div>
+    <div>Artist: {{ artist.name }}</div>
     {% if album %}
-    <div>{{ album.name }}</div>
+    <div>Album: {{ album.name }}</div>
     {% endif %}
     {% if song %}
-    <div>{{ song.name }}</div>
+    <div>Song: {{ song.name }}</div>
     {% endif %}
     <ul>
       <li>Apple Link: {{ apple }}</li>
       <li>Spotify Link: {{ spotify }}</li>
     </ul>
-  </body>
-</html>
 {% endblock %}
