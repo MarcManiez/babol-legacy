@@ -21,7 +21,7 @@ if (process.env.ENV !== 'production') {
   swig.setDefaults({ cache: false });
 }
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use('/client', express.static(path.join(__dirname, '../client')));
+app.use('*/client', express.static(path.join(__dirname, '../client')));
 app.get('/', (req, res) => res.render('index'));
 app.get('/link/:id', getLink);
 app.use('/api', routes);
