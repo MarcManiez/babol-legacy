@@ -4,16 +4,34 @@
     <h1>Hey, you're welcome for the links!</h1>
   </div>
   <div class="row content-info">
-    <div>Artist: {{ artist.name }}</div>
-    {% if album %}
-    <div>Album: {{ album.name }}</div>
-    {% endif %}
-    {% if song %}
-    <div>Song: {{ song.name }}</div>
-    {% endif %}
-    <ul>
-      <li>Apple Link: {{ apple }}</li>
-      <li>Spotify Link: {{ spotify }}</li>
-    </ul>
+    <div class="row column content-names">
+      <div class="column content-art">
+        image placeholder
+      </div>
+      <div class="row column names">
+        <div class="name-group">
+          <p>Artist:</p>
+          <p class="name">{{ artist.name }}</p>
+        </div>
+        {% if album %}
+        <div class="name-group">
+          <p>Album:</p>
+          <p class="name">{{ album.name }}</p>
+        </div>
+        {% endif %}
+        {% if song %}
+        <div class="name-group">
+          <p>Song:</p>
+          <p class="name">{{ song.name }}</p>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+    <div class="column">
+      <ul>
+        <li>Apple Link: {{ apple }}</li>
+        <li>Spotify Link: {{ spotify }}</li>
+      </ul>
+    </div>
   </div>
 {% endblock %}
