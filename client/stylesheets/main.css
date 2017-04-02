@@ -29,12 +29,31 @@ main {
   display: flex;
 }
 
+.column {
+  flex: 1;
+}
+
 .spread {
 	justify-content: space-between;
 }
 
-.column {
-  flex: 1;
+.vert-center {
+	align-items: center;
+}
+
+/* ===== trans-view assets =====*/
+
+.copy-clipboard {
+	display: inline-block;
+	background-image: url("client/assets/copy.png");
+	background-size: cover;
+	height: 4vh;
+	width: 4vh;
+	outline-width: medium;
+	background-color: transparent;
+	border: none;
+	cursor: pointer;
+	margin: 0 1vw;
 }
 
 /* ============ nav =============*/
@@ -98,15 +117,6 @@ nav > .logo {
 	width: 90%;
 }
 
-#permalink button {
-	width: 10%;
-	cursor: pointer;
-	display: block;
-	padding: 1px 0;
-	border: none;
-	background-color: #FFF;
-}
-
 #permalink button:focus {
 	outline: #d3d3d3 solid 0.5px;
 }
@@ -163,19 +173,6 @@ nav > .logo {
 	background-color: inherit;
 	width: 85%;
 	outline-width: medium;
-}
-
-.link button {
-	display: inline-block;
-	background-image: url("client/assets/copy.png");
-	background-size: cover;
-	height: 4.5vh;
-	width: 4.5vh;
-	outline-width: medium;
-	background-color: transparent;
-	border: none;
-	cursor: pointer;
-	margin: 0 1vw;
 }
 
 .link > .apple {
