@@ -16,10 +16,7 @@ if (document.getElementById('search')) {
   form.addEventListener('submit', app.getLinks);
   // form.addEventListener('submit', slide);
   const copy = document.getElementById('permalink').children[1];
-  copy.onclick = function (e) {
-    document.getElementById('permalink').children[0].select();
-    document.execCommand('copy');
-  };
+  copy.onclick = copyToClipboard;
 }
 
 if (document.getElementById('links')) {
