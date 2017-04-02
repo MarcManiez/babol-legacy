@@ -11,10 +11,15 @@ const copyToClipboard = (e) => {
   document.execCommand('copy');
 };
 
+const translateLink = e => app.getLinks(e)
+  .then((response) => {
+    app.update(response);
+    // form.addEventListener('submit', slide);
+  });
+
 if (document.getElementById('search')) {
   const form = document.querySelector('form');
-  form.addEventListener('submit', app.getLinks);
-  // form.addEventListener('submit', slide);
+  form.addEventListener('submit', translateLink);
   const copy = document.getElementById('permalink').children[1];
   copy.onclick = copyToClipboard;
 }
