@@ -1,5 +1,9 @@
 {% extends 'layout.html' %}
 {% block content %}
+  <div class="row links-presentation">
+    <h1>Hey, you're welcome for the links!</h1>
+  </div>
+  <div class="row content-info">
     <div>Artist: {{ artist.name }}</div>
     {% if album %}
     <div>Album: {{ album.name }}</div>
@@ -11,4 +15,5 @@
       <li>Apple Link: {{ apple }}</li>
       <li>Spotify Link: {{ spotify }}</li>
     </ul>
+  </div>
 {% endblock %}

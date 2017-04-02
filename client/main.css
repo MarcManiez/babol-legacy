@@ -86,7 +86,7 @@ nav > .logo {
 }
 
 #permalink div {
-	vertical-align: middle
+	vertical-align: middle;
 }
 
 #permalink input {
@@ -106,6 +106,17 @@ nav > .logo {
 
 #permalink button:focus {
 	outline: #d3d3d3 solid 0.5px;
+}
+
+/* =========== links ============*/
+
+.links-presentation {
+	height: 46vh;
+}
+
+.content-info {
+	height: 46vh;
+	border-top: 1px solid black;
 }
 
 /* ========= animation ===========*/
