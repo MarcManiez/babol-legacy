@@ -1,0 +1,68 @@
+.links-presentation {
+	height: 46vh;
+}
+
+.content-info {
+	height: 46vh;
+	border-top: 1px solid black;
+}
+
+.content-names {
+	border-right: 1px solid black;
+}
+
+.content-art {
+	border-right: 1px solid black;
+}
+
+.names {
+	justify-content: space-around;
+	align-items: center;
+	flex-direction: column;
+	font-size: 0.8em;
+}
+
+.name-group {
+	text-align: center;
+}
+
+.name {
+	font-size: 1.5em;
+	font-weight: normal;
+	margin-top: 2px;
+}
+
+.links {
+	justify-content: space-around;
+	flex-direction: column;
+}
+
+.link {
+	display: flex;
+	align-items: center;
+}
+
+.link input {
+	font-size: 1.25em;
+	border: none;
+	background-color: inherit;
+	width: 85%;
+	outline-width: medium;
+}
+
+.link > .apple {
+	background: url("client/assets/apple-logo.png");
+	background-size: cover;
+}
+
+.link > .spotify {
+	background: url("client/assets/spotify-logo.ico");
+	background-size: cover;
+}
+
+.service-logo {
+	margin: 0 1vw;
+	display: inline-block;
+	height: 4.5vh;
+	width: 4.5vh;
+}

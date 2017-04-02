@@ -1,0 +1,67 @@
+.flex-center {
+	justify-content: center;
+	align-items: center;
+	height: 100%;
+	transform: translateY(-7%);
+}
+
+.search-module {
+	width: 40%;
+	font-size: 2em;
+}
+
+#link {
+	width: 100%;
+	font-size: 100%;
+}
+
+#link:focus {
+	outline: #4099FF solid 0.5px;
+}
+
+.parent {
+	position: relative;
+}
+
+.copy {
+  height: 4vh;
+}
+
+#permalink {
+	position: relative;
+	overflow: hidden;
+	width: 101.5%;
+}
+
+#permalink div {
+	vertical-align: middle;
+}
+
+#permalink input {
+	border: none;
+	font-size: 100%;
+	width: 90%;
+}
+
+#permalink button:focus {
+	outline: #d3d3d3 solid 0.5px;
+}
+
+/* ========= animation ===========*/
+
+.slide {
+	position: absolute;
+	left: -100px;
+	width: 100px;
+	height: 100px;
+	-webkit-animation: slide 0.5s forwards;
+	animation: slide 0.5s forwards;
+}
+
+/* ======== media query ==========*/
+
+@media (min-width: 600px) and (orientation: portrait){
+  .copy {
+    height: 2vh;
+  }
+}
