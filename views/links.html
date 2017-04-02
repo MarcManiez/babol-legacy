@@ -1,6 +1,6 @@
 {% extends 'layout.html' %}
 {% block content %}
-  <div class="row links-presentation">
+  <div class="row links-presentation" id="links">
     <h1>Hey, you're welcome for the links!</h1>
   </div>
   <div class="row content-info">
@@ -31,10 +31,12 @@
       <div class="link">
         <div class="service-logo apple"></div>
         <input type="text" value="{{ apple }}">
+        <button>
       </div>
       <div class="link">
         <div class="service-logo spotify"></div>
         <input type="text" value="{{ spotify }}">
+        <button>
       </div>
     </div>
   </div>
