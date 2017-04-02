@@ -6,12 +6,23 @@
 //   }
 // };
 
-const form = document.querySelector('form');
-form.addEventListener('submit', app.getLinks);
-// form.addEventListener('submit', slide);
-
-const copy = document.getElementById('permalink').children[1];
-copy.onclick = function (e) {
-  document.getElementById('permalink').children[0].select();
+const copyToClipboard = (e) => {
+  e.target.previousSibling.previousSibling.select();
   document.execCommand('copy');
 };
+
+if (document.getElementById('search')) {
+  const form = document.querySelector('form');
+  form.addEventListener('submit', app.getLinks);
+  // form.addEventListener('submit', slide);
+  const copy = document.getElementById('permalink').children[1];
+  copy.onclick = function (e) {
+    document.getElementById('permalink').children[0].select();
+    document.execCommand('copy');
+  };
+}
+
+if (document.getElementById('links')) {
+  const links = document.getElementsByClassName('link');
+  for (const node of links) node.lastChild.onclick = copyToClipboard;
+}
