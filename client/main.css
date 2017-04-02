@@ -152,6 +152,32 @@ nav > .logo {
 	flex-direction: column;
 }
 
+.link {
+	display: flex;
+	align-items: center;
+}
+
+.link input {
+	font-size: 1.25em;
+	border: none;
+	background-color: inherit;
+	width: 85%;
+	outline-width: medium;
+}
+
+.link button {
+	display: inline-block;
+	background-image: url("client/assets/copy.png");
+	background-size: cover;
+	height: 4.5vh;
+	width: 4.5vh;
+	outline-width: medium;
+	background-color: transparent;
+	border: none;
+	cursor: pointer;
+	margin: 0 1vw;
+}
+
 .link > .apple {
 	background: url("client/assets/apple-logo.png");
 	background-size: cover;
@@ -163,6 +189,7 @@ nav > .logo {
 }
 
 .service-logo {
+	margin: 0 1vw;
 	display: inline-block;
 	height: 4.5vh;
 	width: 4.5vh;
