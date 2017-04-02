@@ -147,6 +147,27 @@ nav > .logo {
 	margin-top: 2px;
 }
 
+.links {
+	justify-content: space-around;
+	flex-direction: column;
+}
+
+.link > .apple {
+	background: url("client/assets/apple-logo.png");
+	background-size: cover;
+}
+
+.link > .spotify {
+	background: url("client/assets/spotify-logo.ico");
+	background-size: cover;
+}
+
+.service-logo {
+	display: inline-block;
+	height: 4.5vh;
+	width: 4.5vh;
+}
+
 /* ========= animation ===========*/
 
 .slide {

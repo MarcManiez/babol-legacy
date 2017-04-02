@@ -27,11 +27,15 @@
         {% endif %}
       </div>
     </div>
-    <div class="column">
-      <ul>
-        <li>Apple Link: {{ apple }}</li>
-        <li>Spotify Link: {{ spotify }}</li>
-      </ul>
+    <div class="row column links">
+      <div class="link">
+        <div class="service-logo apple"></div>
+        <input type="text" value="{{ apple }}">
+      </div>
+      <div class="link">
+        <div class="service-logo spotify"></div>
+        <input type="text" value="{{ spotify }}">
+      </div>
     </div>
   </div>
 {% endblock %}
