@@ -5,6 +5,12 @@
     <title>Babol</title>
     <link rel="stylesheet" href="../client/stylesheets/reset.css">
     <link rel="stylesheet" href="../client/stylesheets/main.css">
+    {% if url === '/' %}
+    <link rel="stylesheet" href="../client/stylesheets/index.css">
+    {% endif %}
+    {% if url.includes('/link/') %}
+    <link rel="stylesheet" href="../client/stylesheets/links.css">
+    {% endif %}
   </head>
   <body>
     <nav>
