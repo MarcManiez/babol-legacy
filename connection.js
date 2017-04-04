@@ -1,6 +1,6 @@
-const config = require('./knexfile');
+const config = require('./knexfile')[process.env.PRODUCTION ? 'production' : 'development'];
 
-const db = require('knex')(config.development);
+const db = require('knex')(config);
 
 module.exports = require('bookshelf')(db);
 
