@@ -116,7 +116,7 @@ module.exports = {
       const dataMap = { song: 'tracks', album: 'albums', artist: 'artists' };
       const dataType = dataMap[type];
       const cases = spotifySearches[type];
-      const trySearch = (index) => {
+      const trySearch = (index = 0) => {
         if (!cases[index]) reject('Could not retrieve any results from Spotify\'s search API.');
         const searches = cases[index]
           .map((search) => {
@@ -133,7 +133,7 @@ module.exports = {
           return resolve(combinedResults);
         });
       };
-      trySearch(0);
+      trySearch();
     });
   },
 };
