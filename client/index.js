@@ -19,7 +19,7 @@ const app = {
   },
   update(response) {
     const type = response.type;
-    app.links.babol = `http://localhost:8000/link/${response.id}`;
+    app.links.babol = `${window.location.href}link/${response.id}`;
     for (let i = 0; i < app.services.length; i += 1) {
       app.links[app.services[i]] = response[app.services[i]];
     }
@@ -30,7 +30,7 @@ const app = {
     if (type === 'song') {
       app.content.song = response.song.name;
     }
-    document.getElementById('permalink').children[0].value = app.links.babol.slice(7);
+    document.getElementById('permalink').children[0].value = app.links.babol;
   },
   content: {
     artist: null,
