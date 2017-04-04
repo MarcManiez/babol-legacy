@@ -56,7 +56,7 @@
 }
 
 .link > .spotify {
-	background: url("client/assets/spotify-logo.ico");
+	background: url("client/assets/spotify-logo.png");
 	background-size: cover;
 }
 
