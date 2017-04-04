@@ -102,16 +102,20 @@ describe('Links Controler', () => {
       .catch(err => done(err));
     });
 
-    it('should fetch missing links given a brand new spotify link', (done) => {
+    it('should fetch missing links given a brand new spotify track link', (done) => {
       request(server).post('/api/link').send({ link: 'https://open.spotify.com/track/0IDoJJD5rea4Em9JZA8Wh2' })
       .then(response => Link.where({ type: 'song', spotify: 'https://open.spotify.com/track/0IDoJJD5rea4Em9JZA8Wh2' }).fetch()
         .then((link) => { expect(link.attributes.apple).to.equals('https://itunes.apple.com/us/album/el-negro-del-blanco/id448538868?i=448538886&uo=4'); done(); }))
       .catch(err => done(err));
     });
 
-    // should fetch missing links given a brand new link
-      // output on page should be correct
-      // database should be populated with the right stuff
+    it.only('should fetch missing links given a brand new spotify artist link', (done) => {
+      request(server).post('/api/link').send({ link: 'https://open.spotify.com/artist/3pO5VjZ4wOHCMBXOvbMISG' })
+      .then(response => Link.where({ type: 'artist', spotify: 'https://open.spotify.com/artist/3pO5VjZ4wOHCMBXOvbMISG' }).fetch()
+        .then((link) => { expect(link.attributes.apple).to.equals('https://itunes.apple.com/us/artist/ant%C3%B4nio-carlos-jobim/id201663245?uo=4'); done(); }))
+      .catch(err => done(err));
+    });
+
     // should complete a missing link given a previously existing, but incomplete link ==> does this make much sense though? We'll always try to complete it.
     // should fail when xyz
   });
