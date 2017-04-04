@@ -109,7 +109,7 @@ describe('Links Controler', () => {
       .catch(err => done(err));
     });
 
-    it.only('should fetch missing links given a brand new spotify artist link', (done) => {
+    it('should fetch missing links given a brand new spotify artist link', (done) => {
       request(server).post('/api/link').send({ link: 'https://open.spotify.com/artist/3pO5VjZ4wOHCMBXOvbMISG' })
       .then(response => Link.where({ type: 'artist', spotify: 'https://open.spotify.com/artist/3pO5VjZ4wOHCMBXOvbMISG' }).fetch()
         .then((link) => { expect(link.attributes.apple).to.equals('https://itunes.apple.com/us/artist/ant%C3%B4nio-carlos-jobim/id201663245?uo=4'); done(); }))

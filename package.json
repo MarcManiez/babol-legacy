@@ -6,7 +6,8 @@
   "scripts": {
     "test": "mocha -r ./spec/testHelpers ./spec",
     "debug": "node --nolazy --debug-brk=9222 server/server.js",
-    "start": "nodemon server/run.js"
+    "start": "node server/run.js",
+    "dev": "nodemon server/run.js"
   },
   "keywords": [
     "music",
