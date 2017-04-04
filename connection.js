@@ -1,4 +1,4 @@
-const config = require('./knexfile')[process.env.PRODUCTION ? 'production' : 'development'];
+const config = require('./knexfile')[process.env.NODE_ENV ? 'production' : 'development'];
 
 const db = require('knex')(config);
 
