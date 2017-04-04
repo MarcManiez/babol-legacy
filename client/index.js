@@ -12,7 +12,7 @@ const app = {
           reject(httpRequest);
         }
       };
-      httpRequest.open('POST', 'http://localhost:8000/api/link/', true);
+      httpRequest.open('POST', `${window.location.href}api/link/`, true);
       httpRequest.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
       httpRequest.send(`link=${link}`);
     });
