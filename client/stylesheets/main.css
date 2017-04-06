@@ -74,6 +74,23 @@ nav {
 	background-color: rgba(255,255,255,1);
 }
 
-nav > .logo {
+nav .logo {
+	display: inline-block;
 	font-size: 7vh;
+}
+
+.service-selection {
+	float: right;
+	font-size: 3vh;
+}
+
+.service-selection select {
+	background-color: rgba(255,255,255,0);
+	border: none;
+	font-weight: 200;
+	font-size: 3vh;
+}
+
+select::-ms-expand { 
+	display: none;
 }

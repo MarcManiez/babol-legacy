@@ -22,7 +22,16 @@
 .search-module {
 	width: 40%;
 	font-size: 2em;
-	transform: translateY(-175%);
+	transform: translateY(-75%);
+}
+
+.service-selection {
+	font-size: 2em;
+	transform: translateY(-350%);
+}
+
+.service-selection > select {
+	font-size: 1em;
 }
 
 #link {
