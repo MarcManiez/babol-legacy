@@ -22,12 +22,12 @@
 .search-module {
 	width: 40%;
 	font-size: 2em;
-	transform: translateY(-75%);
+	transform: translateY(-50%);
 }
 
 .service-selection {
 	font-size: 2em;
-	transform: translateY(-350%);
+	transform: translateY(-250%);
 }
 
 .service-selection > select {
