@@ -3,7 +3,6 @@ const morgan = require('morgan');
 const express = require('express');
 const bodyParser = require('body-parser');
 
-const routes = require('./routes');
 const getLink = require('./controllers/linksController').get;
 
 module.exports = (app) => {
