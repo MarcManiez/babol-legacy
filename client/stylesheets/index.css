@@ -1,13 +1,28 @@
 .flex-center {
-	justify-content: center;
+	flex-direction: column;
+	justify-content: space-around;
 	align-items: center;
 	height: 100%;
-	transform: translateY(-7%);
+}
+
+.introduction {
+	text-align: center;
+	max-width: 67%;
+}
+
+.introduction * {
+	margin: 5px;
+}
+
+.introduction h2 {
+	max-width: 66%;
+	margin: 10px auto;
 }
 
 .search-module {
 	width: 40%;
 	font-size: 2em;
+	transform: translateY(-175%);
 }
 
 #link {
