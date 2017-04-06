@@ -25,6 +25,7 @@ if (document.getElementById('search')) {
 }
 
 if (document.getElementById('links')) {
-  // const links = document.getElementsByClassName('link');
-  // for (const node of links) node.lastChild.onclick = copyToClipboard;
+  const links = document.getElementsByClassName('link');
+  for (const node of links) node.lastChild.onclick = copyToClipboard;
 }
+

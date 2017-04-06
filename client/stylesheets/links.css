@@ -87,23 +87,22 @@
 	position: relative;
 }
 
-.copy-clipboard > span {
-	visibility: hidden;
+[tooltip]:before {
+	content: attr(tooltip);
 	position: absolute;
+	opacity: 0;
 	background: black;
 	background: linear-gradient(to top right, black, #363636);
 	text-align: center;
 	border-radius: 5px;
-	/*z-index: 1;*/
 	width: 250px;
-	top: -65px;
+	top: -60px;
 	left: -225px;
 	padding: 5px;
 	color: #dfe3e6;
-	outline: none;
 	pointer-events: none;
 }
 
-.copy-clipboard:hover > span {
-	visibility: visible;
+[tooltip]:hover:before {
+	opacity: 1;
 }
