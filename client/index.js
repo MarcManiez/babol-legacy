@@ -1,4 +1,12 @@
 const app = {
+  init() {
+      // do nothing
+        // cookies are the right tool for the job in this instance, because they are sent with every request
+        // this makes it a better experience when it comes to redirecting users to their streaming service.
+        // if we did it with JWT, there would first be a get request to /link/:id
+        // after that response, the javascript is read, and the JWT sent back to the server for a porential redirection. This is bad.
+        // Using a cookie, the correct information will be included from the get-go and the redirect will be seamless.
+  },
   getLinks(event) {
     return new Promise((resolve, reject) => {
       event.preventDefault();
@@ -39,4 +47,5 @@ const app = {
   },
   links: {},
   services: ['apple', 'spotify'],
+  service: null,
 };
