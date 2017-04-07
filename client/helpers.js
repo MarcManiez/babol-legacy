@@ -1,4 +1,6 @@
-const httpRequest = (method, url, options) => new Promise((resolve, reject) => {
+const helpers = {};
+
+helpers.httpRequest = (method, url, options) => new Promise((resolve, reject) => {
   const { body } = options;
   const request = new XMLHttpRequest();
   request.onreadystatechange = () => {
@@ -14,4 +16,15 @@ const httpRequest = (method, url, options) => new Promise((resolve, reject) => {
     request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
   }
   request.send(body);
+});
+
+helpers.copyToClipboard = (e) => {
+  e.target.previousSibling.previousSibling.select();
+  document.execCommand('copy');
+};
+
+helpers.translateLink = e => app.getLinks(e)
+.then((response) => {
+  app.update(response);
+  // form.addEventListener('submit', slide);
 });

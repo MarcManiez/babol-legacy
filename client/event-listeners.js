@@ -6,26 +6,19 @@
 //   }
 // };
 
-const copyToClipboard = (e) => {
-  e.target.previousSibling.previousSibling.select();
-  document.execCommand('copy');
-};
-
-const translateLink = e => app.getLinks(e)
-  .then((response) => {
-    app.update(response);
-    // form.addEventListener('submit', slide);
-  });
-
 if (document.getElementById('search')) {
   const form = document.querySelector('form');
-  form.addEventListener('submit', translateLink);
+  form.addEventListener('submit', helpers.translateLink);
+
   const copy = document.getElementById('permalink').children[1];
-  copy.onclick = copyToClipboard;
+  copy.onclick = helpers.copyToClipboard;
+
+  const serviceSelection = document.querySelector('.service-selection').querySelector('select');
+  serviceSelection.onchange = app.setService;
 }
 
 if (document.getElementById('links')) {
   const links = document.getElementsByClassName('link');
-  for (const node of links) node.lastChild.onclick = copyToClipboard;
+  for (const node of links) node.lastChild.onclick = helpers.copyToClipboard;
 }
 
