@@ -6,7 +6,7 @@ helpers.httpRequest = (method, url, options) => new Promise((resolve, reject) =>
   request.onreadystatechange = () => {
     if (request.readyState === XMLHttpRequest.DONE && request.status.toString().match(/^[23]\d\d/)) {
       resolve(JSON.parse(request.responseText));
-    } else if (request.status !== 200 && request.readyState !== 1) {
+    } else if (!request.status.toString().match(/^[23]\d\d/) && request.readyState !== 1) {
       console.error(request);
       reject(request);
     }
