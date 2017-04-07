@@ -1,5 +1,5 @@
 const app = {
-  getService() {
+  getService(event) {
     // get the current value
     // cookies are the right tool for the job in this instance, because they are sent with every request
     // this makes it a better experience when it comes to redirecting users to their streaming service.
@@ -8,12 +8,16 @@ const app = {
     // Using a cookie, the correct information will be included from the get-go and the redirect will be seamless.
   },
   setService() {
-
+    const service = this.options[this.selectedIndex].value;
+    return helpers.httpRequest('POST', `${window.location.href}api/service/`, { body: `service=${service}` })
+    .then((response) => {
+      app.service = response.service;
+    });
   },
   getLinks(event) {
     event.preventDefault();
     const link = document.getElementById('link').value;
-    return httpRequest('POST', `${window.location.href}api/link/`, { body: `link=${link}` });
+    return helpers.httpRequest('POST', `${window.location.href}api/link/`, { body: `link=${link}` });
   },
   update(response) {
     const type = response.type;
