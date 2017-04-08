@@ -12,7 +12,7 @@ describe('Helper methods', () => {
 
   describe('findOrCreate', () => {
     it('should create a record if it does not exist', () => {
-      const attributes = { name: 'this is a test name', artist_id: 1 };
+      const attributes = { name: 'this is a test name', artist_id: 1, slug: '09876543' };
       return expect(helpers.findOrCreate(Album, attributes).then(album => album.attributes.name)).to.eventually.equal('this is a test name');
     });
 
