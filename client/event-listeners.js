@@ -14,11 +14,15 @@ if (document.getElementById('search')) {
   copy.onclick = helpers.copyToClipboard;
 
   const serviceSelection = document.querySelector('.service-selection').querySelector('select');
-  serviceSelection.onchange = app.setService;
+  serviceSelection.onchange = helpers.setServiceSelect;
 }
 
 if (document.getElementById('links')) {
   const links = document.getElementsByClassName('link');
-  for (const node of links) node.lastChild.onclick = helpers.copyToClipboard;
+  for (const node of links) {
+    node.lastChild.onclick = helpers.copyToClipboard;
+    node.lastChild.addEventListener('click', helpers.setServiceClip);
+    node.lastChild.previousElementSibling.onclick = helpers.setServiceClip;
+  }
 }
 
