@@ -12,7 +12,7 @@ describe('Helper methods', () => {
 
   describe('findOrCreate', () => {
     it('should create a record if it does not exist', () => {
-      const attributes = { name: 'this is a test name', artist_id: 1, slug: '09876543' };
+      const attributes = { name: 'this is a test name', artist_id: 1 };
       return expect(helpers.findOrCreate(Album, attributes).then(album => album.attributes.name)).to.eventually.equal('this is a test name');
     });
 
@@ -22,7 +22,7 @@ describe('Helper methods', () => {
     });
   });
 
-  describe.only('createSlug', () => {
+  describe('createSlug', () => {
     it('should create an 8 character unique identifier', () => {
       expect(helpers.createSlug().length).to.equals(8);
     });
