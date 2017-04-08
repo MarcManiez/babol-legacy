@@ -28,3 +28,12 @@ helpers.translateLink = e => app.getLinks(e)
   app.update(response);
   // form.addEventListener('submit', slide);
 });
+
+helpers.setServiceClip = function () {
+  app.setService(this.name);
+};
+
+helpers.setServiceSelect = function () {
+  const service = this.options[this.selectedIndex].value;
+  app.setService(service);
+};
