@@ -106,7 +106,7 @@ module.exports = {
     return Link.where({ id }).fetch({ withRelated: ['artist', 'song', 'album'] })
     .then((link) => {
       const service = req.get('Cookie');
-      if (service) {
+      if (service && service.split('=')[0] === 'service' && helpers.services.includes(service.split('=')[1])) {
         res.redirect(link.attributes[service.split('=')[1]]);
       } else {
         link.attributes.url = req.url;
