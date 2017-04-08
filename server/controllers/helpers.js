@@ -1,3 +1,6 @@
+const base64url = require('base64-url');
+const crypto = require('crypto');
+
 module.exports = {
   services: ['apple', 'spotify'],
 
@@ -64,5 +67,9 @@ module.exports = {
       prev[curr] = prev[curr] + 1 || 1;
       return prev;
     }, {});
+  },
+
+  createSlug() {
+    return base64url.encode(crypto.randomBytes(6));
   },
 };
