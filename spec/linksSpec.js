@@ -116,7 +116,40 @@ describe('Links Controler', () => {
       .catch(err => done(err));
     });
 
+    it.only('should fetch an entry given a search for a name that is present multiple times in the database', function () {
+      this.timeout(6000);
+      // example of windows which is present on Sweet Rain, where there are two versions of Sweet Rain, 1) album by Stan Getz, Chick Corea & Bill Evans, and the other by 2) Chick Corea, Stan Getz & Bill Evans.
+      return expect(request(server).post('/api/link').send({ link: 'https://itun.es/us/djGbr?i=285606958' })
+      .then(() => request(server).post('/api/link').send({ link: 'https://itun.es/us/djGbr?i=285606968' }))
+      .then((hey) => {
+        console.log(hey);
+        return hey.body;
+      }))
+      .to.eventually.not.be.null;
+    });
+
     // should complete a missing link given a previously existing, but incomplete link ==> does this make much sense though? We'll always try to complete it.
     // should fail when xyz
+  });
+
+  describe('get', () => {
+    it('should serve a babol links page if there is no cookie present in the request', () => {
+      return expect(request(server).get('/link/1').then(response => response.redirect)).to.eventually.be.false;
+    });
+
+    it('should serve a babol links page if there is no service cookie present in the request', () => {
+      return expect(request(server).get('/link/1').set('Cookie', 'notService=test')
+      .then(response => response.redirect)).to.eventually.be.false;
+    });
+
+    it('should redirect to the related service if there is a service cookie present in the request', () => {
+      return expect(request(server).get('/link/1').set('Cookie', 'service=apple')
+      .then(response => response.redirect)).to.eventually.be.true;
+    });
+
+    it('should serve a babol links page if there is a service cookie present for an unsupported service', () => {
+      return expect(request(server).get('/link/1').set('Cookie', 'service=musicIsSoCool')
+      .then(response => response.redirect)).to.eventually.be.false;
+    });
   });
 });

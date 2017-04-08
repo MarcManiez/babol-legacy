@@ -3,16 +3,24 @@
 <div class="row flex-center" id="search">
   <div class="introduction">
     <h1>Babol helps you share music with friends</h1>
-    <h2>Share a link from your streaming platform and Babol provides a link that works for all services</h2>
+    <h2>Share a link from your streaming service and Babol provides a link that works for all services</h2>
   </div>
   <div class="search-module">
     <form method="post">
-      <input name="link" type="url" id="link" placeholder="Paste a music link" autofocus>
+      <input name="link" type="url" id="link" placeholder="Enter a music link" autofocus>
     </form>
     <div class="row spread vert-center" id="permalink">
       <input type="url">
       <button class="copy-clipboard">
     </div>
+  </div>
+  <div class="service-selection">
+    <label for="service">Current Service:</label>
+    <select name="service" id="service">
+      <option value="apple">Apple Music</option>
+      <option value="spotify">Spotify</option>
+      <option selected value="">None</option>
+    </select>
   </div>
 </div>
 {% endblock %}

@@ -16,7 +16,8 @@
         "guard-for-in": 0,
         "no-continue": 0,
         "no-unused-expressions": 0,
-        "prefer-rest-params": 0
+        "prefer-rest-params": 0,
+        "arrow-body-style": 0
     },
     "settings": {
         "import/resolver": {

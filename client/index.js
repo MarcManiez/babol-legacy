@@ -1,21 +1,17 @@
 const app = {
+  getService(event) {
+    const service = document.cookie.split('=')[1];
+    const option = document.querySelector(`option[value=${service}]`);
+    if (option) option.selected = true;
+    return service;
+  },
+  setService(service) {
+    document.cookie = `service=${service}; path=/ ; ${!service ? ' expires=Thu, 01 Jan 1970 00:00:01 GMT;' : ''}`;
+  },
   getLinks(event) {
-    return new Promise((resolve, reject) => {
-      event.preventDefault();
-      const link = document.getElementById('link').value;
-      const httpRequest = new XMLHttpRequest();
-      httpRequest.onreadystatechange = () => {
-        if (httpRequest.readyState === XMLHttpRequest.DONE && httpRequest.status === 200) {
-          resolve(JSON.parse(httpRequest.responseText));
-        } else if (httpRequest.status !== 200 && httpRequest.readyState !== 1) {
-          console.error(httpRequest);
-          reject(httpRequest);
-        }
-      };
-      httpRequest.open('POST', `${window.location.href}api/link/`, true);
-      httpRequest.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-      httpRequest.send(`link=${link}`);
-    });
+    event.preventDefault();
+    const link = document.getElementById('link').value;
+    return helpers.httpRequest('POST', `${window.location.href}api/link/`, { body: `link=${link}` });
   },
   update(response) {
     const type = response.type;
@@ -32,6 +28,9 @@ const app = {
     }
     document.getElementById('permalink').children[0].value = app.links.babol;
   },
+  init() {
+    app.getService();
+  },
   content: {
     artist: null,
     album: null,
@@ -39,4 +38,7 @@ const app = {
   },
   links: {},
   services: ['apple', 'spotify'],
+  service: null,
 };
+
+app.init();

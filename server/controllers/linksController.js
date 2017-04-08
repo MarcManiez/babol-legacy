@@ -105,8 +105,13 @@ module.exports = {
     const { id } = req.params;
     return Link.where({ id }).fetch({ withRelated: ['artist', 'song', 'album'] })
     .then((link) => {
-      link.attributes.url = req.url;
-      res.render('links', helpers.formatLink(link));
+      const service = req.get('Cookie');
+      if (service && service.split('=')[0] === 'service' && helpers.services.includes(service.split('=')[1])) {
+        res.redirect(link.attributes[service.split('=')[1]]);
+      } else {
+        link.attributes.url = req.url;
+        res.render('links', helpers.formatLink(link));
+      }
     })
     .catch((err) => {
       console.log(err);

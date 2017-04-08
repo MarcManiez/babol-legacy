@@ -22,7 +22,16 @@
 .search-module {
 	width: 40%;
 	font-size: 2em;
-	transform: translateY(-175%);
+	transform: translateY(-50%);
+}
+
+.service-selection {
+	font-size: 2em;
+	transform: translateY(-250%);
+}
+
+.service-selection > select {
+	font-size: 1em;
 }
 
 #link {
@@ -56,6 +65,15 @@
 	border: none;
 	font-size: 100%;
 	width: 90%;
+	background-color: #f9f8f8;
+}
+
+#permalink button {
+	visibility: hidden;
+}
+
+#permalink:hover button {
+	visibility: visible;
 }
 
 #permalink button:focus {

@@ -4,7 +4,7 @@
   "description": "Share music links seamslessly across services.",
   "main": "server/server.js",
   "scripts": {
-    "test": "mocha -r ./spec/testHelpers ./spec",
+    "test": "mocha -r ./spec/testHelpers --recursive ./spec",
     "debug": "node --nolazy --debug-brk=9222 server/server.js",
     "start": "node server/run.js",
     "dev": "nodemon server/run.js"
