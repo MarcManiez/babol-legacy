@@ -1,18 +1,12 @@
 const app = {
   getService(event) {
-    // get the current value
-    // cookies are the right tool for the job in this instance, because they are sent with every request
-    // this makes it a better experience when it comes to redirecting users to their streaming service.
-    // if we did it with JWT, there would first be a get request to /link/:id
-    // after that response, the javascript is read, and the JWT sent back to the server for a porential redirection. This is bad.
-    // Using a cookie, the correct information will be included from the get-go and the redirect will be seamless.
+    const service = document.cookie.split('=')[1];
+    const option = document.querySelector(`option[value=${service}]`);
+    if (option) option.selected = true;
+    return service;
   },
-  setService() {
-    const service = this.options[this.selectedIndex].value;
-    return helpers.httpRequest('POST', `${window.location.href}api/service/`, { body: `service=${service}` })
-    .then((response) => {
-      app.service = response.service;
-    });
+  setService(service) {
+    document.cookie = `service=${service}; path=/ ; ${!service ? ' expires=Thu, 01 Jan 1970 00:00:01 GMT;' : ''}`;
   },
   getLinks(event) {
     event.preventDefault();
@@ -34,6 +28,9 @@ const app = {
     }
     document.getElementById('permalink').children[0].value = app.links.babol;
   },
+  init() {
+    app.getService();
+  },
   content: {
     artist: null,
     album: null,
@@ -43,3 +40,5 @@ const app = {
   services: ['apple', 'spotify'],
   service: null,
 };
+
+app.init();
