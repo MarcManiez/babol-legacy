@@ -9,7 +9,10 @@ module.exports = {
   findOrCreate(model, criteria) {
     return model.where(criteria).fetch()
     .then((result) => {
-      if (!result) return model.forge(criteria).save(null, { method: 'insert' });
+      if (!result) {
+        criteria.slug = module.exports.createSlug();
+        return model.forge(criteria).save(null, { method: 'insert' });
+      }
       return result;
     });
   },
