@@ -22,6 +22,12 @@ describe('Helper methods', () => {
     });
   });
 
+  describe.only('createSlug', () => {
+    it('should create an 8 character unique identifier', () => {
+      expect(helpers.createSlug().length).to.equals(8);
+    });
+  });
+
   describe('isMatch', () => {
     it('should return a confidence score >= 80% for two strings that are more than 80% similar', () => {
       expect(helpers.isMatch('Art Blakey & The Jazz Messengers', 'Art Blakey and The Jazz Messengers')).to.be.at.least(0.8);
