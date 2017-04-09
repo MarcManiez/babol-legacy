@@ -1,8 +1,14 @@
 const base64url = require('base64-url');
 const crypto = require('crypto');
 
+const Artist = require('../../database/models/artist');
+const Album = require('../../database/models/album');
+const Song = require('../../database/models/song');
+
 module.exports = {
   services: ['apple', 'spotify'],
+
+  tableSwitch: { artist: Artist, album: Album, song: Song },
 
   formatLink: link => JSON.parse(JSON.stringify(link)), // TODO: think of a more efficient way to do this, eh?
 
