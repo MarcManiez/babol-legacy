@@ -41,7 +41,7 @@ describe('Links Controler', () => {
     });
   });
 
-  describe.only('searchLink', () => {
+  describe('searchLink', () => {
     it('should find a matching record (with related entities) if such a record exists', () => {
       const searchCriteria = { type: 'song', song: 'Fantasy in D', album: 'Turning Point', artist: 'Aaron Goldberg', service: 'spotify', id: 3 };
       return linksController.searchLink(searchCriteria)
@@ -73,27 +73,14 @@ describe('Links Controler', () => {
   });
 
   describe('post', () => {
-    it('should load a page with the correct content given an previously existing link', (done) => {
-      request(server).post('/api/link').send({ link: 'https://itun.es/us/nZ-wz?i=425454830' })
-      .end((err, response) => {
-        if (err) done(err);
-        const page = response.text;
-        const outcome = page.indexOf('Fantasy in D') >= 0 && page.indexOf('Turning Point') >= 0 && page.indexOf('Aaron Goldberg') >= 0;
-        expect(outcome).to.be.true;
-        done();
-      });
+    it('should load a page with the correct content given a previously existing link', () => {
+      return request(server).post('/api/link').send({ link: 'https://itun.es/us/nZ-wz?i=425454830' })
+      .then(response => expect(response.body.name).to.equal('Fantasy in D'));
     });
 
-    it('should fetch missing links given a brand new apple link', (done) => {
-      request(server).post('/api/link').send({ link: 'https://itun.es/us/kQRMj?i=161135249' })
-      .then((response) => {
-        const page = response.text;
-        const outcome = page.indexOf('La danse des canards') >= 0 && page.indexOf('La danse des canards') >= 0 && page.indexOf('JJ Lionel') >= 0;
-        expect(outcome).to.be.true;
-        return Link.where({ type: 'song', apple: 'https://itun.es/us/kQRMj?i=161135249' }).fetch()
-        .then((link) => { expect(link.attributes.spotify).to.truthy; done(); });
-      })
-      .catch(err => done(err));
+    it('should fetch missing links given a brand new apple link', () => {
+      return request(server).post('/api/link').send({ link: 'https://itun.es/us/kQRMj?i=161135249' })
+      .then(response => expect(response.body.spotify_id).to.equal('6R5tQlnUOLzZkeInNoes1c'));
     });
 
     it('should fetch missing links given a brand new spotify track link', (done) => {
@@ -115,10 +102,7 @@ describe('Links Controler', () => {
       // example of windows which is present on Sweet Rain, where there are two versions of Sweet Rain, 1) album by Stan Getz, Chick Corea & Bill Evans, and the other by 2) Chick Corea, Stan Getz & Bill Evans.
       return expect(request(server).post('/api/link').send({ link: 'https://itun.es/us/djGbr?i=285606958' })
       .then(() => request(server).post('/api/link').send({ link: 'https://itun.es/us/djGbr?i=285606968' }))
-      .then((hey) => {
-        console.log(hey);
-        return hey.body;
-      }))
+      .then(hey => hey.body))
       .to.eventually.not.be.null;
     });
 
