@@ -1,3 +1,5 @@
+const knex = require('../../connection').knex;
+
 const Artist = require('../../database/models/artist');
 const Album = require('../../database/models/album');
 const Song = require('../../database/models/song');
@@ -55,6 +57,28 @@ module.exports = {
     });
   },
 
+  searchbySlug(slug) {
+    let columns = ['id', 'name', 'slug'];
+    helpers.services.forEach((service) => {
+      columns = columns.concat([`${service}_id`, `${service}_url`]);
+    });
+    columns = columns.join(' ,');
+    const query = `select * from (
+      (select ${columns}, 'artist' as type from artists)
+      UNION
+      (select ${columns}, 'album' as type from albums)
+      UNION
+      (select ${columns}, 'song' as type from songs)
+    ) AS records WHERE slug = '${slug}'`;
+    return knex.raw(query)
+    .then((result) => {
+      const type = result.rows[0].type;
+      const model = helpers.tableSwitch[type];
+      const options = helpers.withRelatedSwitch[type];
+      return model.where({ slug }).fetch({ withRelated: options });
+    });
+  },
+
   post(req, res) {
     const link = req.body.link;
     let service;
@@ -70,7 +94,7 @@ module.exports = {
     })
     .then(longUrl => services[service].getId(longUrl))
     .then((id) => {
-      info.id = id;
+      info.id = id.id || id;
       return services[service].getInfo(id);
     })
     .then((itemInfo) => {
@@ -87,10 +111,16 @@ module.exports = {
         return services[musicService].getId(urls[`${musicService}_url`])
         .then((id) => { urls[`${musicService}_id`] = id.id || id; });
       }))
-        .then(() => newLinkInstance.save(urls)))
-      .then(savedLinkInstance => module.exports.searchLink(info));
+        .then(() => {
+          return newLinkInstance.save(urls);
+        }))
+      .then((savedLinkInstance) => {
+        return module.exports.searchLink(info);
+      });
     })
-    .then(linkInstance => res.json(linkInstance))
+    .then((linkInstance) => {
+      res.json(linkInstance);
+    })
     .catch((err) => {
       console.log('Error in linkController.post:', err);
       res.status(404).render('404');
@@ -98,8 +128,8 @@ module.exports = {
   },
 
   get(req, res) {
-    const { id } = req.params;
-    return Link.where({ id }).fetch({ withRelated: ['artist', 'song', 'album'] })
+    const { slug } = req.params;
+    return module.exports.searchbySlug(slug)
     .then((link) => {
       const service = req.get('Cookie');
       if (service && service.split('=')[0] === 'service' && helpers.services.includes(service.split('=')[1])) {
