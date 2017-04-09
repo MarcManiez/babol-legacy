@@ -7,7 +7,6 @@ const server = require('../server/server');
 const config = require('../knexfile');
 const db = require('../connection');
 const linksController = require('../server/controllers/linksController');
-const Link = require('../database/models/link');
 const Artist = require('../database/models/artist');
 const Album = require('../database/models/album');
 const Song = require('../database/models/song');
@@ -42,39 +41,34 @@ describe('Links Controler', () => {
     });
   });
 
-  describe('searchLink', () => {
-    it('should find a matching record (with related entities) if such a record exists', (done) => {
-      linksController.searchLink({ type: 'song', song: 'Fantasy in D', album: 'Turning Point', artist: 'Aaron Goldberg' })
+  describe.only('searchLink', () => {
+    it('should find a matching record (with related entities) if such a record exists', () => {
+      const searchCriteria = { type: 'song', song: 'Fantasy in D', album: 'Turning Point', artist: 'Aaron Goldberg', service: 'spotify', id: 3 };
+      return linksController.searchLink(searchCriteria)
       .then((linkInstance) => {
-        expect(linkInstance.attributes.spotify).to.equal('https://open.spotify.com/track/2OWKDnQje6CyuUHtOWVuD9');
-        expect(linkInstance.attributes.apple).to.equal('https://itun.es/us/nZ-wz?i=425454830');
+        expect(linkInstance.attributes.name).to.equal('Fantasy in D');
         expect(linkInstance.relations.artist.attributes.name).to.equal('Aaron Goldberg');
         expect(linkInstance.relations.album.attributes.name).to.equal('Turning Point');
-        expect(linkInstance.relations.song.attributes.name).to.equal('Fantasy in D');
-        done();
       })
-      .catch(err => done(err));
+      .catch(err => console.log(err));
     });
 
     it('should resolve to null if a matching record does not exist', () => {
-      expect(linksController.searchLink({ type: 'song', song: 'La Zoubida' })).to.eventually.be.null;
+      const searchCriteria = { type: 'song', artist: 'test', album: 'test', song: 'La Zoubida', service: 'spotify', id: 4 };
+      expect(linksController.searchLink(searchCriteria)).to.eventually.be.null;
     });
   });
 
   describe('createLink', () => {
     // /!\ I am only testing this with songs for now. I have to hope this will also work for albums and artists
-    it('should create a new entry with completely new artist, album, and song info', (done) => {
+    it('should create a new entry with completely new artist, album, and song info', () => {
       const info = { type: 'song', song: 'A la queue leu leu', artist: 'La Bande à Basile', album: 'Double d\'Or: La Bande à Basile' };
-      linksController.createLink(info)
-      .then((song) => { expect(song.attributes.type).to.equals(info.type); done(); })
-      .catch(err => done(err));
+      return expect(linksController.createLink(info).then(song => song.attributes.name)).to.eventually.equals(info.song);
     });
 
-    it('should create a new entry with pre-existing artist, album, and song info', (done) => {
+    it('should create a new entry with pre-existing artist, album, and song info', () => {
       const info = { type: 'song', song: 'Turkish Moonrise', artist: 'Aaron Goldberg', album: 'Turning Point' };
-      linksController.createLink(info)
-      .then((song) => { expect(song.attributes.type).to.equals(info.type); done(); })
-      .catch(err => done(err));
+      return expect(linksController.createLink(info).then(song => song.attributes.name)).to.eventually.equals(info.song);
     });
   });
 
@@ -116,7 +110,7 @@ describe('Links Controler', () => {
       .catch(err => done(err));
     });
 
-    it.only('should fetch an entry given a search for a name that is present multiple times in the database', function () {
+    it('should fetch an entry given a search for a name that is present multiple times in the database', function () {
       this.timeout(6000);
       // example of windows which is present on Sweet Rain, where there are two versions of Sweet Rain, 1) album by Stan Getz, Chick Corea & Bill Evans, and the other by 2) Chick Corea, Stan Getz & Bill Evans.
       return expect(request(server).post('/api/link').send({ link: 'https://itun.es/us/djGbr?i=285606958' })
