@@ -24,7 +24,6 @@ module.exports = {
   searchLink(info) { // searches for a group of links based on its type and its song/album/artist name
     switch (info.type) {
     case 'song':
-      console.log('in song', info);
       return Song.where({ [`${info.service}_id`]: info.id }).fetch({ withRelated: ['artist', 'album'] });
     case 'album':
       return Album.where({ [`${info.service}_id`]: info.id }).fetch({ withRelated: ['artist'] });
@@ -59,9 +58,8 @@ module.exports = {
   post(req, res) {
     const link = req.body.link;
     let service;
-    let info;
-    let linkGroup;
-    let links;
+    let info = {};
+    let urls;
     const remainingServices = helpers.services.slice();
     return module.exports.detectService(link)
     .then((musicService) => {
@@ -80,13 +78,16 @@ module.exports = {
       return module.exports.searchLink(info);
     })
     .then((linkInstance) => {
-      linkGroup = linkInstance;
       if (linkInstance) return linkInstance; // We've reached a fork in the road
-      links = { [service]: link };
-      return Promise.all(remainingServices.map(musicService =>  // collect links from other music services
-         services[musicService].getLink(info).then((permaLink) => { links[musicService] = permaLink; })))
+      urls = { [`${service}_url`]: link };
+      return Promise.all(remainingServices.map(musicService =>  // collect urls from other music services
+         services[musicService].getLink(info).then((permaLink) => { urls[`${musicService}_url`] = permaLink; })))
       .then(() => module.exports.createLink(info))
-      .then(newLinkInstance => newLinkInstance.save(links))
+      .then(newLinkInstance => Promise.all(helpers.services.map((musicService) => {
+        return services[musicService].getId(urls[`${musicService}_url`])
+        .then((id) => { urls[`${musicService}_id`] = id.id || id; });
+      }))
+        .then(() => newLinkInstance.save(urls)))
       .then(savedLinkInstance => module.exports.searchLink(info));
     })
     .then(linkInstance => res.json(linkInstance))
