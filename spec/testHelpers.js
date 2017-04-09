@@ -1,5 +1,5 @@
 const cleaner = require('knex-cleaner');
-const db = require('../connection');
+const db = require('../connection').bookshelf;
 
 global.resetDb = () => {
   beforeEach((done) => {
