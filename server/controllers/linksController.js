@@ -1,4 +1,3 @@
-const Link = require('../../database/models/link');
 const Artist = require('../../database/models/artist');
 const Album = require('../../database/models/album');
 const Song = require('../../database/models/song');
@@ -23,27 +22,19 @@ module.exports = {
   },
 
   searchLink(info) { // searches for a group of links based on its type and its song/album/artist name
-    const type = info.type;
-    const foreignKeyColumn = `${type}_id`;
-    return Promise.all([
-      Artist.where({ name: info.artist || null }).fetch(),
-      Album.where({ name: info.album || null }).fetch(),
-      Song.where({ name: info.song || null }).fetch(),
-    ])
-    .then((instances) => {
-      if (!instances[0]) return null;
-      if (type === 'artist') return instances[0];
-      else if (type === 'album') return Album.where({ name: info.album, artist_id: instances[0].id }).fetch();
-      if (!instances[1]) return null;
-      return Song.where({ name: info.song, album_id: instances[1].id, artist_id: instances[0].id }).fetch();
-    })
-    .then((instance) => {
-      if (!instance) return null;
-      return Link.where({ [foreignKeyColumn]: instance.id, type }).fetch({ withRelated: ['artist', 'song', 'album'] });
-    });
+    switch (info.type) {
+    case 'song':
+      console.log('in song', info);
+      return Song.where({ [`${info.service}_id`]: info.id }).fetch({ withRelated: ['artist', 'album'] });
+    case 'album':
+      return Album.where({ [`${info.service}_id`]: info.id }).fetch({ withRelated: ['artist'] });
+    case 'artist':
+      return Artist.where({ [`${info.service}_id`]: info.id }).fetch();
+    }
   },
 
   createLink(info) {
+    const { type } = info;
     const instances = [];
     return helpers.findOrCreate(Artist, { name: info.artist })
     .then((artist) => {
@@ -58,10 +49,10 @@ module.exports = {
     })
     .then((song) => {
       instances.push(song);
-      const properties = { type: info.type, artist_id: instances[0].id };
-      if (instances[1]) properties.album_id = instances[1].id;
-      if (song) properties.song_id = song.id;
-      return helpers.findOrCreate(Link, properties);
+      const properties = { name: info[type] };
+      if (type !== 'artist') properties.artist_id = instances[0].id;
+      if (type === 'album') properties.album_id = instances[1].id;
+      return helpers.findOrCreate(helpers.tableSwitch[type], properties);
     });
   },
 
@@ -75,13 +66,17 @@ module.exports = {
     return module.exports.detectService(link)
     .then((musicService) => {
       service = musicService;
+      info.service = service;
       remainingServices.splice(remainingServices.indexOf(service), 1);
       return services[service].getUrl(link);
     })
     .then(longUrl => services[service].getId(longUrl))
-    .then(id => services[service].getInfo(id))
+    .then((id) => {
+      info.id = id;
+      return services[service].getInfo(id);
+    })
     .then((itemInfo) => {
-      info = itemInfo;
+      info = Object.assign(info, itemInfo);
       return module.exports.searchLink(info);
     })
     .then((linkInstance) => {
