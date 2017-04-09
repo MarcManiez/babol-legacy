@@ -1,6 +1,5 @@
 const db = require('../../connection');
 const Song = require('./song');
-const Link = require('./link');
 const Album = require('./album');
 
 module.exports = db.Model.extend({
@@ -11,8 +10,5 @@ module.exports = db.Model.extend({
   },
   albums() {
     return this.hasMany(Album);
-  },
-  links() {
-    return this.hasMany(Link);
   },
 });
