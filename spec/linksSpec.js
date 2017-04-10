@@ -96,7 +96,7 @@ describe('Links Controler', () => {
     });
 
     it('should fetch missing links given a brand new apple artist link', () => {
-      expect(request(server).post('/api/link').send({ link: 'https://itun.es/us/pCH' }))
+      return expect(request(server).post('/api/link').send({ link: 'https://itun.es/us/pCH' }))
       .to.eventually.have.deep.property('body.name', 'The Beatles');
     });
 
