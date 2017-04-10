@@ -37,23 +37,23 @@ module.exports = {
   createLink(info) {
     const { type } = info;
     const instances = [];
-    return helpers.findOrCreate(Artist, { name: info.artist })
+    return helpers.findOrCreate(Artist, { name: info.artist }, { slug: helpers.createSlug() })
     .then((artist) => {
       instances.push(artist);
-      return info.album ? helpers.findOrCreate(Album, { name: info.album, artist_id: artist.id }) : null;
+      return info.album ? helpers.findOrCreate(Album, { name: info.album, artist_id: artist.id }, { slug: helpers.createSlug() }) : null;
     })
     .then((album) => {
       instances.push(album);
       const properties = { name: info.song, artist_id: instances[0].id };
       if (album) properties.album_id = album.id;
-      return info.song ? helpers.findOrCreate(Song, properties) : null;
+      return info.song ? helpers.findOrCreate(Song, properties, { slug: helpers.createSlug() }) : null;
     })
     .then((song) => {
       instances.push(song);
       const properties = { name: info[type] };
       if (type !== 'artist') properties.artist_id = instances[0].id;
       if (type === 'album') properties.album_id = instances[1].id;
-      return helpers.findOrCreate(helpers.tableSwitch[type], properties);
+      return helpers.findOrCreate(helpers.tableSwitch[type], properties, { slug: helpers.createSlug() });
     });
   },
 
