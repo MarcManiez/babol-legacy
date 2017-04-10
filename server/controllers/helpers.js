@@ -80,7 +80,8 @@ module.exports = {
     }, {});
   },
 
-  createSlug() {
-    return base64url.encode(crypto.randomBytes(6));
+  createSlug(type) {
+    if (!type) throw new Error('Slug must have type prefix');
+    return `${type}${base64url.encode(crypto.randomBytes(6))}`;
   },
 };

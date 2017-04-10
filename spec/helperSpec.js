@@ -23,9 +23,13 @@ describe('Helper methods', () => {
     });
   });
 
-  describe('createSlug', () => {
+  describe.only('createSlug', () => {
     it('should create an 8 character unique identifier', () => {
-      expect(helpers.createSlug().length).to.equals(8);
+      return expect(helpers.createSlug('a').length).to.equals(9);
+    });
+
+    it('should create an 8 character unique identifier', () => {
+      return expect(helpers.createSlug).to.throw(Error);
     });
   });
 
