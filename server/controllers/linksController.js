@@ -104,11 +104,11 @@ module.exports = {
     })
     .then((linkInstance) => {
       if (linkInstance) return linkInstance; // We've reached a fork in the road
-      urls = { [`${service}_url`]: link };
+      urls = { [`${service}_url`]: link, [`${service}_id`]: info.id };
       return Promise.all(remainingServices.map(musicService =>  // collect urls from other music services
          services[musicService].getLink(info).then((permaLink) => { urls[`${musicService}_url`] = permaLink; })))
       .then(() => module.exports.createLink(info))
-      .then(newLinkInstance => Promise.all(helpers.services.map((musicService) => {
+      .then(newLinkInstance => Promise.all(remainingServices.map((musicService) => {
         return services[musicService].getId(urls[`${musicService}_url`])
         .then((id) => { urls[`${musicService}_id`] = id.id || id; });
       }))
