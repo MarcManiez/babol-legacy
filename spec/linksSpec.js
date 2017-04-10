@@ -78,8 +78,8 @@ describe('Links Controler', () => {
   });
 
   describe('searchBySlug', () => {
-    it('should find a record and return its related items based on a provided slug', () => {
-      const task = linksController.searchbySlug('12345678');
+    it.only('should find a record and return its related items based on a provided slug', () => {
+      const task = linksController.searchbySlug('c12345678');
       return expect(task).to.eventually.have.deep.property('attributes.name', 'Turning Point');
     });
   });
@@ -125,21 +125,21 @@ describe('Links Controler', () => {
 
   describe('get', () => {
     it('should serve a babol links page if there is no cookie present in the request', () => {
-      return expect(request(server).get('/link/12345678').then(response => response.redirect)).to.eventually.be.false;
+      return expect(request(server).get('/link/s12345678').then(response => response.redirect)).to.eventually.be.false;
     });
 
     it('should serve a babol links page if there is no service cookie present in the request', () => {
-      return expect(request(server).get('/link/12345678').set('Cookie', 'notService=test')
+      return expect(request(server).get('/link/s12345678').set('Cookie', 'notService=test')
       .then(response => response.redirect)).to.eventually.be.false;
     });
 
     it('should redirect to the related service if there is a service cookie present in the request', () => {
-      return expect(request(server).get('/link/12345678').set('Cookie', 'service=apple')
+      return expect(request(server).get('/link/s12345678').set('Cookie', 'service=apple')
       .then(response => response.redirect)).to.eventually.be.true;
     });
 
     it('should serve a babol links page if there is a service cookie present for an unsupported service', () => {
-      return expect(request(server).get('/link/12345678').set('Cookie', 'service=musicIsSoCool')
+      return expect(request(server).get('/link/s12345678').set('Cookie', 'service=musicIsSoCool')
       .then(response => response.redirect)).to.eventually.be.false;
     });
   });
