@@ -14,11 +14,11 @@ module.exports = {
 
   formatLink: link => JSON.parse(JSON.stringify(link)), // TODO: think of a more efficient way to do this, eh?
 
-  findOrCreate(model, criteria) {
+  findOrCreate(model, criteria, createdCriteria = {}) {
     return model.where(criteria).fetch()
     .then((result) => {
       if (!result) {
-        criteria.slug = module.exports.createSlug();
+        criteria = Object.assign(criteria, createdCriteria);
         return model.forge(criteria).save(null, { method: 'insert' });
       }
       return result;
