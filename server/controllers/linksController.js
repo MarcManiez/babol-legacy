@@ -32,7 +32,7 @@ module.exports = {
     case 'artist':
       return Artist.where({ [`${info.service}_id`]: info.id }).fetch();
     }
-    throw new Error('Specify a correct type for searchlink.')
+    throw new Error('Specify a correct type for searchlink.');
   },
 
   createLink(info) {
