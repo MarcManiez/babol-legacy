@@ -14,17 +14,23 @@ const app = {
     return helpers.httpRequest('POST', `${window.location.href}api/link/`, { body: `link=${link}` });
   },
   update(response) {
-    const type = response.type;
-    app.links.babol = `${window.location.href}link/${response.id}`;
+    // debugger;
+    const type = helpers.typeSwitch[response.slug[0]];
+    app.links.babol = `${window.location.href}link/${response.slug}`;
     for (let i = 0; i < app.services.length; i += 1) {
-      app.links[app.services[i]] = response[app.services[i]];
+      app.links[app.services[i]] = response[`${app.services[i]}_url`];
     }
-    app.content.artist = response.artist.name;
-    if (type === 'album' || type === 'song') {
-      app.content.album = response.album.name;
+    if (type === 'artist') {
+      app.content.artist = response.name;
+    }
+    if (type === 'album') {
+      app.content.artist = response.artist.name;
+      app.content.album = response.name;
     }
     if (type === 'song') {
-      app.content.song = response.song.name;
+      app.content.artist = response.artist.name;
+      app.content.album = response.album.name;
+      app.content.song = response.name;
     }
     document.getElementById('permalink').children[0].value = app.links.babol;
   },
