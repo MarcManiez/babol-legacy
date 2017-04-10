@@ -7,10 +7,9 @@ const Song = require('../../database/models/song');
 
 module.exports = {
   services: ['apple', 'spotify'],
-
   tableSwitch: { artist: Artist, album: Album, song: Song },
-
   withRelatedSwitch: { artist: [], album: ['artist'], song: ['artist, album'] },
+  slugSwitch: { artist: 'a', album: 'c', song: 's' };
 
   formatLink: link => JSON.parse(JSON.stringify(link)), // TODO: think of a more efficient way to do this, eh?
 
