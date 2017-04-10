@@ -62,30 +62,7 @@ module.exports = {
     const type = helpers.typeSwitch[slug[0]];
     const model = helpers.tableSwitch[type];
     const options = helpers.withRelatedSwitch[type];
-    // return model.where({ slug }).fetch({ withRelated: options });
-    return model.where({ slug }).fetch().then((stuff) => {
-      console.log(stuff);
-      return stuff;
-    });
-    // let columns = ['id', 'name', 'slug'];
-    // helpers.services.forEach((service) => {
-    //   columns = columns.concat([`${service}_id`, `${service}_url`]);
-    // });
-    // columns = columns.join(' ,');
-    // const query = `select * from (
-    //   (select ${columns}, 'artist' as type from artists)
-    //   UNION
-    //   (select ${columns}, 'album' as type from albums)
-    //   UNION
-    //   (select ${columns}, 'song' as type from songs)
-    // ) AS records WHERE slug = '${slug}'`;
-    // return knex.raw(query)
-    // .then((result) => {
-    //   const type = result.rows[0].type;
-    //   const model = helpers.tableSwitch[type];
-    //   const options = helpers.withRelatedSwitch[type];
-    //   return model.where({ slug }).fetch({ withRelated: options });
-    // });
+    return model.where({ slug }).fetch({ withRelated: options });
   },
 
   post(req, res) {
@@ -142,7 +119,7 @@ module.exports = {
     .then((link) => {
       const service = req.get('Cookie');
       if (service && service.split('=')[0] === 'service' && helpers.services.includes(service.split('=')[1])) {
-        res.redirect(link.attributes[service.split('=')[1]]);
+        res.redirect(link.attributes[`${service.split('=')[1]}_url`]);
       } else {
         link.attributes.url = req.url;
         res.render('links', helpers.formatLink(link));
