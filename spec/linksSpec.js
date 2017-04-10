@@ -78,7 +78,7 @@ describe('Links Controler', () => {
   });
 
   describe('searchBySlug', () => {
-    it.only('should find a record and return its related items based on a provided slug', () => {
+    it('should find a record and return its related items based on a provided slug', () => {
       const task = linksController.searchbySlug('c12345678');
       return expect(task).to.eventually.have.deep.property('attributes.name', 'Turning Point');
     });
