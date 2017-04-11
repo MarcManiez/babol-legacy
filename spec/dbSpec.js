@@ -1,6 +1,5 @@
 const expect = require('chai').expect;
 
-const Link = require('../database/models/link');
 const searchLink = require('../server/controllers/linksController').searchLink;
 
 xdescribe('Database Controller', () => {

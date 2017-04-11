@@ -1,12 +1,26 @@
+const base64url = require('base64-url');
+const crypto = require('crypto');
+
+const Artist = require('../../database/models/artist');
+const Album = require('../../database/models/album');
+const Song = require('../../database/models/song');
+
 module.exports = {
   services: ['apple', 'spotify'],
+  tableSwitch: { artist: Artist, album: Album, song: Song },
+  withRelatedSwitch: { artist: [], album: ['artist'], song: ['artist', 'album'] },
+  slugSwitch: { artist: 'a', album: 'c', song: 's' },
+  typeSwitch: { a: 'artist', c: 'album', s: 'song' },
 
   formatLink: link => JSON.parse(JSON.stringify(link)), // TODO: think of a more efficient way to do this, eh?
 
-  findOrCreate(model, criteria) {
+  findOrCreate(model, criteria, createdCriteria = {}) {
     return model.where(criteria).fetch()
     .then((result) => {
-      if (!result) return model.forge(criteria).save(null, { method: 'insert' });
+      if (!result) {
+        criteria = Object.assign(criteria, createdCriteria);
+        return model.forge(criteria).save(null, { method: 'insert' });
+      }
       return result;
     });
   },
@@ -64,5 +78,10 @@ module.exports = {
       prev[curr] = prev[curr] + 1 || 1;
       return prev;
     }, {});
+  },
+
+  createSlug(type) {
+    if (!type) throw new Error('Slug must have type prefix');
+    return `${type}${base64url.encode(crypto.randomBytes(6))}`;
   },
 };

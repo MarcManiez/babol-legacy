@@ -10,6 +10,7 @@ apiRoutes.post('/link', links.post);
 module.exports = (app) => {
   app.use('*/client', express.static(path.join(__dirname, '../client')));
   app.get('/', (req, res) => res.render('index', { url: req.url }));
-  app.get('/link/:id', getLink);
+  app.get('/link/:slug', getLink);
   app.use('/api', apiRoutes);
+  app.use('/*', (req, res) => res.render('404'));
 };

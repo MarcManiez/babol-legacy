@@ -5,9 +5,8 @@ const cleaner = require('knex-cleaner');
 const request = require('supertest');
 const server = require('../server/server');
 const config = require('../knexfile');
-const db = require('../connection');
+const db = require('../connection').bookshelf;
 const linksController = require('../server/controllers/linksController');
-const Link = require('../database/models/link');
 const Artist = require('../database/models/artist');
 const Album = require('../database/models/album');
 const Song = require('../database/models/song');
@@ -43,112 +42,109 @@ describe('Links Controler', () => {
   });
 
   describe('searchLink', () => {
-    it('should find a matching record (with related entities) if such a record exists', (done) => {
-      linksController.searchLink({ type: 'song', song: 'Fantasy in D', album: 'Turning Point', artist: 'Aaron Goldberg' })
+    it('should find a matching record (with related entities) if such a record exists', () => {
+      const searchCriteria = {
+        type: 'song',
+        service: 'spotify',
+        song: 'Fantasy in D',
+        album: 'Turning Point',
+        artist: 'Aaron Goldberg',
+        id: '2OWKDnQje6CyuUHtOWVuD9' };
+      return linksController.searchLink(searchCriteria)
       .then((linkInstance) => {
-        expect(linkInstance.attributes.spotify).to.equal('https://open.spotify.com/track/2OWKDnQje6CyuUHtOWVuD9');
-        expect(linkInstance.attributes.apple).to.equal('https://itun.es/us/nZ-wz?i=425454830');
+        expect(linkInstance.attributes.name).to.equal('Fantasy in D');
         expect(linkInstance.relations.artist.attributes.name).to.equal('Aaron Goldberg');
         expect(linkInstance.relations.album.attributes.name).to.equal('Turning Point');
-        expect(linkInstance.relations.song.attributes.name).to.equal('Fantasy in D');
-        done();
-      })
-      .catch(err => done(err));
+      });
     });
 
     it('should resolve to null if a matching record does not exist', () => {
-      expect(linksController.searchLink({ type: 'song', song: 'La Zoubida' })).to.eventually.be.null;
+      const searchCriteria = { type: 'song', artist: 'test', album: 'test', song: 'La Zoubida', service: 'spotify', id: 4 };
+      expect(linksController.searchLink(searchCriteria)).to.eventually.be.null;
     });
   });
 
   describe('createLink', () => {
     // /!\ I am only testing this with songs for now. I have to hope this will also work for albums and artists
-    it('should create a new entry with completely new artist, album, and song info', (done) => {
+    it('should create a new entry with completely new artist, album, and song info', () => {
       const info = { type: 'song', song: 'A la queue leu leu', artist: 'La Bande à Basile', album: 'Double d\'Or: La Bande à Basile' };
-      linksController.createLink(info)
-      .then((song) => { expect(song.attributes.type).to.equals(info.type); done(); })
-      .catch(err => done(err));
+      return expect(linksController.createLink(info).then(song => song.attributes.name)).to.eventually.equals(info.song);
     });
 
-    it('should create a new entry with pre-existing artist, album, and song info', (done) => {
+    it('should create a new entry with pre-existing artist, album, and song info', () => {
       const info = { type: 'song', song: 'Turkish Moonrise', artist: 'Aaron Goldberg', album: 'Turning Point' };
-      linksController.createLink(info)
-      .then((song) => { expect(song.attributes.type).to.equals(info.type); done(); })
-      .catch(err => done(err));
+      return expect(linksController.createLink(info).then(song => song.attributes.name)).to.eventually.equals(info.song);
+    });
+  });
+
+  describe('searchBySlug', () => {
+    it('should find a record and return its related items based on a provided slug', () => {
+      const task = linksController.searchbySlug('c12345678');
+      return expect(task).to.eventually.have.deep.property('attributes.name', 'Turning Point');
     });
   });
 
   describe('post', () => {
-    it('should load a page with the correct content given an previously existing link', (done) => {
-      request(server).post('/api/link').send({ link: 'https://itun.es/us/nZ-wz?i=425454830' })
-      .end((err, response) => {
-        if (err) done(err);
-        const page = response.text;
-        const outcome = page.indexOf('Fantasy in D') >= 0 && page.indexOf('Turning Point') >= 0 && page.indexOf('Aaron Goldberg') >= 0;
-        expect(outcome).to.be.true;
-        done();
-      });
+    it('should load a page with the correct content given a previously existing link', () => {
+      return request(server).post('/api/link').send({ link: 'https://itun.es/us/nZ-wz?i=425454830' })
+      .then(response => expect(response.body.name).to.equal('Fantasy in D'));
     });
 
-    it('should fetch missing links given a brand new apple link', (done) => {
-      request(server).post('/api/link').send({ link: 'https://itun.es/us/kQRMj?i=161135249' })
-      .then((response) => {
-        const page = response.text;
-        const outcome = page.indexOf('La danse des canards') >= 0 && page.indexOf('La danse des canards') >= 0 && page.indexOf('JJ Lionel') >= 0;
-        expect(outcome).to.be.true;
-        return Link.where({ type: 'song', apple: 'https://itun.es/us/kQRMj?i=161135249' }).fetch()
-        .then((link) => { expect(link.attributes.spotify).to.truthy; done(); });
-      })
-      .catch(err => done(err));
+    it('should fetch missing links given a brand new apple link', () => {
+      return request(server).post('/api/link').send({ link: 'https://itun.es/us/kQRMj?i=161135249' })
+      .then(response => expect(response.body.spotify_id).to.equal('6R5tQlnUOLzZkeInNoes1c'));
     });
 
-    it('should fetch missing links given a brand new spotify track link', (done) => {
-      request(server).post('/api/link').send({ link: 'https://open.spotify.com/track/0IDoJJD5rea4Em9JZA8Wh2' })
-      .then(response => Link.where({ type: 'song', spotify: 'https://open.spotify.com/track/0IDoJJD5rea4Em9JZA8Wh2' }).fetch()
-        .then((link) => { expect(link.attributes.apple).to.equals('https://itunes.apple.com/us/album/el-negro-del-blanco/id448538868?i=448538886&uo=4'); done(); }))
-      .catch(err => done(err));
+    it('should fetch missing links given a brand new apple artist link', () => {
+      return expect(request(server).post('/api/link').send({ link: 'https://itun.es/us/pCH' }))
+      .to.eventually.have.deep.property('body.name', 'The Beatles');
     });
 
-    it('should fetch missing links given a brand new spotify artist link', (done) => {
-      request(server).post('/api/link').send({ link: 'https://open.spotify.com/artist/3pO5VjZ4wOHCMBXOvbMISG' })
-      .then(response => Link.where({ type: 'artist', spotify: 'https://open.spotify.com/artist/3pO5VjZ4wOHCMBXOvbMISG' }).fetch()
-        .then((link) => { expect(link.attributes.apple).to.equals('https://itunes.apple.com/us/artist/ant%C3%B4nio-carlos-jobim/id201663245?uo=4'); done(); }))
-      .catch(err => done(err));
+    it('should fetch missing links given a brand new apple album link', () => {
+      return expect(request(server).post('/api/link').send({ link: 'https://itun.es/us/0rm8C' }))
+      .to.eventually.have.deep.property('body.name', 'Getz/Gilberto');
     });
 
-    it.only('should fetch an entry given a search for a name that is present multiple times in the database', function () {
-      this.timeout(6000);
-      // example of windows which is present on Sweet Rain, where there are two versions of Sweet Rain, 1) album by Stan Getz, Chick Corea & Bill Evans, and the other by 2) Chick Corea, Stan Getz & Bill Evans.
+    it('should fetch missing links given a brand new spotify track link', () => {
+      const task = request(server).post('/api/link').send({ link: 'https://open.spotify.com/track/0IDoJJD5rea4Em9JZA8Wh2' });
+      const url = 'https://itunes.apple.com/us/album/el-negro-del-blanco/id448538868?i=448538886&uo=4';
+      return Promise.all([
+        expect(task).to.eventually.have.deep.property('body.apple_url', url),
+        expect(task).to.eventually.have.deep.property('body.artist.name', 'Yamandú Costa'),
+      ]);
+    });
+
+    it('should fetch missing links given a brand new spotify artist link', () => {
+      const task = request(server).post('/api/link').send({ link: 'https://open.spotify.com/artist/3pO5VjZ4wOHCMBXOvbMISG' });
+      const url = 'https://itunes.apple.com/us/artist/ant%C3%B4nio-carlos-jobim/id201663245?uo=4';
+      return expect(task).to.eventually.have.deep.property('body.apple_url', url);
+    });
+
+    it('should fetch an entry given a search for a name that is present multiple times in the database', function () {
+      this.timeout(10000);
       return expect(request(server).post('/api/link').send({ link: 'https://itun.es/us/djGbr?i=285606958' })
-      .then(() => request(server).post('/api/link').send({ link: 'https://itun.es/us/djGbr?i=285606968' }))
-      .then((hey) => {
-        console.log(hey);
-        return hey.body;
-      }))
-      .to.eventually.not.be.null;
+      .then(() => request(server).post('/api/link').send({ link: 'https://itun.es/us/djGbr?i=285606968' })))
+      .to.eventually.have.deep.property('body.artist.name', 'Chick Corea, Stan Getz & Bill Evans');
     });
-
-    // should complete a missing link given a previously existing, but incomplete link ==> does this make much sense though? We'll always try to complete it.
-    // should fail when xyz
   });
 
   describe('get', () => {
     it('should serve a babol links page if there is no cookie present in the request', () => {
-      return expect(request(server).get('/link/1').then(response => response.redirect)).to.eventually.be.false;
+      return expect(request(server).get('/link/s12345678').then(response => response.redirect)).to.eventually.be.false;
     });
 
     it('should serve a babol links page if there is no service cookie present in the request', () => {
-      return expect(request(server).get('/link/1').set('Cookie', 'notService=test')
+      return expect(request(server).get('/link/s12345678').set('Cookie', 'notService=test')
       .then(response => response.redirect)).to.eventually.be.false;
     });
 
     it('should redirect to the related service if there is a service cookie present in the request', () => {
-      return expect(request(server).get('/link/1').set('Cookie', 'service=apple')
+      return expect(request(server).get('/link/s12345678').set('Cookie', 'service=apple')
       .then(response => response.redirect)).to.eventually.be.true;
     });
 
     it('should serve a babol links page if there is a service cookie present for an unsupported service', () => {
-      return expect(request(server).get('/link/1').set('Cookie', 'service=musicIsSoCool')
+      return expect(request(server).get('/link/s12345678').set('Cookie', 'service=musicIsSoCool')
       .then(response => response.redirect)).to.eventually.be.false;
     });
   });

@@ -37,3 +37,5 @@ helpers.setServiceSelect = function () {
   const service = this.options[this.selectedIndex].value;
   app.setService(service);
 };
+
+helpers.typeSwitch = { a: 'artist', c: 'album', s: 'song' };

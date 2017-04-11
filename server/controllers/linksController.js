@@ -1,4 +1,5 @@
-const Link = require('../../database/models/link');
+const knex = require('../../connection').knex;
+
 const Artist = require('../../database/models/artist');
 const Album = require('../../database/models/album');
 const Song = require('../../database/models/song');
@@ -23,78 +24,91 @@ module.exports = {
   },
 
   searchLink(info) { // searches for a group of links based on its type and its song/album/artist name
-    const type = info.type;
-    const foreignKeyColumn = `${type}_id`;
-    return Promise.all([
-      Artist.where({ name: info.artist || null }).fetch(),
-      Album.where({ name: info.album || null }).fetch(),
-      Song.where({ name: info.song || null }).fetch(),
-    ])
-    .then((instances) => {
-      if (!instances[0]) return null;
-      if (type === 'artist') return instances[0];
-      else if (type === 'album') return Album.where({ name: info.album, artist_id: instances[0].id }).fetch();
-      if (!instances[1]) return null;
-      return Song.where({ name: info.song, album_id: instances[1].id, artist_id: instances[0].id }).fetch();
-    })
-    .then((instance) => {
-      if (!instance) return null;
-      return Link.where({ [foreignKeyColumn]: instance.id, type }).fetch({ withRelated: ['artist', 'song', 'album'] });
-    });
+    switch (info.type) {
+    case 'song':
+      return Song.where({ [`${info.service}_id`]: info.id }).fetch({ withRelated: ['artist', 'album'] });
+    case 'album':
+      return Album.where({ [`${info.service}_id`]: info.id }).fetch({ withRelated: ['artist'] });
+    case 'artist':
+      return Artist.where({ [`${info.service}_id`]: info.id }).fetch();
+    }
+    throw new Error('Specify a correct type for searchlink.');
   },
 
   createLink(info) {
+    const { type } = info;
     const instances = [];
-    return helpers.findOrCreate(Artist, { name: info.artist })
+    return helpers.findOrCreate(Artist, { name: info.artist }, { slug: helpers.createSlug('a') })
     .then((artist) => {
       instances.push(artist);
-      return info.album ? helpers.findOrCreate(Album, { name: info.album, artist_id: artist.id }) : null;
+      return info.album ? helpers.findOrCreate(Album, { name: info.album, artist_id: artist.id }, { slug: helpers.createSlug('c') }) : null;
     })
     .then((album) => {
       instances.push(album);
       const properties = { name: info.song, artist_id: instances[0].id };
       if (album) properties.album_id = album.id;
-      return info.song ? helpers.findOrCreate(Song, properties) : null;
+      return info.song ? helpers.findOrCreate(Song, properties, { slug: helpers.createSlug('s') }) : null;
     })
     .then((song) => {
       instances.push(song);
-      const properties = { type: info.type, artist_id: instances[0].id };
-      if (instances[1]) properties.album_id = instances[1].id;
-      if (song) properties.song_id = song.id;
-      return helpers.findOrCreate(Link, properties);
+      const properties = { name: info[type] };
+      if (type !== 'artist') properties.artist_id = instances[0].id;
+      if (type === 'song') properties.album_id = instances[1].id;
+      return helpers.findOrCreate(helpers.tableSwitch[type], properties, { slug: helpers.createSlug(helpers.slugSwitch[type]) });
     });
+  },
+
+  searchbySlug(slug) {
+    const type = helpers.typeSwitch[slug[0]];
+    const model = helpers.tableSwitch[type];
+    const options = helpers.withRelatedSwitch[type];
+    return model.where({ slug }).fetch({ withRelated: options });
   },
 
   post(req, res) {
     const link = req.body.link;
     let service;
-    let info;
-    let linkGroup;
-    let links;
+    let info = {};
+    let urls;
     const remainingServices = helpers.services.slice();
     return module.exports.detectService(link)
     .then((musicService) => {
       service = musicService;
+      info.service = service;
       remainingServices.splice(remainingServices.indexOf(service), 1);
       return services[service].getUrl(link);
     })
     .then(longUrl => services[service].getId(longUrl))
-    .then(id => services[service].getInfo(id))
+    .then((id) => {
+      info.id = id.id || id;
+      return services[service].getInfo(id);
+    })
     .then((itemInfo) => {
-      info = itemInfo;
+      info = Object.assign(info, itemInfo);
       return module.exports.searchLink(info);
     })
     .then((linkInstance) => {
-      linkGroup = linkInstance;
       if (linkInstance) return linkInstance; // We've reached a fork in the road
-      links = { [service]: link };
-      return Promise.all(remainingServices.map(musicService =>  // collect links from other music services
-         services[musicService].getLink(info).then((permaLink) => { links[musicService] = permaLink; })))
+      urls = { [`${service}_url`]: link, [`${service}_id`]: info.id };
+      return Promise.all(remainingServices.map(musicService =>  // collect urls from other music services
+         services[musicService].getLink(info).then((permaLink) => { urls[`${musicService}_url`] = permaLink; })))
       .then(() => module.exports.createLink(info))
-      .then(newLinkInstance => newLinkInstance.save(links))
-      .then(savedLinkInstance => module.exports.searchLink(info));
+      .then(newLinkInstance => Promise.all(remainingServices.map((musicService) => {
+        console.log(newLinkInstance);
+        return services[musicService].getId(urls[`${musicService}_url`])
+        .then((id) => { urls[`${musicService}_id`] = id.id || id; });
+      }))
+        .then(() => {
+          console.log(urls, newLinkInstance);
+          return newLinkInstance.save(urls);
+        }))
+      .then((savedLinkInstance) => {
+        return module.exports.searchLink(info);
+      });
     })
-    .then(linkInstance => res.json(linkInstance))
+    .then((linkInstance) => {
+      res.json(linkInstance);
+    })
     .catch((err) => {
       console.log('Error in linkController.post:', err);
       res.status(404).render('404');
@@ -102,12 +116,12 @@ module.exports = {
   },
 
   get(req, res) {
-    const { id } = req.params;
-    return Link.where({ id }).fetch({ withRelated: ['artist', 'song', 'album'] })
+    const { slug } = req.params;
+    return module.exports.searchbySlug(slug)
     .then((link) => {
       const service = req.get('Cookie');
       if (service && service.split('=')[0] === 'service' && helpers.services.includes(service.split('=')[1])) {
-        res.redirect(link.attributes[service.split('=')[1]]);
+        res.redirect(link.attributes[`${service.split('=')[1]}_url`]);
       } else {
         link.attributes.url = req.url;
         res.render('links', helpers.formatLink(link));

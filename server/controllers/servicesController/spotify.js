@@ -5,12 +5,12 @@ module.exports = {
   // retrieves content id based on url
   getId(longUrl) {
     return new Promise((resolve, reject) => {
-      if (!longUrl) reject('Error: no link provided.');
+      if (!longUrl) reject(new Error('No link provided.'));
       const result = {
         id: longUrl.match(/\w+$/g)[0],
         type: module.exports.getType(longUrl),
       };
-      result ? resolve(result) : reject('Error: id could not be extracted.');
+      result ? resolve(result) : reject(new Error('Id could not be extracted.'));
     });
   },
 
@@ -83,7 +83,8 @@ module.exports = {
       }
     }
     const score = highScore / coefficient;
-    return score >= benchmark ? link : null;
+    if (score >= benchmark) return link;
+    throw new Error('No link was found whose score was high enough');
   },
 
   search({ song, album, artist, type }) {

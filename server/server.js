@@ -1,7 +1,7 @@
 const express = require('express');
 const swig = require('swig');
 
-const db = require('../connection');
+const db = require('../connection').bookshelf;
 const middleware = require('./middleware');
 
 const routes = require('./routes');

@@ -1,18 +1,12 @@
-const db = require('../../connection');
-const Artist = require('./artist');
-const Album = require('./album');
-const Link = require('./link');
+const db = require('../../connection').bookshelf;
 
 module.exports = db.Model.extend({
   tableName: 'songs',
   hasTimeStamps: true,
   artist() {
-    return this.belongsTo(Artist);
+    return this.belongsTo(require('./artist'));
   },
   album() {
-    return this.belongsTo(Album);
-  },
-  link() {
-    return this.belongsTo(Link);
+    return this.belongsTo(require('./album'));
   },
 });

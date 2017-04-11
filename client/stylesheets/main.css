@@ -19,6 +19,10 @@ h2 {
 	font-size: 150%;
 }
 
+a:hover {
+	text-decoration: underline;
+}
+
 .nav-offset {
 	height: 8vh;
 }
