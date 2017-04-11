@@ -140,7 +140,7 @@ module.exports = () => {
     });
   });
 
-  describe.only('getInfo', () => {
+  describe('getInfo', () => {
     it('should retrieve song information given a valid song id', () => {
       const result = { artist: 'The Beatles', album: 'Abbey Road (Remastered)', song: 'Here Comes The Sun - Remastered 2009', type: 'song' };
       return expect(services.spotify.getInfo({ id: '45yEy5WJywhJ3sDI28ajTm', type: 'track' })).to.eventually.eql(result);
