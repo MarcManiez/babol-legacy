@@ -5,17 +5,16 @@ module.exports = {
     // retrieves the id for a piece of content based on its long form url
   getId(longUrl) {
     return new Promise((resolve, reject) => {
-      if (!longUrl) reject('Error: no link provided.');
+      if (!longUrl) reject(new Error('No link provided.'));
       const id = longUrl.match(/\d+$/g);
-      id ? resolve(id[0]) : reject('Error: id could not be extracted.');
+      id ? resolve(id[0]) : reject(new Error('Id could not be extracted.'));
     });
   },
 
     // returns the long form url from a shortened url, needed to derive content information
   getUrl(link) {
     return axios.get(link)
-      .then(response => response.headers['x-apple-orig-url'])
-      .catch(err => console.log('Error feching apple long form url', err));
+      .then(response => response.headers['x-apple-orig-url']);
   },
 
     // returns the type of content being shared
@@ -29,7 +28,7 @@ module.exports = {
       for (const type in typeRegex) {
         if (longUrl.match(typeRegex[type])) return resolve(type);
       }
-      return reject('Could not derive type based on provided url.');
+      return reject(new Error('Could not derive type based on provided url.'));
     });
   },
 
@@ -52,6 +51,17 @@ module.exports = {
       });
   },
 
+    // aggregates the tasks of getUrl, getId, getInfo and accumulates all the data in a single object.
+  getData(link) {
+    const data = { service: 'apple', apple_url: link };
+    return module.exports.getUrl(link)
+    .then(longUrl => module.exports.getId(longUrl))
+    .then((id) => {
+      data.id = id;
+      return module.exports.getInfo(id);
+    })
+    .then(info => Object.assign(data, info));
+  },
 
     // retrieves the permalink given a set of search criteria
   getLink({ artist, album, song, type }) {
