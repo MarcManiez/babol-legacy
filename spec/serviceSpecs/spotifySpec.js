@@ -37,6 +37,44 @@ module.exports = () => {
     });
   });
 
+  describe.only('getData', () => {
+    it('should retrieve the url, content type, id and content info when given an spotify song url', () => {
+      const result = {
+        artist: 'Aaron Goldberg',
+        song: 'Turkish Moonrise',
+        album: 'Turning Point',
+        id: '5V3K899uEKvBEiGoxOb04H',
+        service: 'spotify',
+        type: 'song',
+        spotify_url: 'https://open.spotify.com/track/5V3K899uEKvBEiGoxOb04H',
+      };
+      expect(services.spotify.getData('https://open.spotify.com/track/5V3K899uEKvBEiGoxOb04H')).to.eventually.eql(result);
+    });
+
+    it('should retrieve the url, content type, id and content info when given an spotify album url', () => {
+      const result = {
+        artist: 'Aaron Goldberg',
+        album: 'Turning Point',
+        id: '5V3K899uEKvBEiGoxOb04H',
+        service: 'spotify',
+        type: 'album',
+        spotify_url: 'https://open.spotify.com/album/1NYLLZQ0DBSMA6hDjonTnR',
+      };
+      expect(services.spotify.getData('https://open.spotify.com/album/1NYLLZQ0DBSMA6hDjonTnR')).to.eventually.eql(result);
+    });
+
+    it('should retrieve the url, content type, id and content info when given an spotify artist url', () => {
+      const result = {
+        artist: 'Aaron Goldberg',
+        id: '5V3K899uEKvBEiGoxOb04H',
+        service: 'spotify',
+        type: 'artist',
+        spotify_url: 'https://open.spotify.com/artist/0BTfBwYC5Mw5ezDg91JBma',
+      };
+      expect(services.spotify.getData('https://open.spotify.com/artist/0BTfBwYC5Mw5ezDg91JBma')).to.eventually.eql(result);
+    });
+  });
+
   describe('scan', () => {
     it('should scan a Spotifiy search API response and return a song when there is one to be found', () => {
       const parameters = { song: 'Moanin\'', album: 'Moanin\'', artist: 'Art Blakey & The Jazz Messengers', type: 'song' };
