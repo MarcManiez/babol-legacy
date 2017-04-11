@@ -62,6 +62,11 @@
 	outline-width: medium;
 }
 
+.link p {
+	font-size: 1.25em;
+	font-weight: normal;
+}
+
 .link > .apple {
 	background: url("client/assets/apple-logo.png");
 	background-size: cover;
@@ -83,6 +88,10 @@
 					link tooltip
 ===============================*/
 
+.link > a {
+	position: relative;
+}
+
 .link > button {
 	position: relative;
 }
@@ -95,9 +104,9 @@
 	background: linear-gradient(to top right, black, #313538);
 	text-align: center;
 	border-radius: 5px;
-	width: 250px;
+	width: 450px;
 	top: -60px;
-	left: -225px;
+	left: 0px;
 	padding: 5px;
 	color: #dfe3e6;
 	pointer-events: none;
