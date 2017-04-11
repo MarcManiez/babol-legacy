@@ -17,28 +17,24 @@ module.exports = () => {
   });
 
   describe('getType', () => {
-    it('should return return the link type \'song\' given a valid song link', (done) => {
-      services.apple.getType('https://itunes.apple.com/us/album/its-you-i-like/id529664802?i=529664804')
-        .then((type) => { expect(type).to.equal('song'); done(); })
-        .catch(err => done(err));
+    it('should return return the link type \'song\' given a valid song link', () => {
+      return expect(services.apple.getType('https://itunes.apple.com/us/album/its-you-i-like/id529664802?i=529664804'))
+      .to.eventually.equal('song');
     });
 
-    it('should return return the link type \'album\' given a valid song link', (done) => {
-      services.apple.getType('https://itunes.apple.com/us/album/turning-point/id425454797')
-        .then((type) => { expect(type).to.equal('album'); done(); })
-        .catch(err => done(err));
+    it('should return return the link type \'album\' given a valid song link', () => {
+      return expect(services.apple.getType('https://itunes.apple.com/us/album/turning-point/id425454797'))
+      .to.eventually.equal('album');
     });
 
-    it('should return return the link type \'artist\' given a valid song link', (done) => {
-      services.apple.getType('https://itunes.apple.com/us/artist/aaron-goldberg/id5421052')
-        .then((type) => { expect(type).to.equal('artist'); done(); })
-        .catch(err => done(err));
+    it('should return return the link type \'artist\' given a valid song link', () => {
+      return expect(services.apple.getType('https://itunes.apple.com/us/artist/aaron-goldberg/id5421052'))
+      .to.eventually.equal('artist');
     });
 
-    it('should throw an error if a link type cannot be derived', (done) => {
-      services.apple.getType('https://itunes.apple.com/us/atist/aaron-goldberg/id5421052')
-        .then()
-        .catch((err) => { expect(err).to.be.equal('Could not derive type based on provided url.'); done(); });
+    it('should throw an error if a link type cannot be derived', () => {
+      return expect(services.apple.getType('https://itunes.apple.com/us/atist/aaron-goldberg/id5421052'))
+      .to.eventually.be.rejected;
     });
   });
 
@@ -88,16 +84,11 @@ module.exports = () => {
         .catch(err => done(err));
     });
 
-    it('should return an error message given no arguments', (done) => {
-      services.apple.getId()
-        .then()
-        .catch((err) => { expect(err).to.equals('Error: no link provided.'); done(); });
-    });
+    it('should return an error message given no arguments', () => expect(services.apple.getId()).to.eventually.be.rejected);
 
-    it('should return an error message if the id could not be extracted', (done) => {
-      services.apple.getId('https://itunes.apple.com/us/artist/aaron-goldberg/id5421052/')
-        .then()
-        .catch((err) => { expect(err).to.equals('Error: id could not be extracted.'); done(); });
+    it('should return an error message if the id could not be extracted', () => {
+      return expect(services.apple.getId('https://itunes.apple.com/us/artist/aaron-goldberg/id5421052/'))
+      .to.eventually.be.rejected;
     });
   });
 
