@@ -70,6 +70,19 @@ module.exports = {
     return model.where({ slug }).fetch({ withRelated: options });
   },
 
+  fetchRemainingData(info, remainingServices) {
+    const retrievals = remainingServices
+    .map(musicService => services[musicService].getLink(info)
+      .then((permaLink) => {
+        info[`${musicService}_url`] = permaLink;
+        return services[musicService].getId(permaLink);
+      })
+      .then((id) => {
+        info[`${musicService}_id`] = id;
+      }));
+    return Promise.all(retrievals).then(() => info);
+  },
+
   post(req, res) {
     const link = req.body.link;
     let service;
