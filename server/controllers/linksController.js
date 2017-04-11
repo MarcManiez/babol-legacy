@@ -53,7 +53,7 @@ module.exports = {
       instances.push(song);
       const properties = { name: info[type] };
       if (type !== 'artist') properties.artist_id = instances[0].id;
-      if (type === 'album') properties.album_id = instances[1].id;
+      if (type === 'song') properties.album_id = instances[1].id;
       return helpers.findOrCreate(helpers.tableSwitch[type], properties, { slug: helpers.createSlug(helpers.slugSwitch[type]) });
     });
   },
@@ -94,10 +94,12 @@ module.exports = {
          services[musicService].getLink(info).then((permaLink) => { urls[`${musicService}_url`] = permaLink; })))
       .then(() => module.exports.createLink(info))
       .then(newLinkInstance => Promise.all(remainingServices.map((musicService) => {
+        console.log(newLinkInstance);
         return services[musicService].getId(urls[`${musicService}_url`])
         .then((id) => { urls[`${musicService}_id`] = id.id || id; });
       }))
         .then(() => {
+          console.log(urls, newLinkInstance);
           return newLinkInstance.save(urls);
         }))
       .then((savedLinkInstance) => {
