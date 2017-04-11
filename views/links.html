@@ -30,15 +30,17 @@
     <div class="row column links">
       <div class="link">
         <div class="service-logo apple"></div>
-        <input name="apple" type="text" value="{{ apple_url }}">
-        <button name="apple" class="copy-clipboard" tooltip="Babol will take you directly to your streaming service next time.
-          Change this setting on the Babol.com home page." tooltip-persistent>
+        <a href="{{ apple_url }}" name="apple" tooltip-persistent
+        tooltip="Babol will take you directly to your streaming service next time. Change this setting on the Babol.com home page.">
+          <p>{{ apple_url }}</p>
+        </a>
       </div>
       <div class="link">
         <div class="service-logo spotify"></div>
-        <input name="spotify" type="text" value="{{ spotify_url }}">
-        <button name="spotify" class="copy-clipboard" tooltip="Babol will take you directly to your streaming service next time.
-          Change this setting on the Babol.com home page." tooltip-persistent>
+        <a href="{{ spotify_url }}" name="spotify" tooltip-persistent
+        tooltip="Babol will take you directly to your streaming service next time. Change this setting on the Babol.com home page.">
+          <p>{{ spotify_url }}</p>
+        </a>
       </div>
     </div>
   </div>
