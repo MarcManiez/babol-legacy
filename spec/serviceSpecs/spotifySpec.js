@@ -48,7 +48,7 @@ module.exports = () => {
         type: 'song',
         spotify_url: 'https://open.spotify.com/track/5V3K899uEKvBEiGoxOb04H',
       };
-      expect(services.spotify.getData('https://open.spotify.com/track/5V3K899uEKvBEiGoxOb04H')).to.eventually.eql(result);
+      return expect(services.spotify.getData('https://open.spotify.com/track/5V3K899uEKvBEiGoxOb04H')).to.eventually.eql(result);
     });
 
     it('should retrieve the url, content type, id and content info when given an spotify album url', () => {
@@ -60,7 +60,7 @@ module.exports = () => {
         type: 'album',
         spotify_url: 'https://open.spotify.com/album/1NYLLZQ0DBSMA6hDjonTnR',
       };
-      expect(services.spotify.getData('https://open.spotify.com/album/1NYLLZQ0DBSMA6hDjonTnR')).to.eventually.eql(result);
+      return expect(services.spotify.getData('https://open.spotify.com/album/1NYLLZQ0DBSMA6hDjonTnR')).to.eventually.eql(result);
     });
 
     it('should retrieve the url, content type, id and content info when given an spotify artist url', () => {
@@ -71,7 +71,7 @@ module.exports = () => {
         type: 'artist',
         spotify_url: 'https://open.spotify.com/artist/0BTfBwYC5Mw5ezDg91JBma',
       };
-      expect(services.spotify.getData('https://open.spotify.com/artist/0BTfBwYC5Mw5ezDg91JBma')).to.eventually.eql(result);
+      return expect(services.spotify.getData('https://open.spotify.com/artist/0BTfBwYC5Mw5ezDg91JBma')).to.eventually.eql(result);
     });
   });
 

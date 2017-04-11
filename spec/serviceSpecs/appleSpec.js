@@ -112,7 +112,7 @@ module.exports = () => {
         type: 'song',
         apple_url: 'https://itun.es/us/nZ-wz?i=425454835',
       };
-      expect(services.apple.getData('https://itun.es/us/nZ-wz?i=425454835')).to.eventually.eql(result);
+      return expect(services.apple.getData('https://itun.es/us/nZ-wz?i=425454835')).to.eventually.eql(result);
     });
 
     it('should retrieve the url, content type, id and content info when given an apple album url', () => {
@@ -124,7 +124,7 @@ module.exports = () => {
         type: 'album',
         apple_url: 'https://itun.es/us/nZ-wz',
       };
-      expect(services.apple.getData('https://itun.es/us/nZ-wz')).to.eventually.eql(result);
+      return expect(services.apple.getData('https://itun.es/us/nZ-wz')).to.eventually.eql(result);
     });
 
     it('should retrieve the url, content type, id and content info when given an apple artist url', () => {
@@ -135,7 +135,7 @@ module.exports = () => {
         type: 'artist',
         apple_url: 'https://itun.es/us/8FRu',
       };
-      expect(services.apple.getData('https://itun.es/us/8FRu')).to.eventually.eql(result);
+      return expect(services.apple.getData('https://itun.es/us/8FRu')).to.eventually.eql(result);
     });
   });
 
