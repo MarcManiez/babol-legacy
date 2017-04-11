@@ -44,6 +44,7 @@ module.exports = () => {
         song: 'Turkish Moonrise',
         album: 'Turning Point',
         id: '5V3K899uEKvBEiGoxOb04H',
+        spotify_id: '5V3K899uEKvBEiGoxOb04H',
         service: 'spotify',
         type: 'song',
         spotify_url: 'https://open.spotify.com/track/5V3K899uEKvBEiGoxOb04H',
@@ -56,6 +57,7 @@ module.exports = () => {
         artist: 'Aaron Goldberg',
         album: 'Turning Point',
         id: '1NYLLZQ0DBSMA6hDjonTnR',
+        spotify_id: '1NYLLZQ0DBSMA6hDjonTnR',
         service: 'spotify',
         type: 'album',
         spotify_url: 'https://open.spotify.com/album/1NYLLZQ0DBSMA6hDjonTnR',
@@ -67,6 +69,7 @@ module.exports = () => {
       const result = {
         artist: 'Aaron Goldberg',
         id: '0BTfBwYC5Mw5ezDg91JBma',
+        spotify_id: '0BTfBwYC5Mw5ezDg91JBma',
         service: 'spotify',
         type: 'artist',
         spotify_url: 'https://open.spotify.com/artist/0BTfBwYC5Mw5ezDg91JBma',
@@ -117,26 +120,26 @@ module.exports = () => {
 
   describe('getId', () => {
     it('should retrieve a song id given a valid long form url', () => {
-      expect(services.spotify.getId('https://open.spotify.com/track/45yEy5WJywhJ3sDI28ajTm'))
-        .to.eventually.eql({ id: '45yEy5WJywhJ3sDI28ajTm', type: 'track' });
+      return expect(services.spotify.getId('https://open.spotify.com/track/45yEy5WJywhJ3sDI28ajTm'))
+        .to.eventually.equal('45yEy5WJywhJ3sDI28ajTm');
     });
 
     it('should retrieve a album id given a valid long form url', () => {
-      expect(services.spotify.getId('https://open.spotify.com/album/5XfJmldgWzrc1AIdbBaVZn'))
-        .to.eventually.eql({ type: 'album', id: '5XfJmldgWzrc1AIdbBaVZn' });
+      return expect(services.spotify.getId('https://open.spotify.com/album/5XfJmldgWzrc1AIdbBaVZn'))
+        .to.eventually.equal('5XfJmldgWzrc1AIdbBaVZn');
     });
 
     it('should retrieve an artist id given a valid long form url', () => {
-      expect(services.spotify.getId('https://open.spotify.com/artist/3WrFJ7ztbogyGnTHbHJFl2'))
-        .to.eventually.eql({ type: 'artist', id: '3WrFJ7ztbogyGnTHbHJFl2' });
+      return expect(services.spotify.getId('https://open.spotify.com/artist/3WrFJ7ztbogyGnTHbHJFl2'))
+        .to.eventually.equal('3WrFJ7ztbogyGnTHbHJFl2');
     });
 
     it('should return an error message given no arguments', () => {
-      expect(services.spotify.getId()).to.eventually.be.rejected;
+      return expect(services.spotify.getId()).to.eventually.be.rejected;
     });
 
     it('should return an error message if the id could not be extracted', () => {
-      expect(services.spotify.getId('https://itunes.apple.com/us/artist/aaron-goldberg/id5421052/')).to.eventually.be.rejected;
+      return expect(services.spotify.getId('https://itunes.apple.com/us/artist/aaron-goldberg/id5421052/')).to.eventually.be.rejected;
     });
   });
 

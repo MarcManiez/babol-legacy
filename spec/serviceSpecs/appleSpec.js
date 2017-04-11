@@ -99,6 +99,7 @@ module.exports = () => {
         song: 'Turkish Moonrise',
         album: 'Turning Point',
         id: '425454835',
+        apple_id: '425454835',
         service: 'apple',
         type: 'song',
         apple_url: 'https://itun.es/us/nZ-wz?i=425454835',
@@ -111,6 +112,7 @@ module.exports = () => {
         artist: 'Aaron Goldberg',
         album: 'Turning Point',
         id: '425454797',
+        apple_id: '425454797',
         service: 'apple',
         type: 'album',
         apple_url: 'https://itun.es/us/nZ-wz',
@@ -122,6 +124,7 @@ module.exports = () => {
       const result = {
         artist: 'Aaron Goldberg',
         id: '5421052',
+        apple_id: '5421052',
         service: 'apple',
         type: 'artist',
         apple_url: 'https://itun.es/us/8FRu',
