@@ -58,6 +58,7 @@ module.exports = {
     .then(longUrl => module.exports.getId(longUrl))
     .then((id) => {
       data.id = id;
+      data.apple_id = id;
       return module.exports.getInfo(id);
     })
     .then(info => Object.assign(data, info));
