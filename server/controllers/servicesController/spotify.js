@@ -54,6 +54,16 @@ module.exports = {
     .then(response => module.exports.scan(response, arguments[0]));
   },
 
+  getData(link) {
+    const data = { service: 'spotify', spotify_url: link };
+    return module.exports.getId(link)
+    .then((id) => {
+      data.id = id;
+      return module.exports.getInfo(id);
+    })
+    .then(info => Object.assign(data, info));
+  },
+
   // analyze a Spotify search API response object and return item with the highest score
   scan(response, parameters, benchmark = 0.75) {
     if (!response || !parameters) throw new Error('scan.song must take a response and parameters.');
