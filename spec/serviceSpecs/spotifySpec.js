@@ -46,8 +46,9 @@ module.exports = () => {
 
     it('should scan a Sptofiy search API response and return null when there is no match to be found', () => {
       const parameters = { song: '22', album: 'Red', artist: 'Taylor Swift', type: 'song' };
-      const answer = services.spotify.scan(mockData.failedSpotifySongSearch, parameters);
-      expect(answer).to.be.null;
+      try { services.spotify.scan(mockData.failedSpotifySongSearch, parameters); } catch (error) {
+        expect(error).to.eql(new Error('No link was found whose score was high enough'));
+      }
     });
 
     it('should scan a Spotifiy search API response and return an album when there is one to be found', () => {
@@ -58,8 +59,9 @@ module.exports = () => {
 
     it('should scan a Spotifiy search API response and return null when there is no album to be found', () => {
       const parameters = { album: 'Red', artist: 'Taylor Swift', type: 'album' };
-      const answer = services.spotify.scan(mockData.failedSpotifyAlbumSearch, parameters);
-      expect(answer).to.be.null;
+      try { services.spotify.scan(mockData.failedSpotifySongSearch, parameters); } catch (error) {
+        expect(error).to.eql(new Error('No link was found whose score was high enough'));
+      }
     });
 
     it('should scan a Spotifiy search API response and return an artist when there is one to be found', () => {
