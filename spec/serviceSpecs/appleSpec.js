@@ -101,6 +101,44 @@ module.exports = () => {
     });
   });
 
+  describe('getData', () => {
+    it('should retrieve the url, content type, id and content info when given an apple song url', () => {
+      const result = {
+        artist: 'Aaron Goldberg',
+        song: 'Turkish Moonrise',
+        album: 'Turning Point',
+        id: '425454835',
+        service: 'apple',
+        type: 'song',
+        apple_url: 'https://itun.es/us/nZ-wz?i=425454835',
+      };
+      expect(services.apple.getData('https://itun.es/us/nZ-wz?i=425454835')).to.eventually.eql(result);
+    });
+
+    it('should retrieve the url, content type, id and content info when given an apple album url', () => {
+      const result = {
+        artist: 'Aaron Goldberg',
+        album: 'Turning Point',
+        id: '425454797',
+        service: 'apple',
+        type: 'album',
+        apple_url: 'https://itun.es/us/nZ-wz',
+      };
+      expect(services.apple.getData('https://itun.es/us/nZ-wz')).to.eventually.eql(result);
+    });
+
+    it('should retrieve the url, content type, id and content info when given an apple artist url', () => {
+      const result = {
+        artist: 'Aaron Goldberg',
+        id: '5421052',
+        service: 'apple',
+        type: 'artist',
+        apple_url: 'https://itun.es/us/8FRu',
+      };
+      expect(services.apple.getData('https://itun.es/us/8FRu')).to.eventually.eql(result);
+    });
+  });
+
   describe('scan', () => {
     it('should scan an apple search API response and return a song when there is one to be found', () => {
       const parameters = { song: 'Moanin\'', album: 'Moanin\'', artist: 'Art Blakey & The Jazz Messengers', type: 'song' };
