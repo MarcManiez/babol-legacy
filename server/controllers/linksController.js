@@ -94,17 +94,11 @@ module.exports = {
          services[musicService].getLink(info).then((permaLink) => { urls[`${musicService}_url`] = permaLink; })))
       .then(() => module.exports.createLink(info))
       .then(newLinkInstance => Promise.all(remainingServices.map((musicService) => {
-        console.log(newLinkInstance);
         return services[musicService].getId(urls[`${musicService}_url`])
         .then((id) => { urls[`${musicService}_id`] = id.id || id; });
       }))
-        .then(() => {
-          console.log(urls, newLinkInstance);
-          return newLinkInstance.save(urls);
-        }))
-      .then((savedLinkInstance) => {
-        return module.exports.searchLink(info);
-      });
+        .then(() => newLinkInstance.save(urls)))
+      .then(savedLinkInstance => module.exports.searchLink(info));
     })
     .then((linkInstance) => {
       res.json(linkInstance);
