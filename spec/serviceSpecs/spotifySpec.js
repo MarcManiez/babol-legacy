@@ -37,7 +37,7 @@ module.exports = () => {
     });
   });
 
-  describe.only('getData', () => {
+  describe('getData', () => {
     it('should retrieve the url, content type, id and content info when given an spotify song url', () => {
       const result = {
         artist: 'Aaron Goldberg',
@@ -55,7 +55,7 @@ module.exports = () => {
       const result = {
         artist: 'Aaron Goldberg',
         album: 'Turning Point',
-        id: '5V3K899uEKvBEiGoxOb04H',
+        id: '1NYLLZQ0DBSMA6hDjonTnR',
         service: 'spotify',
         type: 'album',
         spotify_url: 'https://open.spotify.com/album/1NYLLZQ0DBSMA6hDjonTnR',
@@ -66,7 +66,7 @@ module.exports = () => {
     it('should retrieve the url, content type, id and content info when given an spotify artist url', () => {
       const result = {
         artist: 'Aaron Goldberg',
-        id: '5V3K899uEKvBEiGoxOb04H',
+        id: '0BTfBwYC5Mw5ezDg91JBma',
         service: 'spotify',
         type: 'artist',
         spotify_url: 'https://open.spotify.com/artist/0BTfBwYC5Mw5ezDg91JBma',
@@ -140,20 +140,20 @@ module.exports = () => {
     });
   });
 
-  describe('getInfo', () => {
+  describe.only('getInfo', () => {
     it('should retrieve song information given a valid song id', () => {
       const result = { artist: 'The Beatles', album: 'Abbey Road (Remastered)', song: 'Here Comes The Sun - Remastered 2009', type: 'song' };
-      expect(services.spotify.getInfo({ id: '45yEy5WJywhJ3sDI28ajTm', type: 'track' })).to.eventually.eql(result);
+      return expect(services.spotify.getInfo({ id: '45yEy5WJywhJ3sDI28ajTm', type: 'track' })).to.eventually.eql(result);
     });
 
     it('should retrieve album information given a valid album id', () => {
-      const result = { artist: 'The Beatles', album: 'Live At The Hollywood Bowl', song: null, type: 'album' };
-      expect(services.spotify.getInfo({ type: 'album', id: '5XfJmldgWzrc1AIdbBaVZn' })).to.eventually.eql(result);
+      const result = { artist: 'The Beatles', album: 'Live At The Hollywood Bowl', type: 'album' };
+      return expect(services.spotify.getInfo({ type: 'album', id: '5XfJmldgWzrc1AIdbBaVZn' })).to.eventually.eql(result);
     });
 
     it('should retrieve artist information given a valid artist id', () => {
-      const result = { artist: 'The Beatles', album: null, song: null, type: 'artist' };
-      expect(services.spotify.getInfo({ type: 'artist', id: '3WrFJ7ztbogyGnTHbHJFl2' })).to.eventually.eql(result);
+      const result = { artist: 'The Beatles', type: 'artist' };
+      return expect(services.spotify.getInfo({ type: 'artist', id: '3WrFJ7ztbogyGnTHbHJFl2' })).to.eventually.eql(result);
     });
 
     it('should reject requests with invalid ids', () => expect(services.spotify.getInfo({ id: '5421052abc' })).to.eventually.be.rejected);
