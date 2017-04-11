@@ -11,18 +11,18 @@
       <div class="row column names">
         <div class="name-group">
           <p>Artist:</p>
-          <p class="name">{{ artist.name }}</p>
+          <p class="name">{{ artist.name || name }}</p>
         </div>
-        {% if album %}
+        {% if slug[0] === 'c' || slug[0] === 's' %}
         <div class="name-group">
           <p>Album:</p>
-          <p class="name">{{ album.name }}</p>
+          <p class="name">{{ album.name || name }}</p>
         </div>
         {% endif %}
-        {% if song %}
+        {% if slug[0] === 's' %}
         <div class="name-group">
           <p>Song:</p>
-          <p class="name">{{ song.name }}</p>
+          <p class="name">{{ name }}</p>
         </div>
         {% endif %}
       </div>
@@ -30,13 +30,13 @@
     <div class="row column links">
       <div class="link">
         <div class="service-logo apple"></div>
-        <input name="apple" type="text" value="{{ apple }}">
+        <input name="apple" type="text" value="{{ apple_url }}">
         <button name="apple" class="copy-clipboard" tooltip="Babol will take you directly to your streaming service next time.
           Change this setting on the Babol.com home page." tooltip-persistent>
       </div>
       <div class="link">
         <div class="service-logo spotify"></div>
-        <input name="spotify" type="text" value="{{ spotify }}">
+        <input name="spotify" type="text" value="{{ spotify_url }}">
         <button name="spotify" class="copy-clipboard" tooltip="Babol will take you directly to your streaming service next time.
           Change this setting on the Babol.com home page." tooltip-persistent>
       </div>
