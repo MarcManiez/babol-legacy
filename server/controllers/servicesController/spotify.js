@@ -6,11 +6,8 @@ module.exports = {
   getId(longUrl) {
     return new Promise((resolve, reject) => {
       if (!longUrl) reject(new Error('No link provided.'));
-      const result = {
-        id: longUrl.match(/\w+$/g)[0],
-        type: module.exports.getType(longUrl),
-      };
-      result ? resolve(result) : reject(new Error('Id could not be extracted.'));
+      const id = longUrl.match(/\w+$/g)[0];
+      id ? resolve(id) : reject(new Error('Id could not be extracted.'));
     });
   },
 
@@ -58,8 +55,10 @@ module.exports = {
     const data = { service: 'spotify', spotify_url: link };
     return module.exports.getId(link)
     .then((id) => {
-      data.id = id.id;
-      return module.exports.getInfo(id);
+      data.id = id;
+      data.spotify_id = id;
+      const type = module.exports.getType(link);
+      return module.exports.getInfo({ type, id });
     })
     .then(info => Object.assign(data, info));
   },
