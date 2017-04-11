@@ -35,27 +35,9 @@ module.exports = {
     throw new Error('Specify a correct type for searchlink.');
   },
 
-  createLink(info) {
-    const { type } = info;
-    const instances = [];
-    return helpers.findOrCreate(Artist, { name: info.artist }, { slug: helpers.createSlug('a') })
-    .then((artist) => {
-      instances.push(artist);
-      return info.album ? helpers.findOrCreate(Album, { name: info.album, artist_id: artist.id }, { slug: helpers.createSlug('c') }) : null;
-    })
-    .then((album) => {
-      instances.push(album);
-      const properties = { name: info.song, artist_id: instances[0].id };
-      if (album) properties.album_id = album.id;
-      return info.song ? helpers.findOrCreate(Song, properties, { slug: helpers.createSlug('s') }) : null;
-    })
-    .then((song) => {
-      instances.push(song);
-      const properties = { name: info[type] };
-      if (type !== 'artist') properties.artist_id = instances[0].id;
-      if (type === 'song') properties.album_id = instances[1].id;
-      return helpers.findOrCreate(helpers.tableSwitch[type], properties, { slug: helpers.createSlug(helpers.slugSwitch[type]) });
-    });
+  getInfo(link) {
+    return module.exports.detectService(link)
+    .then(service => services[service].getData(link));
   },
 
   searchbySlug(slug) {
@@ -65,50 +47,60 @@ module.exports = {
     return model.where({ slug }).fetch({ withRelated: options });
   },
 
+  fetchRemainingData(info, remainingServices) {
+    const retrievals = remainingServices
+    .map(musicService => services[musicService].getLink(info)
+      .then((permaLink) => {
+        info[`${musicService}_url`] = permaLink;
+        return services[musicService].getId(permaLink);
+      })
+      .then((id) => {
+        info[`${musicService}_id`] = id;
+      }));
+    return Promise.all(retrievals).then(() => info);
+  },
+
+  createLink(info) {
+    const { type, song, album, artist, apple_id, apple_url, spotify_id, spotify_url } = info;
+    const instances = [];
+    const createdInfo = { apple_id, apple_url, spotify_id, spotify_url, slug: helpers.createSlug('a') };
+    return helpers.findOrCreate(Artist, { name: info.artist }, createdInfo)
+    .then((artistInstance) => {
+      instances.push(artistInstance);
+      createdInfo.slug = helpers.createSlug('c');
+      return info.album ? helpers.findOrCreate(Album, { name: info.album, artist_id: artistInstance.id }, createdInfo) : null;
+    })
+    .then((albumInstance) => {
+      instances.push(albumInstance);
+      createdInfo.slug = helpers.createSlug('s');
+      const properties = { name: info.song, artist_id: instances[0].id };
+      if (albumInstance) properties.album_id = albumInstance.id;
+      return info.song ? helpers.findOrCreate(Song, properties, createdInfo) : null;
+    })
+    .then(() => { // TODO: this may be unnecessary post schema refactor. run tests with this out of the way.
+      const properties = { name: info[type] };
+      if (type !== 'artist') properties.artist_id = instances[0].id;
+      if (type === 'song') properties.album_id = instances[1].id;
+      return helpers.findOrCreate(helpers.tableSwitch[type], properties, { slug: helpers.createSlug(helpers.slugSwitch[type]) });
+    });
+  },
+
+  findOrCreate(info) {
+    return module.exports.searchLink(info)
+    .then((result) => {
+      if (result && result.attributes.spotify_id && result.attributes.apple_id) return result;
+      const remainingServices = helpers.services.slice();
+      remainingServices.splice(remainingServices.indexOf(info.service), 1);
+      return module.exports.fetchRemainingData(info, remainingServices)
+      .then(completedInfo => module.exports.createLink(completedInfo))
+      .then(createdModel => module.exports.searchLink(info));
+    });
+  },
+
   post(req, res) {
-    const link = req.body.link;
-    let service;
-    let info = {};
-    let urls;
-    const remainingServices = helpers.services.slice();
-    return module.exports.detectService(link)
-    .then((musicService) => {
-      service = musicService;
-      info.service = service;
-      remainingServices.splice(remainingServices.indexOf(service), 1);
-      return services[service].getUrl(link);
-    })
-    .then(longUrl => services[service].getId(longUrl))
-    .then((id) => {
-      info.id = id.id || id;
-      return services[service].getInfo(id);
-    })
-    .then((itemInfo) => {
-      info = Object.assign(info, itemInfo);
-      return module.exports.searchLink(info);
-    })
-    .then((linkInstance) => {
-      if (linkInstance) return linkInstance; // We've reached a fork in the road
-      urls = { [`${service}_url`]: link, [`${service}_id`]: info.id };
-      return Promise.all(remainingServices.map(musicService =>  // collect urls from other music services
-         services[musicService].getLink(info).then((permaLink) => { urls[`${musicService}_url`] = permaLink; })))
-      .then(() => module.exports.createLink(info))
-      .then(newLinkInstance => Promise.all(remainingServices.map((musicService) => {
-        console.log(newLinkInstance);
-        return services[musicService].getId(urls[`${musicService}_url`])
-        .then((id) => { urls[`${musicService}_id`] = id.id || id; });
-      }))
-        .then(() => {
-          console.log(urls, newLinkInstance);
-          return newLinkInstance.save(urls);
-        }))
-      .then((savedLinkInstance) => {
-        return module.exports.searchLink(info);
-      });
-    })
-    .then((linkInstance) => {
-      res.json(linkInstance);
-    })
+    return module.exports.getInfo(req.body.link)
+    .then(info => module.exports.findOrCreate(info))
+    .then(linkInstance => res.json(linkInstance))
     .catch((err) => {
       console.log('Error in linkController.post:', err);
       res.status(404).render('404');

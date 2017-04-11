@@ -6,11 +6,8 @@ module.exports = {
   getId(longUrl) {
     return new Promise((resolve, reject) => {
       if (!longUrl) reject(new Error('No link provided.'));
-      const result = {
-        id: longUrl.match(/\w+$/g)[0],
-        type: module.exports.getType(longUrl),
-      };
-      result ? resolve(result) : reject(new Error('Id could not be extracted.'));
+      const id = longUrl.match(/\w+$/g)[0];
+      id ? resolve(id) : reject(new Error('Id could not be extracted.'));
     });
   },
 
@@ -37,10 +34,10 @@ module.exports = {
       info.artist = info.type === 'artist' ? response.name : response.artists[0].name;
       if (info.type === 'album') {
         info.album = response.name;
-      } else {
-        info.album = response.album ? response.album.name : null;
+      } else if (response.album) {
+        info.album = response.album.name;
       }
-      info.song = info.type === 'song' ? response.name : null;
+      if (info.type === 'song') info.song = response.name;
       return info;
     });
   },
@@ -52,6 +49,18 @@ module.exports = {
   getLink({ artist, album, song, type }) { // remove offset, add artist / song / album when possible
     return module.exports.search(arguments[0])
     .then(response => module.exports.scan(response, arguments[0]));
+  },
+
+  getData(link) {
+    const data = { service: 'spotify', spotify_url: link };
+    return module.exports.getId(link)
+    .then((id) => {
+      data.id = id;
+      data.spotify_id = id;
+      const type = module.exports.getType(link);
+      return module.exports.getInfo({ type, id });
+    })
+    .then(info => Object.assign(data, info));
   },
 
   // analyze a Spotify search API response object and return item with the highest score

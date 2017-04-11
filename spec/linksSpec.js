@@ -84,6 +84,35 @@ describe('Links Controler', () => {
     });
   });
 
+  describe('getInfo', () => {
+    it('should retrieve the url, content type, id and content info when given an apple song url', () => {
+      const result = {
+        artist: 'Aaron Goldberg',
+        song: 'Turkish Moonrise',
+        album: 'Turning Point',
+        id: '425454835',
+        apple_id: '425454835',
+        service: 'apple',
+        type: 'song',
+        apple_url: 'https://itun.es/us/nZ-wz?i=425454835',
+      };
+      return expect(linksController.getInfo('https://itun.es/us/nZ-wz?i=425454835')).to.eventually.eql(result);
+    });
+
+    it('should retrieve the url, content type, id and content info when given an spotify album url', () => {
+      const result = {
+        artist: 'Aaron Goldberg',
+        album: 'Turning Point',
+        id: '1NYLLZQ0DBSMA6hDjonTnR',
+        spotify_id: '1NYLLZQ0DBSMA6hDjonTnR',
+        service: 'spotify',
+        type: 'album',
+        spotify_url: 'https://open.spotify.com/album/1NYLLZQ0DBSMA6hDjonTnR',
+      };
+      return expect(linksController.getInfo('https://open.spotify.com/album/1NYLLZQ0DBSMA6hDjonTnR')).to.eventually.eql(result);
+    });
+  });
+
   describe('post', () => {
     it('should load a page with the correct content given a previously existing link', () => {
       return request(server).post('/api/link').send({ link: 'https://itun.es/us/nZ-wz?i=425454830' })
@@ -100,7 +129,7 @@ describe('Links Controler', () => {
       .to.eventually.have.deep.property('body.name', 'The Beatles');
     });
 
-    it('should fetch missing links given a brand new apple album link', () => {
+    it('should fetch missing links given a brand new apple album link', () => { // We expect this to fail to to defficiencies in our spotify.getLink method.
       return expect(request(server).post('/api/link').send({ link: 'https://itun.es/us/0rm8C' }))
       .to.eventually.have.deep.property('body.name', 'Getz/Gilberto');
     });

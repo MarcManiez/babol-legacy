@@ -37,6 +37,47 @@ module.exports = () => {
     });
   });
 
+  describe('getData', () => {
+    it('should retrieve the url, content type, id and content info when given an spotify song url', () => {
+      const result = {
+        artist: 'Aaron Goldberg',
+        song: 'Turkish Moonrise',
+        album: 'Turning Point',
+        id: '5V3K899uEKvBEiGoxOb04H',
+        spotify_id: '5V3K899uEKvBEiGoxOb04H',
+        service: 'spotify',
+        type: 'song',
+        spotify_url: 'https://open.spotify.com/track/5V3K899uEKvBEiGoxOb04H',
+      };
+      return expect(services.spotify.getData('https://open.spotify.com/track/5V3K899uEKvBEiGoxOb04H')).to.eventually.eql(result);
+    });
+
+    it('should retrieve the url, content type, id and content info when given an spotify album url', () => {
+      const result = {
+        artist: 'Aaron Goldberg',
+        album: 'Turning Point',
+        id: '1NYLLZQ0DBSMA6hDjonTnR',
+        spotify_id: '1NYLLZQ0DBSMA6hDjonTnR',
+        service: 'spotify',
+        type: 'album',
+        spotify_url: 'https://open.spotify.com/album/1NYLLZQ0DBSMA6hDjonTnR',
+      };
+      return expect(services.spotify.getData('https://open.spotify.com/album/1NYLLZQ0DBSMA6hDjonTnR')).to.eventually.eql(result);
+    });
+
+    it('should retrieve the url, content type, id and content info when given an spotify artist url', () => {
+      const result = {
+        artist: 'Aaron Goldberg',
+        id: '0BTfBwYC5Mw5ezDg91JBma',
+        spotify_id: '0BTfBwYC5Mw5ezDg91JBma',
+        service: 'spotify',
+        type: 'artist',
+        spotify_url: 'https://open.spotify.com/artist/0BTfBwYC5Mw5ezDg91JBma',
+      };
+      return expect(services.spotify.getData('https://open.spotify.com/artist/0BTfBwYC5Mw5ezDg91JBma')).to.eventually.eql(result);
+    });
+  });
+
   describe('scan', () => {
     it('should scan a Spotifiy search API response and return a song when there is one to be found', () => {
       const parameters = { song: 'Moanin\'', album: 'Moanin\'', artist: 'Art Blakey & The Jazz Messengers', type: 'song' };
@@ -79,43 +120,43 @@ module.exports = () => {
 
   describe('getId', () => {
     it('should retrieve a song id given a valid long form url', () => {
-      expect(services.spotify.getId('https://open.spotify.com/track/45yEy5WJywhJ3sDI28ajTm'))
-        .to.eventually.eql({ id: '45yEy5WJywhJ3sDI28ajTm', type: 'track' });
+      return expect(services.spotify.getId('https://open.spotify.com/track/45yEy5WJywhJ3sDI28ajTm'))
+        .to.eventually.equal('45yEy5WJywhJ3sDI28ajTm');
     });
 
     it('should retrieve a album id given a valid long form url', () => {
-      expect(services.spotify.getId('https://open.spotify.com/album/5XfJmldgWzrc1AIdbBaVZn'))
-        .to.eventually.eql({ type: 'album', id: '5XfJmldgWzrc1AIdbBaVZn' });
+      return expect(services.spotify.getId('https://open.spotify.com/album/5XfJmldgWzrc1AIdbBaVZn'))
+        .to.eventually.equal('5XfJmldgWzrc1AIdbBaVZn');
     });
 
     it('should retrieve an artist id given a valid long form url', () => {
-      expect(services.spotify.getId('https://open.spotify.com/artist/3WrFJ7ztbogyGnTHbHJFl2'))
-        .to.eventually.eql({ type: 'artist', id: '3WrFJ7ztbogyGnTHbHJFl2' });
+      return expect(services.spotify.getId('https://open.spotify.com/artist/3WrFJ7ztbogyGnTHbHJFl2'))
+        .to.eventually.equal('3WrFJ7ztbogyGnTHbHJFl2');
     });
 
     it('should return an error message given no arguments', () => {
-      expect(services.spotify.getId()).to.eventually.be.rejected;
+      return expect(services.spotify.getId()).to.eventually.be.rejected;
     });
 
     it('should return an error message if the id could not be extracted', () => {
-      expect(services.spotify.getId('https://itunes.apple.com/us/artist/aaron-goldberg/id5421052/')).to.eventually.be.rejected;
+      return expect(services.spotify.getId('https://itunes.apple.com/us/artist/aaron-goldberg/id5421052/')).to.eventually.be.rejected;
     });
   });
 
   describe('getInfo', () => {
     it('should retrieve song information given a valid song id', () => {
       const result = { artist: 'The Beatles', album: 'Abbey Road (Remastered)', song: 'Here Comes The Sun - Remastered 2009', type: 'song' };
-      expect(services.spotify.getInfo({ id: '45yEy5WJywhJ3sDI28ajTm', type: 'track' })).to.eventually.eql(result);
+      return expect(services.spotify.getInfo({ id: '45yEy5WJywhJ3sDI28ajTm', type: 'track' })).to.eventually.eql(result);
     });
 
     it('should retrieve album information given a valid album id', () => {
-      const result = { artist: 'The Beatles', album: 'Live At The Hollywood Bowl', song: null, type: 'album' };
-      expect(services.spotify.getInfo({ type: 'album', id: '5XfJmldgWzrc1AIdbBaVZn' })).to.eventually.eql(result);
+      const result = { artist: 'The Beatles', album: 'Live At The Hollywood Bowl', type: 'album' };
+      return expect(services.spotify.getInfo({ type: 'album', id: '5XfJmldgWzrc1AIdbBaVZn' })).to.eventually.eql(result);
     });
 
     it('should retrieve artist information given a valid artist id', () => {
-      const result = { artist: 'The Beatles', album: null, song: null, type: 'artist' };
-      expect(services.spotify.getInfo({ type: 'artist', id: '3WrFJ7ztbogyGnTHbHJFl2' })).to.eventually.eql(result);
+      const result = { artist: 'The Beatles', type: 'artist' };
+      return expect(services.spotify.getInfo({ type: 'artist', id: '3WrFJ7ztbogyGnTHbHJFl2' })).to.eventually.eql(result);
     });
 
     it('should reject requests with invalid ids', () => expect(services.spotify.getInfo({ id: '5421052abc' })).to.eventually.be.rejected);
