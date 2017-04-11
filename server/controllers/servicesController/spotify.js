@@ -37,10 +37,10 @@ module.exports = {
       info.artist = info.type === 'artist' ? response.name : response.artists[0].name;
       if (info.type === 'album') {
         info.album = response.name;
-      } else {
-        info.album = response.album ? response.album.name : null;
+      } else if (response.album) {
+        info.album = response.album.name;
       }
-      info.song = info.type === 'song' ? response.name : null;
+      if (info.type === 'song') info.song = response.name;
       return info;
     });
   },
@@ -58,7 +58,7 @@ module.exports = {
     const data = { service: 'spotify', spotify_url: link };
     return module.exports.getId(link)
     .then((id) => {
-      data.id = id;
+      data.id = id.id;
       return module.exports.getInfo(id);
     })
     .then(info => Object.assign(data, info));
