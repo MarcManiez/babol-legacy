@@ -58,6 +58,11 @@ module.exports = {
     });
   },
 
+  getInfo(link) {
+    return module.exports.detectService(link)
+    .then(service => services[service].getData(link));
+  },
+
   searchbySlug(slug) {
     const type = helpers.typeSwitch[slug[0]];
     const model = helpers.tableSwitch[type];
