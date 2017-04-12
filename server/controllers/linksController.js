@@ -76,12 +76,6 @@ module.exports = {
       const properties = { name: info.song, artist_id: instances[0].id };
       if (albumInstance) properties.album_id = albumInstance.id;
       return info.song ? helpers.findOrCreate(Song, properties, createdInfo) : null;
-    })
-    .then(() => { // TODO: this may be unnecessary post schema refactor. run tests with this out of the way.
-      const properties = { name: info[type] };
-      if (type !== 'artist') properties.artist_id = instances[0].id;
-      if (type === 'song') properties.album_id = instances[1].id;
-      return helpers.findOrCreate(helpers.tableSwitch[type], properties, { slug: helpers.createSlug(helpers.slugSwitch[type]) });
     });
   },
 
