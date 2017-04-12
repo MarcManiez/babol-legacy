@@ -129,7 +129,7 @@ describe('Links Controler', () => {
       .to.eventually.have.deep.property('body.name', 'The Beatles');
     });
 
-    it('should fetch missing links given a brand new apple album link', () => { // We expect this to fail to to defficiencies in our spotify.getLink method.
+    it('should fetch missing links given a brand new apple album link', () => {
       return expect(request(server).post('/api/link').send({ link: 'https://itun.es/us/0rm8C' }))
       .to.eventually.have.deep.property('body.name', 'Getz/Gilberto');
     });
