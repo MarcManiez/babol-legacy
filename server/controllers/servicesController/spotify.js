@@ -112,8 +112,8 @@ module.exports = {
     ];
     const albumSearches = [
       [`artist:${artist} album:${album}`],
-      [`${artist} ${album}`],
       [`${album}`],
+      [`${artist} ${album}`],
     ];
     const artistSearches = [
       [
