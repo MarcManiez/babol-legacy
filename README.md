@@ -4,6 +4,6 @@ Babol is a work in progress with the goal of making music sharing across service
 
 # User Stories
 
-+ A user sharing music should be able to input a link from a Babol-supported music platforms and obtain a Babol permalink listing links to that piece of content on all Babol-supported music platforms.
++ A user sharing music should be able to input a link from a Babol-supported music platform and obtain a Babol permalink listing links to that piece of content on all Babol-supported music platforms.
 + A user consuming a Babol link should be able to access that piece of content on her music platform of choice (provided that it is supported by Babol).
 + A user consuming a Babol link should automatically be redirected to her music platform after the first time.
