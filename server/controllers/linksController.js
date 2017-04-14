@@ -19,6 +19,7 @@ const detectService = module.exports.detectService = (link) => {
       if (link.match(serviceRegexes[service])) resolve(service);
     }
     return reject(error);
+
   });
 };
 
