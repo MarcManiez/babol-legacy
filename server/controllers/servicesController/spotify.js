@@ -42,9 +42,6 @@ module.exports = {
     });
   },
 
-  // Spotify has no shortened urls, therefore we simply return the input url.
-  getUrl: link => link,
-
   // retrieves Spotify link based on search criteria
   getLink({ artist, album, song, type }) { // remove offset, add artist / song / album when possible
     return module.exports.search(arguments[0])
@@ -52,12 +49,13 @@ module.exports = {
   },
 
   getData(link) {
-    const data = { service: 'spotify', spotify_url: link };
+    const data = { service: 'spotify' };
     return module.exports.getId(link)
     .then((id) => {
       data.id = id;
       data.spotify_id = id;
       const type = module.exports.getType(link);
+      data.spotify_url = `https://open.spotify.com/${type === 'song' ? 'track' : type}/${id}`;
       return module.exports.getInfo({ type, id });
     })
     .then(info => Object.assign(data, info));
