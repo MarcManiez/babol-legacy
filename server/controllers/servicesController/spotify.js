@@ -13,9 +13,9 @@ module.exports = {
 
   getType(longUrl) {
     const typeRegex = {
-      track: /\/track\//g,
-      album: /\/album\//g,
-      artist: /\/artist\//g,
+      track: /([/:])track\1/g,
+      album: /([/:])album\1/g,
+      artist: /([/:])artist\1/g,
     };
     for (const type in typeRegex) {
       if (longUrl.match(typeRegex[type])) return type;
