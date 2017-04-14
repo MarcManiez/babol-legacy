@@ -76,6 +76,18 @@ module.exports = () => {
       };
       return expect(services.spotify.getData('https://open.spotify.com/artist/0BTfBwYC5Mw5ezDg91JBma')).to.eventually.eql(result);
     });
+
+    it('should retrieve the url, content type, id and content info when given an spotify artist uri', () => {
+      const result = {
+        artist: 'Aaron Goldberg',
+        id: '0BTfBwYC5Mw5ezDg91JBma',
+        spotify_id: '0BTfBwYC5Mw5ezDg91JBma',
+        service: 'spotify',
+        type: 'artist',
+        spotify_url: 'https://open.spotify.com/artist/0BTfBwYC5Mw5ezDg91JBma',
+      };
+      return expect(services.spotify.getData('spotify:artist:0BTfBwYC5Mw5ezDg91JBma')).to.eventually.eql(result);
+    });
   });
 
   describe('scan', () => {
