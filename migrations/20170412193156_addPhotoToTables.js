@@ -1,23 +1,37 @@
 exports.up = (knex, Promise) => Promise.all([
+  knex.schema.createTable('images', (images) => {
+    images.increments('id').primary();
+    images.string('url').unique().notNullable();
+    images.integer('width');
+    images.integer('height');
+    images.timestamps(true);
+  }),
   knex.schema.table('artists', (artists) => {
-    artists.string('image');
+    artists.integer('image_id').unsigned();
+    artists.foreign('image_id').references('images.id');
+    artists.dropForeign('image_id');
   }),
   knex.schema.table('albums', (albums) => {
-    albums.string('image');
+    albums.integer('image_id').unsigned();
+    albums.foreign('image_id').references('images.id');
+    albums.dropForeign('image_id');
   }),
   knex.schema.table('songs', (songs) => {
-    songs.string('image');
+    songs.integer('image_id').unsigned();
+    songs.foreign('image_id').references('images.id');
+    songs.dropForeign('image_id');
   }),
 ]);
 
 exports.down = (knex, Promise) => Promise.all([
   knex.schema.table('artists', (artists) => {
-    artists.dropColumn('image');
+    artists.dropColumn('image_id');
   }),
-  knex.schema.table('artists', (albums) => {
-    albums.dropColumn('image');
+  knex.schema.table('albums', (albums) => {
+    albums.dropColumn('image_id');
   }),
-  knex.schema.table('artists', (songs) => {
-    songs.dropColumn('image');
+  knex.schema.table('songs', (songs) => {
+    songs.dropColumn('image_id');
   }),
+  knex.schema.dropTable('images'),
 ]);
