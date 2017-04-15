@@ -61,9 +61,10 @@ const fetchRemainingData = module.exports.fetchRemainingData = (info, remainingS
 };
 
 const createLink = module.exports.createLink = (info) => {
-  const { type, song, album, artist, apple_id, apple_url, spotify_id, spotify_url } = info;
+  const { type, song, album, artist, apple_id, apple_url, spotify_id, spotify_url, image_id } = info;
   const instances = [];
   const createdInfo = { apple_id, apple_url, spotify_id, spotify_url, slug: helpers.createSlug('a') };
+  if (image_id) createdInfo.image_id = image_id;
   return helpers.findOrCreate(Artist, { name: info.artist }, createdInfo)
   .then((artistInstance) => {
     instances.push(artistInstance);
