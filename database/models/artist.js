@@ -9,4 +9,7 @@ module.exports = db.Model.extend({
   albums() {
     return this.hasMany(require('./album'));
   },
+  image() {
+    return this.belongsTo(require('./image'));
+  },
 });
