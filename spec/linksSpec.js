@@ -109,6 +109,7 @@ describe('Links Controler', () => {
         type: 'album',
         spotify_url: 'https://open.spotify.com/album/1NYLLZQ0DBSMA6hDjonTnR',
         image: { width: 300, height: 300, url: 'https://i.scdn.co/image/522ab1fc1beac641c1dd2fbac4d3f7aa9818c5a4' },
+        image_id: 1,
       };
       return expect(linksController.getInfo('https://open.spotify.com/album/1NYLLZQ0DBSMA6hDjonTnR')).to.eventually.eql(result);
     });

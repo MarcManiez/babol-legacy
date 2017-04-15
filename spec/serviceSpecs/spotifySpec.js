@@ -49,6 +49,7 @@ module.exports = () => {
         type: 'song',
         spotify_url: 'https://open.spotify.com/track/5V3K899uEKvBEiGoxOb04H',
         image: { width: 300, height: 300, url: 'https://i.scdn.co/image/522ab1fc1beac641c1dd2fbac4d3f7aa9818c5a4' },
+        image_id: 1,
       };
       return expect(spotify.getData('https://open.spotify.com/track/5V3K899uEKvBEiGoxOb04H')).to.eventually.eql(result);
     });
@@ -63,6 +64,7 @@ module.exports = () => {
         type: 'album',
         spotify_url: 'https://open.spotify.com/album/1NYLLZQ0DBSMA6hDjonTnR',
         image: { width: 300, height: 300, url: 'https://i.scdn.co/image/522ab1fc1beac641c1dd2fbac4d3f7aa9818c5a4' },
+        image_id: 1,
       };
       return expect(spotify.getData('https://open.spotify.com/album/1NYLLZQ0DBSMA6hDjonTnR')).to.eventually.eql(result);
     });
@@ -76,6 +78,7 @@ module.exports = () => {
         type: 'artist',
         spotify_url: 'https://open.spotify.com/artist/0BTfBwYC5Mw5ezDg91JBma',
         image: { width: 500, height: 300, url: 'https://i.scdn.co/image/87bb4f8c14ec4432311a043e20f88e8a0943d75e' },
+        image_id: 1,
       };
       return expect(spotify.getData('https://open.spotify.com/artist/0BTfBwYC5Mw5ezDg91JBma')).to.eventually.eql(result);
     });
@@ -89,6 +92,7 @@ module.exports = () => {
         type: 'artist',
         spotify_url: 'https://open.spotify.com/artist/0BTfBwYC5Mw5ezDg91JBma',
         image: { width: 500, height: 300, url: 'https://i.scdn.co/image/87bb4f8c14ec4432311a043e20f88e8a0943d75e' },
+        image_id: 1,
       };
       return expect(spotify.getData('spotify:artist:0BTfBwYC5Mw5ezDg91JBma')).to.eventually.eql(result);
     });
