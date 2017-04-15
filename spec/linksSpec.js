@@ -108,6 +108,7 @@ describe('Links Controler', () => {
         service: 'spotify',
         type: 'album',
         spotify_url: 'https://open.spotify.com/album/1NYLLZQ0DBSMA6hDjonTnR',
+        image: { width: 300, height: 300, url: 'https://i.scdn.co/image/522ab1fc1beac641c1dd2fbac4d3f7aa9818c5a4' },
       };
       return expect(linksController.getInfo('https://open.spotify.com/album/1NYLLZQ0DBSMA6hDjonTnR')).to.eventually.eql(result);
     });
@@ -134,7 +135,7 @@ describe('Links Controler', () => {
       .to.eventually.have.deep.property('body.name', 'Getz/Gilberto');
     });
 
-    it('should fetch missing links given a brand new spotify track link', () => {
+    it.only('should fetch missing links given a brand new spotify track link', () => {
       const task = request(server).post('/api/link').send({ link: 'https://open.spotify.com/track/0IDoJJD5rea4Em9JZA8Wh2' });
       const url = 'https://itunes.apple.com/us/album/el-negro-del-blanco/id448538868?i=448538886&uo=4';
       return Promise.all([
