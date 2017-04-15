@@ -157,17 +157,25 @@ module.exports = () => {
 
   describe('getInfo', () => {
     it('should retrieve song information given a valid song id', () => {
-      const result = { artist: 'The Beatles', album: 'Abbey Road (Remastered)', song: 'Here Comes The Sun - Remastered 2009', type: 'song' };
+      const result = {
+        artist: 'The Beatles',
+        album: 'Abbey Road (Remastered)',
+        song: 'Here Comes The Sun - Remastered 2009',
+        type: 'song',
+        image: { height: 300, url: 'https://i.scdn.co/image/a650b9dadd2b2d66ab9d7788abdcbfab45b2997d', width: 300 },
+      };
       return expect(spotify.getInfo({ id: '45yEy5WJywhJ3sDI28ajTm', type: 'track' })).to.eventually.eql(result);
     });
 
     it('should retrieve album information given a valid album id', () => {
-      const result = { artist: 'The Beatles', album: 'Live At The Hollywood Bowl', type: 'album' };
+      const image = { height: 300, width: 300, url: 'https://i.scdn.co/image/72d45bffa9869ebf00fcbdda25eb664c819abe64' };
+      const result = { artist: 'The Beatles', album: 'Live At The Hollywood Bowl', type: 'album', image };
       return expect(spotify.getInfo({ type: 'album', id: '5XfJmldgWzrc1AIdbBaVZn' })).to.eventually.eql(result);
     });
 
     it('should retrieve artist information given a valid artist id', () => {
-      const result = { artist: 'The Beatles', type: 'artist' };
+      const image = { height: 200, width: 200, url: 'https://i.scdn.co/image/7fe1a693adc52e274962f1c61d76ca9ccc62c191' };
+      const result = { artist: 'The Beatles', type: 'artist', image };
       return expect(spotify.getInfo({ type: 'artist', id: '3WrFJ7ztbogyGnTHbHJFl2' })).to.eventually.eql(result);
     });
 
@@ -176,7 +184,7 @@ module.exports = () => {
     it('should reject requests with non existant ids', () => expect(spotify.getInfo({})).to.eventually.be.rejected);
   });
 
-  describe.only('selectImage', () => {
+  describe('selectImage', () => {
     it('should select the most adequate image among a group of Spotify results', () => {
       const imageSet = [{ height: 640,
         url: 'https://i.scdn.co/image/9cab76ad73ce2adbacbd118ebc632255ce7c1841',
