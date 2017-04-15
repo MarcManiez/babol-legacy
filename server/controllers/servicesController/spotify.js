@@ -1,5 +1,6 @@
 const axios = require('axios');
 const helpers = require('../helpers');
+const Image = require('../../../database/models/image');
 
 module.exports = {
   // selects the best fitting image out of an array of Spotify image results
@@ -75,7 +76,13 @@ module.exports = {
       data.spotify_url = `https://open.spotify.com/${type === 'song' ? 'track' : type}/${id}`;
       return module.exports.getInfo({ type, id });
     })
-    .then(info => Object.assign(data, info));
+    .then((info) => {
+      Object.assign(data, info);
+      return helpers.findOrCreate(Image, info.image);
+    })
+    .then((image) => {
+      return Object.assign(data, { image_id: image.id });
+    });
   },
 
   // analyze a Spotify search API response object and return item with the highest score
