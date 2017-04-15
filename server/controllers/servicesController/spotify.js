@@ -1,23 +1,23 @@
 const axios = require('axios');
 const helpers = require('../helpers');
 
-
-const selectImage = module.exports.selectImage = (imageArray) => {
-  const idealSize = 300;
-  let bestImage;
-  let bestScore;
-  imageArray.forEach((image) => {
-    if (image.height < 200 || image.width < 200) return;
-    const score = Math.abs(image.height - idealSize) + Math.abs(image.width - idealSize);
-    if (score < bestScore || bestScore === undefined) {
-      bestScore = score;
-      bestImage = image;
-    }
-  });
-  return bestImage;
-};
-
 module.exports = {
+  // selects the best fitting image out of an array of Spotify image results
+  selectImage(imageArray) {
+    const idealSize = 300;
+    let bestImage;
+    let bestScore;
+    imageArray.forEach((image) => {
+      if (image.height < 200 || image.width < 200) return;
+      const score = Math.abs(image.height - idealSize) + Math.abs(image.width - idealSize);
+      if (score < bestScore || bestScore === undefined) {
+        bestScore = score;
+        bestImage = image;
+      }
+    });
+    return bestImage;
+  },
+
   // retrieves content id based on url
   getId(longUrl) {
     return new Promise((resolve, reject) => {
@@ -45,7 +45,7 @@ module.exports = {
     .then((response) => {
       response = response.data;
       const info = {};
-      info.image = selectImage(response.images || response.album.images);
+      info.image = module.exports.selectImage(response.images || response.album.images);
       info.type = response.type;
       if (info.type === 'track') info.type = 'song';
       info.artist = info.type === 'artist' ? response.name : response.artists[0].name;
