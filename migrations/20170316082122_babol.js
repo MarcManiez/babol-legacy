@@ -39,7 +39,7 @@ exports.up = (knex, Promise) => Promise.all([
 ]);
 
 exports.down = (knex, Promise) => Promise.all([
-  knex.schema.dropTable('albums'),
   knex.schema.dropTable('songs'),
+  knex.schema.dropTable('albums'),
   knex.schema.dropTable('artists'),
 ]);
