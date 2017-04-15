@@ -84,7 +84,7 @@ describe('Links Controler', () => {
     });
   });
 
-  describe('getInfo', () => {
+  describe.only('getInfo', () => {
     it('should retrieve the url, content type, id and content info when given an apple song url', () => {
       const result = {
         artist: 'Aaron Goldberg',
@@ -113,7 +113,7 @@ describe('Links Controler', () => {
     });
   });
 
-  describe('post', () => {
+  describe.only('post', () => {
     it('should load a page with the correct content given a previously existing link', () => {
       return request(server).post('/api/link').send({ link: 'https://itun.es/us/nZ-wz?i=425454830' })
       .then(response => expect(response.body.name).to.equal('Fantasy in D'));
