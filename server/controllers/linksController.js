@@ -27,11 +27,11 @@ const detectService = module.exports.detectService = (link) => {
 const searchLink = module.exports.searchLink = (info) => { // searches for a group of links based on its type and its song/album/artist name
   switch (info.type) {
   case 'song':
-    return Song.where({ [`${info.service}_id`]: info.id }).fetch({ withRelated: ['artist', 'album'] });
+    return Song.where({ [`${info.service}_id`]: info.id }).fetch({ withRelated: ['artist', 'album', 'image'] });
   case 'album':
-    return Album.where({ [`${info.service}_id`]: info.id }).fetch({ withRelated: ['artist'] });
+    return Album.where({ [`${info.service}_id`]: info.id }).fetch({ withRelated: ['artist', 'image'] });
   case 'artist':
-    return Artist.where({ [`${info.service}_id`]: info.id }).fetch();
+    return Artist.where({ [`${info.service}_id`]: info.id }).fetch({ withRelated: ['image'] });
   }
   throw new Error('Specify a correct type for searchlink.');
 };
