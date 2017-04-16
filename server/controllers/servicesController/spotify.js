@@ -86,9 +86,9 @@ module.exports = {
   },
 
   // analyze a Spotify search API response object and return item with the highest score
-  scan(response, parameters, benchmark = 0.75) {
-    if (!response || !parameters) throw new Error('scan.song must take a response and parameters.');
-    const { artist, album, song, type } = parameters;
+  scan(response, info, benchmark = 0.75) {
+    if (!response || !info) throw new Error('scan.song must take a response and info.');
+    const { artist, album, song, type } = info;
     let link = null;
     let highScore = null;
     const coefficientMap = { song: 3, album: 2, artist: 1 };
@@ -111,6 +111,7 @@ module.exports = {
       if (totalScore > highScore) {
         highScore = totalScore;
         link = items[i].external_urls.spotify;
+        info.image = module.exports.selectImage(items[i].images || items[i].album.images);
       }
     }
     const score = highScore / coefficient;
