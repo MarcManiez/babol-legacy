@@ -1,6 +1,7 @@
 const knex = require('../../connection').knex;
 
 const Artist = require('../../database/models/artist');
+const Image = require('../../database/models/image');
 const Album = require('../../database/models/album');
 const Song = require('../../database/models/song');
 const helpers = require('./helpers');
@@ -56,6 +57,10 @@ const fetchRemainingData = module.exports.fetchRemainingData = (info, remainingS
     })
     .then((id) => {
       info[`${musicService}_id`] = id;
+      return info.image ? helpers.findOrCreate(Image, info.image) : null;
+    })
+    .then((image) => {
+      if (image) info.image_id = image.id;
     }));
   return Promise.all(retrievals).then(() => info);
 };
