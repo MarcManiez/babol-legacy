@@ -14,7 +14,6 @@ const app = {
     return helpers.httpRequest('POST', `${window.location.href}api/link/`, { body: `link=${link}` });
   },
   update(response) {
-    // debugger;
     const type = helpers.typeSwitch[response.slug[0]];
     app.links.babol = `${window.location.href}link/${response.slug}`;
     for (let i = 0; i < app.services.length; i += 1) {
