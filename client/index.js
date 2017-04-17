@@ -19,6 +19,7 @@ const app = {
     for (let i = 0; i < app.services.length; i += 1) {
       app.links[app.services[i]] = response[`${app.services[i]}_url`];
     }
+    app.content.image = response.image.url;
     if (type === 'artist') {
       app.content.artist = response.name;
     }
@@ -40,6 +41,7 @@ const app = {
     artist: null,
     album: null,
     song: null,
+    image: null,
   },
   links: {},
   services: ['apple', 'spotify'],
