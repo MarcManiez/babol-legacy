@@ -7,6 +7,26 @@
 }
 
 /* ==============================
+					content-art
+===============================*/
+
+.content-art {
+	height: 100%;
+	border-right: 1px solid black;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.content-art > div {
+	height: 80%;
+	width: 80%;
+	background-size: 100%;
+	background-repeat: no-repeat;
+}
+
+
+/* ==============================
 					content box
 ===============================*/
 
@@ -17,10 +37,7 @@
 
 .content-names {
 	border-right: 1px solid black;
-}
-
-.content-art {
-	border-right: 1px solid black;
+	height: 100%;
 }
 
 .names {
