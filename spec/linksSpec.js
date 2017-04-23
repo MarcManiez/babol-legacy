@@ -108,6 +108,8 @@ describe('Links Controler', () => {
         service: 'spotify',
         type: 'album',
         spotify_url: 'https://open.spotify.com/album/1NYLLZQ0DBSMA6hDjonTnR',
+        image: { width: 300, height: 300, url: 'https://i.scdn.co/image/522ab1fc1beac641c1dd2fbac4d3f7aa9818c5a4' },
+        image_id: 1,
       };
       return expect(linksController.getInfo('https://open.spotify.com/album/1NYLLZQ0DBSMA6hDjonTnR')).to.eventually.eql(result);
     });
@@ -129,7 +131,7 @@ describe('Links Controler', () => {
       .to.eventually.have.deep.property('body.name', 'The Beatles');
     });
 
-    it('should fetch missing links given a brand new apple album link', () => { // We expect this to fail to to defficiencies in our spotify.getLink method.
+    it('should fetch missing links given a brand new apple album link', () => {
       return expect(request(server).post('/api/link').send({ link: 'https://itun.es/us/0rm8C' }))
       .to.eventually.have.deep.property('body.name', 'Getz/Gilberto');
     });

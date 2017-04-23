@@ -8,7 +8,7 @@ const Song = require('../../database/models/song');
 module.exports = {
   services: ['apple', 'spotify'],
   tableSwitch: { artist: Artist, album: Album, song: Song },
-  withRelatedSwitch: { artist: [], album: ['artist'], song: ['artist', 'album'] },
+  withRelatedSwitch: { artist: ['image'], album: ['artist', 'image'], song: ['artist', 'album', 'image'] },
   slugSwitch: { artist: 'a', album: 'c', song: 's' },
   typeSwitch: { a: 'artist', c: 'album', s: 'song' },
 

@@ -1,7 +1,24 @@
 const axios = require('axios');
 const helpers = require('../helpers');
+const Image = require('../../../database/models/image');
 
 module.exports = {
+  // selects the best fitting image out of an array of Spotify image results
+  selectImage(imageArray) {
+    const idealSize = 300;
+    let bestImage;
+    let bestScore;
+    imageArray.forEach((image) => {
+      if (image.height < 200 || image.width < 200) return;
+      const score = Math.abs(image.height - idealSize) + Math.abs(image.width - idealSize);
+      if (score < bestScore || bestScore === undefined) {
+        bestScore = score;
+        bestImage = image;
+      }
+    });
+    return bestImage;
+  },
+
   // retrieves content id based on url
   getId(longUrl) {
     return new Promise((resolve, reject) => {
@@ -13,9 +30,9 @@ module.exports = {
 
   getType(longUrl) {
     const typeRegex = {
-      track: /\/track\//g,
-      album: /\/album\//g,
-      artist: /\/artist\//g,
+      track: /([/:])track\1/g,
+      album: /([/:])album\1/g,
+      artist: /([/:])artist\1/g,
     };
     for (const type in typeRegex) {
       if (longUrl.match(typeRegex[type])) return type;
@@ -29,6 +46,7 @@ module.exports = {
     .then((response) => {
       response = response.data;
       const info = {};
+      info.image = module.exports.selectImage(response.images || response.album.images);
       info.type = response.type;
       if (info.type === 'track') info.type = 'song';
       info.artist = info.type === 'artist' ? response.name : response.artists[0].name;
@@ -42,9 +60,6 @@ module.exports = {
     });
   },
 
-  // Spotify has no shortened urls, therefore we simply return the input url.
-  getUrl: link => link,
-
   // retrieves Spotify link based on search criteria
   getLink({ artist, album, song, type }) { // remove offset, add artist / song / album when possible
     return module.exports.search(arguments[0])
@@ -52,21 +67,28 @@ module.exports = {
   },
 
   getData(link) {
-    const data = { service: 'spotify', spotify_url: link };
+    const data = { service: 'spotify' };
     return module.exports.getId(link)
     .then((id) => {
       data.id = id;
       data.spotify_id = id;
       const type = module.exports.getType(link);
+      data.spotify_url = `https://open.spotify.com/${type === 'song' ? 'track' : type}/${id}`;
       return module.exports.getInfo({ type, id });
     })
-    .then(info => Object.assign(data, info));
+    .then((info) => {
+      Object.assign(data, info);
+      return helpers.findOrCreate(Image, info.image);
+    })
+    .then((image) => {
+      return Object.assign(data, { image_id: image.id });
+    });
   },
 
   // analyze a Spotify search API response object and return item with the highest score
-  scan(response, parameters, benchmark = 0.75) {
-    if (!response || !parameters) throw new Error('scan.song must take a response and parameters.');
-    const { artist, album, song, type } = parameters;
+  scan(response, info, benchmark = 0.75) {
+    if (!response || !info) throw new Error('scan.song must take a response and info.');
+    const { artist, album, song, type } = info;
     let link = null;
     let highScore = null;
     const coefficientMap = { song: 3, album: 2, artist: 1 };
@@ -89,6 +111,7 @@ module.exports = {
       if (totalScore > highScore) {
         highScore = totalScore;
         link = items[i].external_urls.spotify;
+        info.image = module.exports.selectImage(items[i].images || items[i].album.images);
       }
     }
     const score = highScore / coefficient;
@@ -109,11 +132,12 @@ module.exports = {
         `${song} ${album}`,
       ],
       [`${song}`],
+      [`${album} ${artist}`],
     ];
     const albumSearches = [
       [`artist:${artist} album:${album}`],
-      [`${artist} ${album}`],
       [`${album}`],
+      [`${artist} ${album}`],
     ];
     const artistSearches = [
       [
@@ -130,7 +154,7 @@ module.exports = {
         if (!cases[index]) reject('Could not retrieve any results from Spotify\'s search API.');
         const searches = cases[index]
           .map((search) => {
-            const params = { type, q: search };
+            const params = { type, q: search, limit: 50 };
             if (type === 'song') params.type = 'track';
             return axios.get('https://api.spotify.com/v1/search', { params });
           });

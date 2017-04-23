@@ -69,8 +69,8 @@ module.exports = {
     let entity = type;
     if (type === 'song') entity = 'musicTrack';
     else if (type === 'artist') entity = 'musicArtist';
-    const attribute = `${type}Term`;
-    const params = { media: 'music', term: arguments[0][type], entity, attribute };
+    const attribute = `${type}Term`; // add this to params if a narrower search is needed /!\ this *will* make certain searches return empty
+    const params = { media: 'music', term: arguments[0][type], entity };
     return axios.get('https://itunes.apple.com/search', { params })
       .then(response => module.exports.scan(response, arguments[0]));
   },
