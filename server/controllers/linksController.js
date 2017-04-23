@@ -15,7 +15,7 @@ const detectService = module.exports.detectService = (link) => {
     const serviceRegexes = [
       ['apple', /^https?:\/\/itun\.es\/\S+/g],
       ['spotify', /^https?:\/\/(play|open)\.spotify\.com\/\S+/g],
-      ['spotify', /^spotify:track:.*/g],
+      ['spotify', /^spotify:(track|album|artist):.*/g],
     ];
     for (const index in serviceRegexes) {
       if (link.match(serviceRegexes[index][1])) resolve(serviceRegexes[index][0]);
