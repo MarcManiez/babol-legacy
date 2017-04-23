@@ -153,7 +153,7 @@ module.exports = {
         if (!cases[index]) reject('Could not retrieve any results from Spotify\'s search API.');
         const searches = cases[index]
           .map((search) => {
-            const params = { type, q: search };
+            const params = { type, q: search, limit: 50 };
             if (type === 'song') params.type = 'track';
             return axios.get('https://api.spotify.com/v1/search', { params });
           });
