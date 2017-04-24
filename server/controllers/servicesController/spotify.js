@@ -121,7 +121,11 @@ module.exports = {
 
   search({ song, album, artist, type }) {
     const songSearches = [
-      [`track:${JSON.stringify(song)} artist:${JSON.stringify(artist)} album:${JSON.stringify(album)}`],
+      [
+        `track:${JSON.stringify(song)} artist:${JSON.stringify(artist)} album:${JSON.stringify(album)}`,
+        `${song}`,
+        `${album} ${artist}`,
+      ],
       [
         `track:${JSON.stringify(song)} album:${JSON.stringify(album)}`,
         `track:${JSON.stringify(song)} artist:${JSON.stringify(artist)}`,
@@ -131,8 +135,6 @@ module.exports = {
         `${song} ${artist}`,
         `${song} ${album}`,
       ],
-      [`${song}`],
-      [`${album} ${artist}`],
     ];
     const albumSearches = [
       [`artist:${artist} album:${album}`],
