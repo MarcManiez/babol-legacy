@@ -157,6 +157,17 @@ describe('Links Controler', () => {
       .then(() => request(server).post('/api/link').send({ link: 'https://itun.es/us/djGbr?i=285606968' })))
       .to.eventually.have.deep.property('body.artist.name', 'Chick Corea, Stan Getz & Bill Evans');
     });
+
+  // debugging
+
+    // it.only('should help me figure things out', function () {
+    //   this.timeout(10000);
+    //   return expect(request(server).post('/api/link').send({ link: 'https://itun.es/us/nCTuB?i=458413936' }).then((lol) => {
+    //     console.log(lol);
+    //     return lol;
+    //   }))
+    //   .to.eventually.not.be.null;
+    // });
   });
 
   describe('get', () => {
