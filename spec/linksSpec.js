@@ -92,6 +92,12 @@ describe('Links Controler', () => {
         album: 'Turning Point',
         id: '425454835',
         apple_id: '425454835',
+        apple_album_id: '425454797',
+        apple_album_url: 'https://itunes.apple.com/us/album/turkish-moonrise/id425454797?i=425454835&uo=4',
+        apple_artist_id: '5421052',
+        apple_artist_url: 'https://itunes.apple.com/us/artist/aaron-goldberg/id5421052?uo=4',
+        apple_song_id: '425454835',
+        apple_song_url: 'https://itunes.apple.com/us/album/turkish-moonrise/id425454797?i=425454835&uo=4',
         service: 'apple',
         type: 'song',
         apple_url: 'https://itun.es/us/nZ-wz?i=425454835',
@@ -103,6 +109,23 @@ describe('Links Controler', () => {
       const result = {
         artist: 'Aaron Goldberg',
         album: 'Turning Point',
+        album_image: {
+          height: 300,
+          url: 'https://i.scdn.co/image/522ab1fc1beac641c1dd2fbac4d3f7aa9818c5a4',
+          width: 300,
+        },
+        song_image: {
+          height: 300,
+          url: 'https://i.scdn.co/image/522ab1fc1beac641c1dd2fbac4d3f7aa9818c5a4',
+          width: 300,
+        },
+        spotify_song_id: '1NYLLZQ0DBSMA6hDjonTnR',
+        spotify_song_url: 'https://open.spotify.com/album/1NYLLZQ0DBSMA6hDjonTnR',
+        spotify_album_id: '1NYLLZQ0DBSMA6hDjonTnR',
+        spotify_album_url: 'https://open.spotify.com/album/1NYLLZQ0DBSMA6hDjonTnR',
+        spotify_artist_id: '0BTfBwYC5Mw5ezDg91JBma',
+        spotify_artist_url: 'https://open.spotify.com/artist/0BTfBwYC5Mw5ezDg91JBma',
+        artist_image: null,
         id: '1NYLLZQ0DBSMA6hDjonTnR',
         spotify_id: '1NYLLZQ0DBSMA6hDjonTnR',
         service: 'spotify',
@@ -115,7 +138,7 @@ describe('Links Controler', () => {
     });
   });
 
-  describe.only('post', () => {
+  describe('post', () => {
     it('should load a page with the correct content given a previously existing link', () => {
       return request(server).post('/api/link').send({ link: 'https://itun.es/us/nZ-wz?i=425454830' })
       .then(response => expect(response.body.name).to.equal('Fantasy in D'));

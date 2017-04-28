@@ -40,21 +40,51 @@ module.exports = () => {
 
   describe('getInfo', () => {
     it('should retrieve song information given a valid song id', (done) => {
-      const result = { artist: 'Aaron Goldberg', album: 'Turning Point', song: 'Fantasy in D', type: 'song' };
+      const result = {
+        artist: 'Aaron Goldberg',
+        album: 'Turning Point',
+        song: 'Fantasy in D',
+        type: 'song',
+        apple_album_id: '425454797',
+        apple_album_url: 'https://itunes.apple.com/us/album/fantasy-in-d/id425454797?i=425454830&uo=4',
+        apple_artist_id: '5421052',
+        apple_artist_url: 'https://itunes.apple.com/us/artist/aaron-goldberg/id5421052?uo=4',
+        apple_song_id: '425454830',
+        apple_song_url: 'https://itunes.apple.com/us/album/fantasy-in-d/id425454797?i=425454830&uo=4',
+      };
       services.apple.getInfo('425454830')
         .then((info) => { expect(info).to.eql(result); done(); })
         .catch(err => done(err));
     });
 
     it('should retrieve album information given a valid album id', (done) => {
-      const result = { artist: 'Aaron Goldberg', album: 'Turning Point', type: 'album' };
+      const result = {
+        artist: 'Aaron Goldberg',
+        album: 'Turning Point',
+        type: 'album',
+        apple_album_id: '425454797',
+        apple_album_url: 'https://itunes.apple.com/us/album/turning-point/id425454797?uo=4',
+        apple_artist_id: '5421052',
+        apple_artist_url: 'https://itunes.apple.com/us/artist/aaron-goldberg/id5421052?uo=4',
+        apple_song_id: null,
+        apple_song_url: null,
+      };
       services.apple.getInfo('425454797')
         .then((info) => { expect(info).to.eql(result); done(); })
         .catch(err => done(err));
     });
 
     it('should retrieve artist information given a valid artist id', (done) => {
-      const result = { artist: 'Aaron Goldberg', type: 'artist' };
+      const result = {
+        artist: 'Aaron Goldberg',
+        type: 'artist',
+        apple_album_id: null,
+        apple_album_url: null,
+        apple_artist_id: '5421052',
+        apple_artist_url: 'https://itunes.apple.com/us/artist/aaron-goldberg/id5421052?uo=4',
+        apple_song_id: null,
+        apple_song_url: null,
+      };
       services.apple.getInfo('5421052')
         .then((info) => { expect(info).to.eql(result); done(); })
         .catch(err => done(err));
@@ -99,7 +129,13 @@ module.exports = () => {
         song: 'Turkish Moonrise',
         album: 'Turning Point',
         id: '425454835',
+        apple_album_id: '425454797',
+        apple_album_url: 'https://itunes.apple.com/us/album/turkish-moonrise/id425454797?i=425454835&uo=4',
+        apple_artist_id: '5421052',
+        apple_artist_url: 'https://itunes.apple.com/us/artist/aaron-goldberg/id5421052?uo=4',
         apple_id: '425454835',
+        apple_song_id: '425454835',
+        apple_song_url: 'https://itunes.apple.com/us/album/turkish-moonrise/id425454797?i=425454835&uo=4',
         service: 'apple',
         type: 'song',
         apple_url: 'https://itun.es/us/nZ-wz?i=425454835',
@@ -116,6 +152,12 @@ module.exports = () => {
         service: 'apple',
         type: 'album',
         apple_url: 'https://itun.es/us/nZ-wz',
+        apple_album_id: '425454797',
+        apple_album_url: 'https://itunes.apple.com/us/album/turning-point/id425454797?uo=4',
+        apple_artist_id: '5421052',
+        apple_artist_url: 'https://itunes.apple.com/us/artist/aaron-goldberg/id5421052?uo=4',
+        apple_song_id: null,
+        apple_song_url: null,
       };
       return expect(services.apple.getData('https://itun.es/us/nZ-wz')).to.eventually.eql(result);
     });
@@ -128,6 +170,12 @@ module.exports = () => {
         service: 'apple',
         type: 'artist',
         apple_url: 'https://itun.es/us/8FRu',
+        apple_album_id: null,
+        apple_album_url: null,
+        apple_artist_id: '5421052',
+        apple_artist_url: 'https://itunes.apple.com/us/artist/aaron-goldberg/id5421052?uo=4',
+        apple_song_id: null,
+        apple_song_url: null,
       };
       return expect(services.apple.getData('https://itun.es/us/8FRu')).to.eventually.eql(result);
     });

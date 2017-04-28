@@ -38,18 +38,39 @@ module.exports = () => {
   });
 
   describe('getData', () => {
-    it('should retrieve the url, content type, id and content info when given an spotify song url', () => {
+    it('should retrieve the url, content type, id and content info when given a spotify song url', () => {
       const result = {
-        artist: 'Aaron Goldberg',
-        song: 'Turkish Moonrise',
         album: 'Turning Point',
+        album_image: {
+          height: 300,
+          url: 'https://i.scdn.co/image/522ab1fc1beac641c1dd2fbac4d3f7aa9818c5a4',
+          width: 300,
+        },
+        artist: 'Aaron Goldberg',
+        artist_image: null,
         id: '5V3K899uEKvBEiGoxOb04H',
-        spotify_id: '5V3K899uEKvBEiGoxOb04H',
-        service: 'spotify',
-        type: 'song',
-        spotify_url: 'https://open.spotify.com/track/5V3K899uEKvBEiGoxOb04H',
-        image: { width: 300, height: 300, url: 'https://i.scdn.co/image/522ab1fc1beac641c1dd2fbac4d3f7aa9818c5a4' },
+        image: {
+          height: 300,
+          url: 'https://i.scdn.co/image/522ab1fc1beac641c1dd2fbac4d3f7aa9818c5a4',
+          width: 300,
+        },
         image_id: 1,
+        service: 'spotify',
+        song: 'Turkish Moonrise',
+        song_image: {
+          height: 300,
+          url: 'https://i.scdn.co/image/522ab1fc1beac641c1dd2fbac4d3f7aa9818c5a4',
+          width: 300,
+        },
+        spotify_album_id: '1NYLLZQ0DBSMA6hDjonTnR',
+        spotify_album_url: 'https://open.spotify.com/album/1NYLLZQ0DBSMA6hDjonTnR',
+        spotify_artist_id: '0BTfBwYC5Mw5ezDg91JBma',
+        spotify_artist_url: 'https://open.spotify.com/artist/0BTfBwYC5Mw5ezDg91JBma',
+        spotify_id: '5V3K899uEKvBEiGoxOb04H',
+        spotify_song_id: '5V3K899uEKvBEiGoxOb04H',
+        spotify_song_url: 'https://open.spotify.com/track/5V3K899uEKvBEiGoxOb04H',
+        spotify_url: 'https://open.spotify.com/track/5V3K899uEKvBEiGoxOb04H',
+        type: 'song',
       };
       return expect(spotify.getData('https://open.spotify.com/track/5V3K899uEKvBEiGoxOb04H')).to.eventually.eql(result);
     });
@@ -57,7 +78,13 @@ module.exports = () => {
     it('should retrieve the url, content type, id and content info when given an spotify album url', () => {
       const result = {
         artist: 'Aaron Goldberg',
+        artist_image: null,
         album: 'Turning Point',
+        album_image: {
+          height: 300,
+          url: 'https://i.scdn.co/image/522ab1fc1beac641c1dd2fbac4d3f7aa9818c5a4',
+          width: 300,
+        },
         id: '1NYLLZQ0DBSMA6hDjonTnR',
         spotify_id: '1NYLLZQ0DBSMA6hDjonTnR',
         service: 'spotify',
@@ -65,6 +92,17 @@ module.exports = () => {
         spotify_url: 'https://open.spotify.com/album/1NYLLZQ0DBSMA6hDjonTnR',
         image: { width: 300, height: 300, url: 'https://i.scdn.co/image/522ab1fc1beac641c1dd2fbac4d3f7aa9818c5a4' },
         image_id: 1,
+        song_image: {
+          height: 300,
+          url: 'https://i.scdn.co/image/522ab1fc1beac641c1dd2fbac4d3f7aa9818c5a4',
+          width: 300,
+        },
+        spotify_album_id: '1NYLLZQ0DBSMA6hDjonTnR',
+        spotify_album_url: 'https://open.spotify.com/album/1NYLLZQ0DBSMA6hDjonTnR',
+        spotify_artist_id: '0BTfBwYC5Mw5ezDg91JBma',
+        spotify_artist_url: 'https://open.spotify.com/artist/0BTfBwYC5Mw5ezDg91JBma',
+        spotify_song_id: '1NYLLZQ0DBSMA6hDjonTnR',
+        spotify_song_url: 'https://open.spotify.com/album/1NYLLZQ0DBSMA6hDjonTnR',
       };
       return expect(spotify.getData('https://open.spotify.com/album/1NYLLZQ0DBSMA6hDjonTnR')).to.eventually.eql(result);
     });
@@ -78,6 +116,27 @@ module.exports = () => {
         type: 'artist',
         spotify_url: 'https://open.spotify.com/artist/0BTfBwYC5Mw5ezDg91JBma',
         image: { width: 500, height: 300, url: 'https://i.scdn.co/image/87bb4f8c14ec4432311a043e20f88e8a0943d75e' },
+        album_image: {
+          height: 300,
+          url: 'https://i.scdn.co/image/87bb4f8c14ec4432311a043e20f88e8a0943d75e',
+          width: 500,
+        },
+        artist_image: {
+          height: 300,
+          url: 'https://i.scdn.co/image/87bb4f8c14ec4432311a043e20f88e8a0943d75e',
+          width: 500,
+        },
+        song_image: {
+          height: 300,
+          url: 'https://i.scdn.co/image/87bb4f8c14ec4432311a043e20f88e8a0943d75e',
+          width: 500,
+        },
+        spotify_album_id: '0BTfBwYC5Mw5ezDg91JBma',
+        spotify_album_url: 'https://open.spotify.com/artist/0BTfBwYC5Mw5ezDg91JBma',
+        spotify_artist_id: '0BTfBwYC5Mw5ezDg91JBma',
+        spotify_artist_url: 'https://open.spotify.com/artist/0BTfBwYC5Mw5ezDg91JBma',
+        spotify_song_id: '0BTfBwYC5Mw5ezDg91JBma',
+        spotify_song_url: 'https://open.spotify.com/artist/0BTfBwYC5Mw5ezDg91JBma',
         image_id: 1,
       };
       return expect(spotify.getData('https://open.spotify.com/artist/0BTfBwYC5Mw5ezDg91JBma')).to.eventually.eql(result);
@@ -92,6 +151,27 @@ module.exports = () => {
         type: 'artist',
         spotify_url: 'https://open.spotify.com/artist/0BTfBwYC5Mw5ezDg91JBma',
         image: { width: 500, height: 300, url: 'https://i.scdn.co/image/87bb4f8c14ec4432311a043e20f88e8a0943d75e' },
+        album_image: {
+          height: 300,
+          url: 'https://i.scdn.co/image/87bb4f8c14ec4432311a043e20f88e8a0943d75e',
+          width: 500,
+        },
+        artist_image: {
+          height: 300,
+          url: 'https://i.scdn.co/image/87bb4f8c14ec4432311a043e20f88e8a0943d75e',
+          width: 500,
+        },
+        song_image: {
+          height: 300,
+          url: 'https://i.scdn.co/image/87bb4f8c14ec4432311a043e20f88e8a0943d75e',
+          width: 500,
+        },
+        spotify_album_id: '0BTfBwYC5Mw5ezDg91JBma',
+        spotify_album_url: 'https://open.spotify.com/artist/0BTfBwYC5Mw5ezDg91JBma',
+        spotify_artist_id: '0BTfBwYC5Mw5ezDg91JBma',
+        spotify_artist_url: 'https://open.spotify.com/artist/0BTfBwYC5Mw5ezDg91JBma',
+        spotify_song_id: '0BTfBwYC5Mw5ezDg91JBma',
+        spotify_song_url: 'https://open.spotify.com/artist/0BTfBwYC5Mw5ezDg91JBma',
         image_id: 1,
       };
       return expect(spotify.getData('spotify:artist:0BTfBwYC5Mw5ezDg91JBma')).to.eventually.eql(result);
@@ -171,19 +251,83 @@ module.exports = () => {
         song: 'Here Comes The Sun - Remastered 2009',
         type: 'song',
         image: { height: 300, url: 'https://i.scdn.co/image/a650b9dadd2b2d66ab9d7788abdcbfab45b2997d', width: 300 },
+        album_image: {
+          height: 300,
+          url: 'https://i.scdn.co/image/a650b9dadd2b2d66ab9d7788abdcbfab45b2997d',
+          width: 300,
+        },
+        artist_image: null,
+        song_image: {
+          height: 300,
+          url: 'https://i.scdn.co/image/a650b9dadd2b2d66ab9d7788abdcbfab45b2997d',
+          width: 300,
+        },
+        spotify_album_id: '2Pqkn9Dq2DFtdfkKAeqgMd',
+        spotify_album_url: 'https://open.spotify.com/album/2Pqkn9Dq2DFtdfkKAeqgMd',
+        spotify_artist_id: '3WrFJ7ztbogyGnTHbHJFl2',
+        spotify_artist_url: 'https://open.spotify.com/artist/3WrFJ7ztbogyGnTHbHJFl2',
+        spotify_song_id: '45yEy5WJywhJ3sDI28ajTm',
+        spotify_song_url: 'https://open.spotify.com/track/45yEy5WJywhJ3sDI28ajTm',
       };
       return expect(spotify.getInfo({ id: '45yEy5WJywhJ3sDI28ajTm', type: 'track' })).to.eventually.eql(result);
     });
 
     it('should retrieve album information given a valid album id', () => {
       const image = { height: 300, width: 300, url: 'https://i.scdn.co/image/72d45bffa9869ebf00fcbdda25eb664c819abe64' };
-      const result = { artist: 'The Beatles', album: 'Live At The Hollywood Bowl', type: 'album', image };
+      const result = {
+        artist: 'The Beatles',
+        album: 'Live At The Hollywood Bowl',
+        type: 'album',
+        image,
+        album_image: {
+          height: 300,
+          url: 'https://i.scdn.co/image/72d45bffa9869ebf00fcbdda25eb664c819abe64',
+          width: 300,
+        },
+        artist_image: null,
+        song_image: {
+          height: 300,
+          url: 'https://i.scdn.co/image/72d45bffa9869ebf00fcbdda25eb664c819abe64',
+          width: 300,
+        },
+        spotify_album_id: '5XfJmldgWzrc1AIdbBaVZn',
+        spotify_album_url: 'https://open.spotify.com/album/5XfJmldgWzrc1AIdbBaVZn',
+        spotify_artist_id: '3WrFJ7ztbogyGnTHbHJFl2',
+        spotify_artist_url: 'https://open.spotify.com/artist/3WrFJ7ztbogyGnTHbHJFl2',
+        spotify_song_id: '5XfJmldgWzrc1AIdbBaVZn',
+        spotify_song_url: 'https://open.spotify.com/album/5XfJmldgWzrc1AIdbBaVZn',
+      };
       return expect(spotify.getInfo({ type: 'album', id: '5XfJmldgWzrc1AIdbBaVZn' })).to.eventually.eql(result);
     });
 
     it('should retrieve artist information given a valid artist id', () => {
       const image = { height: 200, width: 200, url: 'https://i.scdn.co/image/7fe1a693adc52e274962f1c61d76ca9ccc62c191' };
-      const result = { artist: 'The Beatles', type: 'artist', image };
+      const result = {
+        artist: 'The Beatles',
+        type: 'artist',
+        image,
+        album_image: {
+          height: 200,
+          url: 'https://i.scdn.co/image/7fe1a693adc52e274962f1c61d76ca9ccc62c191',
+          width: 200,
+        },
+        artist_image: {
+          height: 200,
+          url: 'https://i.scdn.co/image/7fe1a693adc52e274962f1c61d76ca9ccc62c191',
+          width: 200,
+        },
+        song_image: {
+          height: 200,
+          url: 'https://i.scdn.co/image/7fe1a693adc52e274962f1c61d76ca9ccc62c191',
+          width: 200,
+        },
+        spotify_album_id: '3WrFJ7ztbogyGnTHbHJFl2',
+        spotify_album_url: 'https://open.spotify.com/artist/3WrFJ7ztbogyGnTHbHJFl2',
+        spotify_artist_id: '3WrFJ7ztbogyGnTHbHJFl2',
+        spotify_artist_url: 'https://open.spotify.com/artist/3WrFJ7ztbogyGnTHbHJFl2',
+        spotify_song_id: '3WrFJ7ztbogyGnTHbHJFl2',
+        spotify_song_url: 'https://open.spotify.com/artist/3WrFJ7ztbogyGnTHbHJFl2',
+      };
       return expect(spotify.getInfo({ type: 'artist', id: '3WrFJ7ztbogyGnTHbHJFl2' })).to.eventually.eql(result);
     });
 
