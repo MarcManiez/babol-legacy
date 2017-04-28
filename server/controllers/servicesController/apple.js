@@ -47,8 +47,20 @@ module.exports = {
           info.album = info.album.replace(/( - Single)$/, '');
         }
         if (response.trackName) info.song = response.trackName;
+        module.exports.gatherInfo(info, response);
         return info;
       });
+  },
+
+  // helper for .getInfo and .scan. Properties that need to be retrieved during any contact with the Apple API may be retrieved with this method.
+  gatherInfo(info, content) {
+    info.apple_artist_id = content.artistId.toString();
+    info.apple_album_id = content.collectionId ? content.collectionId.toString() : null;
+    info.apple_song_id = content.trackId ? content.trackId.toString() : null;
+    info.apple_artist_url = content.artistViewUrl ? content.artistViewUrl : content.artistLinkUrl;
+    info.apple_album_url = content.collectionViewUrl ? content.collectionViewUrl : null;
+    info.apple_song_url = content.trackViewUrl ? content.trackViewUrl : null;
+    return info;
   },
 
     // aggregates the tasks of getUrl, getId, getInfo and accumulates all the data in a single object.
@@ -61,7 +73,9 @@ module.exports = {
       data.apple_id = id;
       return module.exports.getInfo(id);
     })
-    .then(info => Object.assign(data, info));
+    .then((info) => {
+      return Object.assign(data, info);
+    });
   },
 
     // retrieves the permalink given a set of search criteria
@@ -113,6 +127,7 @@ module.exports = {
           artist: 'artistLinkUrl',
         };
         link = items[i][linkMap[type]];
+        module.exports.gatherInfo(parameters, items[i]);
       }
     }
     const score = highScore / coefficient;
