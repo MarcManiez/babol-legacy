@@ -84,4 +84,8 @@ module.exports = {
     if (!type) throw new Error('Slug must have type prefix');
     return `${type}${base64url.encode(crypto.randomBytes(6))}`;
   },
+
+  removeParensContent(string) {
+    return string.replace(/\([^)]*\)/g, '').trim();
+  },
 };
