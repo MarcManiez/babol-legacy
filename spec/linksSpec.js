@@ -67,12 +67,12 @@ describe('Links Controler', () => {
   describe('createLink', () => {
     // /!\ I am only testing this with songs for now. I have to hope this will also work for albums and artists
     it('should create a new entry with completely new artist, album, and song info', () => {
-      const info = { type: 'song', song: 'A la queue leu leu', artist: 'La Bande à Basile', album: 'Double d\'Or: La Bande à Basile' };
+      const info = { type: 'song', song: 'A la queue leu leu', artist: 'La Bande à Basile', album: 'Double d\'Or: La Bande à Basile', service: 'apple', apple_id: '566073435', apple_song_id: '566073435', apple_artist_id: '16685695', apple_album_id: '566073177' };
       return expect(linksController.createLink(info).then(song => song.attributes.name)).to.eventually.equals(info.song);
     });
 
     it('should create a new entry with pre-existing artist, album, and song info', () => {
-      const info = { type: 'song', song: 'Turkish Moonrise', artist: 'Aaron Goldberg', album: 'Turning Point' };
+      const info = { type: 'song', song: 'Turkish Moonrise', artist: 'Aaron Goldberg', album: 'Turning Point', service: 'apple', apple_id: '566073435', apple_song_id: '566073435', apple_artist_id: '16685695', apple_album_id: '566073177' };
       return expect(linksController.createLink(info).then(song => song.attributes.name)).to.eventually.equals(info.song);
     });
   });
@@ -115,7 +115,7 @@ describe('Links Controler', () => {
     });
   });
 
-  describe('post', () => {
+  describe.only('post', () => {
     it('should load a page with the correct content given a previously existing link', () => {
       return request(server).post('/api/link').send({ link: 'https://itun.es/us/nZ-wz?i=425454830' })
       .then(response => expect(response.body.name).to.equal('Fantasy in D'));
@@ -156,6 +156,20 @@ describe('Links Controler', () => {
       return expect(request(server).post('/api/link').send({ link: 'https://itun.es/us/djGbr?i=285606958' })
       .then(() => request(server).post('/api/link').send({ link: 'https://itun.es/us/djGbr?i=285606968' })))
       .to.eventually.have.deep.property('body.artist.name', 'Chick Corea, Stan Getz & Bill Evans');
+    });
+
+    it('should retrieve the correct album after having already stored a song from that album', function () {
+      this.timeout(10000);
+      return expect(request(server).post('/api/link').send({ link: 'https://itun.es/us/nCTuB?i=458413936' })
+      .then(() => request(server).post('/api/link').send({ link: 'https://itun.es/us/nCTuB' })))
+      .to.eventually.have.deep.property('body.apple_id', '458413837');
+    });
+
+    it('should retrieve the correct artist after having already stored an album from that artist', function () {
+      this.timeout(10000);
+      return expect(request(server).post('/api/link').send({ link: 'https://itun.es/us/nCTuB' })
+      .then(() => request(server).post('/api/link').send({ link: 'https://itun.es/us/5DPXd' })))
+      .to.eventually.have.deep.property('body.apple_id', '63346553');
     });
 
   // debugging
