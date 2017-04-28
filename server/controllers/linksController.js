@@ -66,22 +66,34 @@ const fetchRemainingData = module.exports.fetchRemainingData = (info, remainingS
 };
 
 const createLink = module.exports.createLink = (info) => {
-  const { type, song, album, artist, apple_id, apple_url, spotify_id, spotify_url, image_id } = info;
+  const {
+    service, type, song, album, artist, image_id,
+    apple_id, apple_artist_id, apple_album_id, apple_song_id, apple_url, apple_artist_url, apple_album_url, apple_song_url,
+    spotify_id, spotify_artist_id, spotify_album_id, spotify_song_id, spotify_url, spotify_artist_url, spotify_album_url, spotify_song_url,
+  } = info;
   const instances = [];
-  const createdInfo = { apple_id, apple_url, spotify_id, spotify_url, slug: helpers.createSlug('a') };
-  if (image_id) createdInfo.image_id = image_id;
-  return helpers.findOrCreate(Artist, { name: info.artist }, createdInfo)
+  const createdInfo = { apple_id: apple_artist_id, spotify_id: spotify_artist_id, apple_url, spotify_url, slug: helpers.createSlug('a'), name: artist };
+  if (image_id && type === 'artist') createdInfo.image_id = image_id;
+  return helpers.findOrCreate(Artist, { [`${service}_id`]: info[`${service}_artist_id`] }, createdInfo)
   .then((artistInstance) => {
     instances.push(artistInstance);
     createdInfo.slug = helpers.createSlug('c');
-    return info.album ? helpers.findOrCreate(Album, { name: info.album, artist_id: artistInstance.id }, createdInfo) : null;
+    createdInfo.apple_id = apple_album_id;
+    createdInfo.spotify_id = spotify_album_id;
+    createdInfo.artist_id = artistInstance.id;
+    createdInfo.image_id = image_id;
+    createdInfo.name = album;
+    return album ? helpers.findOrCreate(Album, { [`${service}_id`]: info[`${service}_album_id`] }, createdInfo) : null;
   })
   .then((albumInstance) => {
     instances.push(albumInstance);
     createdInfo.slug = helpers.createSlug('s');
-    const properties = { name: info.song, artist_id: instances[0].id };
+    createdInfo.apple_id = apple_id;
+    createdInfo.spotify_id = spotify_id;
+    createdInfo.name = song;
+    const properties = { name: song, artist_id: instances[0].id };
     if (albumInstance) properties.album_id = albumInstance.id;
-    return info.song ? helpers.findOrCreate(Song, properties, createdInfo) : null;
+    return song ? helpers.findOrCreate(Song, properties, createdInfo) : null;
   });
 };
 
