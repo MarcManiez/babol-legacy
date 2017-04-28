@@ -154,6 +154,7 @@ module.exports = {
       [`artist:${artist} album:${album}`],
       [`${album}`],
       [`${artist} ${album}`],
+      [`${helpers.removeParensContent(album)}`],
     ];
     const artistSearches = [
       [
