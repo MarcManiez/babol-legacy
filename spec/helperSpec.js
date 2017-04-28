@@ -68,7 +68,7 @@ describe('Helper methods', () => {
   });
 
   describe('removeParensContent', () => {
-    it.only('should remove the content in parenthesis within a string', () => {
+    it('should remove the content in parenthesis within a string', () => {
       return expect(helpers.removeParensContent('People Time (Live Copenhagen 1991)')).to.equal('People Time');
     });
   });
