@@ -56,8 +56,23 @@ module.exports = {
         info.album = response.album.name;
       }
       if (info.type === 'song') info.song = response.name;
+      module.exports.gatherInfo(info, response);
       return info;
     });
+  },
+
+  // helper for .getInfo and .scan. Properties that need to be retrieved during any contact with the Spotify API may be retrieved with this method.
+  gatherInfo(info, content) {
+    info.spotify_artist_id = content.artists ? content.artists[0].id : content.id;
+    info.spotify_album_id = content.album ? content.album.id : content.id;
+    info.spotify_song_id = content.id;
+    info.spotify_artist_url = content.artists ? content.artists[0].external_urls.spotify : content.external_urls.spotify;
+    info.spotify_album_url = content.album ? content.album.external_urls.spotify : content.external_urls.spotify;
+    info.spotify_song_url = content.external_urls.spotify;
+    info.artist_image = content.artists ? null : module.exports.selectImage(content.images); // we'll need to ge the image some other way.
+    info.album_image = module.exports.selectImage(content.album ? content.album.images : content.images);
+    info.song_image = info.album_image;
+    return info;
   },
 
   // retrieves Spotify link based on search criteria
@@ -112,6 +127,7 @@ module.exports = {
         highScore = totalScore;
         link = items[i].external_urls.spotify;
         info.image = module.exports.selectImage(items[i].images || items[i].album.images);
+        module.exports.gatherInfo(info, items[i]);
       }
     }
     const score = highScore / coefficient;
@@ -121,8 +137,10 @@ module.exports = {
 
   search({ song, album, artist, type }) {
     const songSearches = [
-      [`track:${JSON.stringify(song)} artist:${JSON.stringify(artist)} album:${JSON.stringify(album)}`],
       [
+        `track:${JSON.stringify(song)} artist:${JSON.stringify(artist)} album:${JSON.stringify(album)}`,
+        `${song}`,
+        `${album} ${artist}`,
         `track:${JSON.stringify(song)} album:${JSON.stringify(album)}`,
         `track:${JSON.stringify(song)} artist:${JSON.stringify(artist)}`,
       ],
@@ -131,8 +149,6 @@ module.exports = {
         `${song} ${artist}`,
         `${song} ${album}`,
       ],
-      [`${song}`],
-      [`${album} ${artist}`],
     ];
     const albumSearches = [
       [`artist:${artist} album:${album}`],
