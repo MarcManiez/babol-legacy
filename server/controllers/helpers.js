@@ -85,7 +85,8 @@ module.exports = {
     return `${type}${base64url.encode(crypto.randomBytes(6))}`;
   },
 
-  removeParensContent(string = '') {
+  removeParensContent(string) {
+    if (!string) return '';
     return string.replace(/\([^)]*\)/g, '').trim();
   },
 };
