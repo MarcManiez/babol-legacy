@@ -3,10 +3,8 @@ node_js:
   - "6"
 env:
   - PG_USER=postgres
-# services:
-#   - postgresql
-addons:
-  postgresql: '9.6'
+services:
+  - postgresql
 install:
   - npm install
 before_script:
