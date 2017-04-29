@@ -139,27 +139,28 @@ module.exports = {
     const songSearches = [
       [
         `track:${JSON.stringify(song)} artist:${JSON.stringify(artist)} album:${JSON.stringify(album)}`,
-        `${song}`,
-        `${album} ${artist}`,
+        JSON.stringify(song),
+        `${JSON.stringify(album)} ${JSON.stringify(artist)}`,
         `track:${JSON.stringify(song)} album:${JSON.stringify(album)}`,
         `track:${JSON.stringify(song)} artist:${JSON.stringify(artist)}`,
       ],
-      [`${song} ${artist} ${album}`],
+      [`${JSON.stringify(song)} ${JSON.stringify(artist)} ${JSON.stringify(album)}`],
       [
-        `${song} ${artist}`,
-        `${song} ${album}`,
+        `${JSON.stringify(song)} ${JSON.stringify(artist)}`,
+        `${JSON.stringify(song)} ${JSON.stringify(album)}`,
       ],
     ];
     const albumSearches = [
-      [`artist:${artist} album:${album}`],
-      [`${album}`],
-      [`${artist} ${album}`],
-      [`${helpers.removeParensContent(album)}`],
+      [`artist:${JSON.stringify(artist)} album:${JSON.stringify(album)}`],
+      [JSON.stringify(album)],
+      [`${JSON.stringify(artist)} ${JSON.stringify(album)}`],
+      [`${JSON.stringify(helpers.removeParensContent(album))}`],
+      [JSON.stringify(artist)],
     ];
     const artistSearches = [
       [
-        `artist:${artist}`,
-        `${artist}`,
+        `artist:${JSON.stringify(artist)}`,
+        JSON.stringify(artist),
       ],
     ];
     const spotifySearches = { song: songSearches, album: albumSearches, artist: artistSearches };
