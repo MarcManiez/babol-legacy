@@ -19,7 +19,7 @@ const app = {
     for (let i = 0; i < app.services.length; i += 1) {
       app.links[app.services[i]] = response[`${app.services[i]}_url`];
     }
-    app.content.image = response.image.url;
+    app.content.image = response.image ? response.image.url : null;
     if (type === 'artist') {
       app.content.artist = response.name;
     }
