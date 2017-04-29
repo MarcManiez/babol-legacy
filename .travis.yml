@@ -8,3 +8,5 @@ install:
   - knex migrate:latest
 script: 
   - npm test
+services:
+  - postgresql
