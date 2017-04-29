@@ -1,6 +1,8 @@
 language: node_js
 node_js:
   - "6"
+env:
+  - PG_USER=postgres
 install:
   - npm install
   - knex migrate:latest
@@ -8,3 +10,5 @@ script:
   - npm test
 services:
   - postgresql
+before_script:
+  - psql -c 'create database babol;' -U postgres
