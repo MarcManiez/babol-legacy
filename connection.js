@@ -10,7 +10,8 @@ case 'test':
 default:
   config = config.development;
 }
-
+console.log('DATABASE CONNECTION CONFIG OBJECT', config);
+console.log('NODE ENV', process.env.NODE_ENV);
 const knex = require('knex')(config);
 const bookshelf = require('bookshelf')(knex);
 
