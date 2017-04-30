@@ -76,7 +76,7 @@ module.exports = {
   },
 
   // retrieves Spotify link based on search criteria
-  getLink({ artist, album, song, type }) { // remove offset, add artist / song / album when possible
+  getLink({ artist, album, song, type }) {
     return module.exports.search(arguments[0])
     .then(response => module.exports.scan(response, arguments[0]));
   },
@@ -113,14 +113,16 @@ module.exports = {
     const items = response.data[dataType].items;
     for (let i = 0; i < items.length; i += 1) {
       let totalScore = 0;
-      const artistScore = helpers.isMatch(items[i].artists ? items[i].artists[0].name : items[i].name, artist);
+      const currentArtist = items[i].artists ? items[i].artists[0].name : items[i].name;
+      const artistScore = helpers.isMatch(helpers.normalize(currentArtist), helpers.normalize(artist));
       totalScore += artistScore;
       if (album) {
-        const albumScore = helpers.isMatch(items[i].album ? items[i].album.name : items[i].name, album);
+        const currentAlbum = items[i].album ? items[i].album.name : items[i].name;
+        const albumScore = helpers.isMatch(helpers.normalize(currentAlbum), helpers.normalize(album));
         totalScore += albumScore;
       }
       if (song) {
-        const songScore = helpers.isMatch(items[i].name, song);
+        const songScore = helpers.isMatch(helpers.normalize(items[i].name), helpers.normalize(song));
         totalScore += songScore;
       }
       if (totalScore > highScore) {
@@ -131,8 +133,9 @@ module.exports = {
       }
     }
     const score = highScore / coefficient;
-    if (score >= benchmark) return link;
-    throw new Error('No link was found whose score was high enough');
+    if (score >= benchmark) {
+      return link;
+    } throw new Error('No link was found whose score was high enough');
   },
 
   search({ song, album, artist, type }) {
