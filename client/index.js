@@ -32,7 +32,8 @@ const app = {
       app.content.album = response.album.name;
       app.content.song = response.name;
     }
-    document.getElementById('permalink').children[0].value = app.links.babol;
+    document.querySelector('#permalink input').value = app.links.babol;
+    return app.links.babol;
   },
   init() {
     app.getService();
