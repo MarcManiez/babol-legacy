@@ -48,7 +48,7 @@
 	width: 100%;
 	font-size: 100%;
 	background-color: rgba(249,248,248, 0.5);
-	color: #454545;
+	color: #1a1a1a;
 }
 
 #link::-webkit-input-placeholder {
@@ -90,7 +90,7 @@ color: #454545 !important;
 	font-size: 100%;
 	width: 90%;
 	background-color: rgba(249,248,248, 0);
-	
+	color: #1a1a1a;
 }
 
 #permalink button {
