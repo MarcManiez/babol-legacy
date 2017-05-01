@@ -36,7 +36,7 @@ module.exports = {
   },
 
   isMatch(string1, string2) {
-    if (!string1 || !string2 || typeof string1 !== 'string' || typeof string2 !== 'string') throw new Error('isMatch must take two strings');
+    if (!string1 || !string2 || typeof string1 !== 'string' || typeof string2 !== 'string') return 0;
     if (string1 === string2) return 1;
     string1 = string1.toLocaleLowerCase();
     string2 = string2.toLocaleLowerCase();
