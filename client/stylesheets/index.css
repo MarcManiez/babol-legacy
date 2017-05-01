@@ -1,3 +1,8 @@
+#search {
+	background-image: url("client/assets/background-home.jpeg");
+	color: white;
+}
+
 .flex-center {
 	flex-direction: column;
 	justify-content: space-around;
@@ -25,6 +30,10 @@
 	transform: translateY(-50%);
 }
 
+.service-selection * {
+	color: #454545;
+}
+
 .service-selection {
 	font-size: 2em;
 	transform: translateY(-250%);
@@ -37,6 +46,20 @@
 #link {
 	width: 100%;
 	font-size: 100%;
+	background-color: rgba(249,248,248, 0.5);
+	color: #454545;
+}
+
+#link::-webkit-input-placeholder {
+color: #454545 !important;
+}
+
+#link::-moz-placeholder {
+color: #454545 !important;  
+}
+
+#link:-ms-input-placeholder {  
+color: #454545 !important;  
 }
 
 #link:focus {
@@ -55,6 +78,7 @@
 	position: relative;
 	overflow: hidden;
 	width: 101.5%;
+	background-color: rgba(249,248,248, 0.5);
 }
 
 #permalink div {
@@ -65,7 +89,8 @@
 	border: none;
 	font-size: 100%;
 	width: 90%;
-	background-color: #f9f8f8;
+	background-color: rgba(249,248,248, 0);
+	
 }
 
 #permalink button {
