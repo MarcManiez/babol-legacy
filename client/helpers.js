@@ -23,11 +23,11 @@ helpers.copyToClipboard = (e) => {
   document.execCommand('copy');
 };
 
-helpers.translateLink = e => app.getLinks(e)
-.then((response) => {
-  app.update(response);
-  // form.addEventListener('submit', slide);
-});
+helpers.translateLink = (e) => {
+  document.querySelector('#permalink input').value = '';
+  return app.getLinks(e)
+  .then(response => app.update(response));
+};
 
 helpers.setServiceClip = function () {
   app.setService(this.name);
