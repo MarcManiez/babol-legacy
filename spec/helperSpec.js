@@ -66,4 +66,10 @@ describe('Helper methods', () => {
       expect(helpers.isMatch).to.throw(Error, 'isMatch must take two strings');
     });
   });
+
+  describe('removeParensContent', () => {
+    it('should remove the content in parenthesis within a string', () => {
+      return expect(helpers.removeParensContent('People Time (Live Copenhagen 1991)')).to.equal('People Time');
+    });
+  });
 });

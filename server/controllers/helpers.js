@@ -1,5 +1,6 @@
 const base64url = require('base64-url');
 const crypto = require('crypto');
+const normalize = require('normalize-strings');
 
 const Artist = require('../../database/models/artist');
 const Album = require('../../database/models/album');
@@ -83,5 +84,16 @@ module.exports = {
   createSlug(type) {
     if (!type) throw new Error('Slug must have type prefix');
     return `${type}${base64url.encode(crypto.randomBytes(6))}`;
+  },
+
+  removeParensContent(string) {
+    if (!string) return '';
+    return string.replace(/\([^)]*\)/g, '').trim();
+  },
+
+  normalize(string) {
+    string = module.exports.removeParensContent(string);
+    string = normalize(string);
+    return string;
   },
 };
