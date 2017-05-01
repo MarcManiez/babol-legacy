@@ -49,6 +49,10 @@
 	font-size: 100%;
 	background-color: rgba(249,248,248, 0.5);
 	color: #1a1a1a;
+	border-radius: 3px;
+	padding-left: 3px;
+	margin-bottom: 3px;
+	border: 1px solid #454545;
 }
 
 #link::-webkit-input-placeholder {
@@ -64,7 +68,8 @@ color: #454545 !important;
 }
 
 #link:focus {
-	outline: #4099FF solid 0.5px;
+	/*outline: #4099FF solid 0.5px;*/
+	outline: none;
 }
 
 .parent {
@@ -77,8 +82,13 @@ color: #454545 !important;
 
 #permalink {
 	width: 100%;
+	box-sizing: border-box;
 	background-color: rgba(249,248,248, 0.5);
 	visibility: hidden;
+	border-radius: 3px;
+	padding-left: 3px;
+	margin-bottom: 3px;
+	border: 1px solid #454545;
 }
 
 #permalink div {
