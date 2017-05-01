@@ -53,6 +53,18 @@ a:hover {
 	align-items: center;
 }
 
+/* ======== animations ========*/
+
+@keyframes fadein {
+	from { opacity: 0; }
+	to   { opacity: 1; }
+}
+
+.fade-in {
+	visibility: visible !important;
+	animation: fadein 1.25s;
+}
+
 /* ===== trans-view assets =====*/
 
 .copy-clipboard {

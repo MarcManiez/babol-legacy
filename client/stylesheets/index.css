@@ -78,6 +78,7 @@ color: #454545 !important;
 #permalink {
 	width: 100%;
 	background-color: rgba(249,248,248, 0.5);
+	visibility: hidden;
 }
 
 #permalink div {
@@ -105,15 +106,6 @@ color: #454545 !important;
 }
 
 /* ========= animation ===========*/
-
-.slide {
-	position: absolute;
-	left: -100px;
-	width: 100px;
-	height: 100px;
-	-webkit-animation: slide 0.5s forwards;
-	animation: slide 0.5s forwards;
-}
 
 /* ======== media query ==========*/
 

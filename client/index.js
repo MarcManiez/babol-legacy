@@ -33,6 +33,7 @@ const app = {
       app.content.song = response.name;
     }
     document.querySelector('#permalink input').value = app.links.babol;
+    document.querySelector('#permalink').classList.add('fade-in');
     return app.links.babol;
   },
   init() {
