@@ -72,6 +72,14 @@ color: #454545 !important;
 	animation:pulse 1s infinite alternate;
 }
 
+.loader {
+	position: absolute;
+	height: 40px;
+	left: 101%;
+	top: 0;
+	visibility: hidden;
+}
+
 .parent {
 	position: relative;
 }
