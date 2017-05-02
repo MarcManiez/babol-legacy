@@ -68,8 +68,8 @@ color: #454545 !important;
 }
 
 #link:focus {
-	/*outline: #4099FF solid 0.5px;*/
 	outline: none;
+	animation:pulse 1s infinite alternate;
 }
 
 .parent {
@@ -101,6 +101,7 @@ color: #454545 !important;
 	width: 90%;
 	background-color: rgba(249,248,248, 0);
 	color: #1a1a1a;
+	outline: none;
 }
 
 #permalink button {

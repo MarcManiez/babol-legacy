@@ -60,6 +60,11 @@ a:hover {
 	to   { opacity: 1; }
 }
 
+@keyframes pulse {
+  from { box-shadow:0px 0px 0px 0px #454545; }
+  to 	 { box-shadow:0px 0px 1.5px 0.5px #1a1a1a; }
+}
+
 .fade-in {
 	visibility: visible !important;
 	animation: fadein 1.25s;
