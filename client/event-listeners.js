@@ -1,11 +1,3 @@
-// const slide = function () {
-//   // debugger;
-//   const sliders = document.getElementById('permalink').children;
-//   for (const node of sliders) {
-//     node.className += ' slide';
-//   }
-// };
-
 if (document.getElementById('search')) {
   const form = document.querySelector('form');
   form.addEventListener('submit', helpers.translateLink);

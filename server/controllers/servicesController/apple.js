@@ -102,22 +102,10 @@ module.exports = {
       const artistScore = helpers.isMatch(items[i].artistName, artist);
       totalScore += artistScore * 1.5; // arbitrarily giving artist matches a higher corefficient to correct certain results
       if (album) {
-        let albumScore = 0;
-        try {
-          albumScore = helpers.isMatch(items[i].collectionName, album);
-          totalScore += albumScore;
-        } catch (error) {
-          console.warn(error);
-        }
+        totalScore += helpers.isMatch(items[i].collectionName, album);
       }
       if (song) {
-        let songScore = 0;
-        try {
-          songScore = helpers.isMatch(items[i].trackName, song);
-          totalScore += songScore;
-        } catch (error) {
-          console.warn(error);
-        }
+        totalScore += helpers.isMatch(items[i].trackName, song);
       }
       if (totalScore > highScore) {
         highScore = totalScore;

@@ -62,8 +62,8 @@ describe('Helper methods', () => {
       expect(helpers.isMatch('Art Blakey & The Jazz Messengers', 'Mingus Big Band')).to.be.below(0.8);
     });
 
-    it('should throw an error if the method doesn\'t take two strings', () => {
-      expect(helpers.isMatch).to.throw(Error, 'isMatch must take two strings');
+    it('should return 0 if the method doesn\'t take two strings', () => {
+      expect(helpers.isMatch(null, 'test')).to.equal(0);
     });
   });
 

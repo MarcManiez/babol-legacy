@@ -11,6 +11,7 @@ const app = {
   getLinks(event) {
     event.preventDefault();
     const link = document.getElementById('link').value;
+    document.querySelector('.loader').classList.add('fade-in');
     return helpers.httpRequest('POST', `${window.location.href}api/link/`, { body: `link=${link}` });
   },
   update(response) {
@@ -32,7 +33,10 @@ const app = {
       app.content.album = response.album.name;
       app.content.song = response.name;
     }
-    document.getElementById('permalink').children[0].value = app.links.babol;
+    document.querySelector('#permalink input').value = app.links.babol;
+    document.querySelector('#permalink').classList.add('fade-in');
+    document.querySelector('.loader').classList.remove('fade-in');
+    return app.links.babol;
   },
   init() {
     app.getService();
