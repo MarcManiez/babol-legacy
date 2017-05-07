@@ -31,7 +31,7 @@
 }
 
 .service-selection * {
-	color: #454545;
+	color: var(--border-color);
 }
 
 .service-selection {
@@ -47,24 +47,24 @@
 	box-sizing: border-box;
 	width: 100%;
 	font-size: 100%;
-	background-color: rgba(249,248,248, 0.5);
-	color: #1a1a1a;
+	background-color: var(--txt-box-background);
+	color: var(--txt-box-color);
 	border-radius: 3px;
 	padding-left: 3px;
 	margin-bottom: 3px;
-	border: 1px solid #454545;
+	border: 1px solid var(--border-color);
 }
 
 #link::-webkit-input-placeholder {
-color: #454545 !important;
+color: var(--border-color) !important;
 }
 
 #link::-moz-placeholder {
-color: #454545 !important;  
+color: var(--border-color) !important;  
 }
 
 #link:-ms-input-placeholder {  
-color: #454545 !important;  
+color: var(--border-color) !important;  
 }
 
 #link:focus {
@@ -91,12 +91,12 @@ color: #454545 !important;
 #permalink {
 	width: 100%;
 	box-sizing: border-box;
-	background-color: rgba(249,248,248, 0.5);
+	background-color: var(--txt-box-background);
 	visibility: hidden;
 	border-radius: 3px;
 	padding-left: 3px;
 	margin-bottom: 3px;
-	border: 1px solid #454545;
+	border: 1px solid var(--border-color);
 }
 
 #permalink div {
@@ -108,7 +108,7 @@ color: #454545 !important;
 	font-size: 100%;
 	width: 90%;
 	background-color: rgba(249,248,248, 0);
-	color: #1a1a1a;
+	color: var(--txt-box-color);
 	outline: none;
 }
 
