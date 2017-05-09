@@ -12,6 +12,7 @@ module.exports = {
   withRelatedSwitch: { artist: ['image'], album: ['artist', 'image'], song: ['artist', 'album', 'image'] },
   slugSwitch: { artist: 'a', album: 'c', song: 's' },
   typeSwitch: { a: 'artist', c: 'album', s: 'song' },
+  sameOrigins: ['localhost', 'babol.herokuap', 'baboltest.herokuapp'],
 
   formatLink: link => JSON.parse(JSON.stringify(link)), // TODO: think of a more efficient way to do this, eh?
 
@@ -95,5 +96,10 @@ module.exports = {
     string = module.exports.removeParensContent(string);
     string = normalize(string);
     return string;
+  },
+
+  hasSameOrigin(req) {
+    const host = req.get('host');
+    return module.exports.sameOrigins.some(origin => host.includes(origin));
   },
 };
