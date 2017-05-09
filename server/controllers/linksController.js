@@ -112,7 +112,9 @@ const findOrCreate = module.exports.findOrCreate = (info) => {
 const post = module.exports.post = (req, res) => {
   return getInfo(req.body.link)
   .then(info => findOrCreate(info))
-  .then(linkInstance => res.json(linkInstance))
+  .then((link) => {
+    res.redirect(`/link/${link.attributes.slug}`);
+  })
   .catch((err) => {
     console.log('Error in linkController.post:', err);
     res.status(404).render('404');
@@ -124,7 +126,7 @@ const get = module.exports.get = (req, res) => {
   return searchbySlug(slug)
   .then((link) => {
     const service = req.get('Cookie');
-    if (service && service.split('=')[0] === 'service' && helpers.services.includes(service.split('=')[1])) {
+    if (service && service.split('=')[0] === 'service' && helpers.services.includes(service.split('=')[1]) && !helpers.hasSameOrigin(req)) {
       res.redirect(link.attributes[`${service.split('=')[1]}_url`]);
     } else {
       link.attributes.url = req.url;

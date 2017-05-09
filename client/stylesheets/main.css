@@ -5,6 +5,9 @@ body {
 	font-family: Lato, Open Sans, Helvetica Neue, Helvetica, Arial, sans-serif;
 	font-weight: 300;
 	background-color: #f9f8f8;
+	--txt-box-background: rgba(249,248,248, 0.5);
+	--txt-box-color: #1a1a1a;
+	--border-color: #454545;
 }
 
 main {
@@ -95,9 +98,13 @@ nav {
 	background-color: rgba(255,255,255,1);
 }
 
-nav .logo {
+.logo {
 	display: inline-block;
 	font-size: 7vh;
+}
+
+.logo > a:hover {
+	text-decoration: none;
 }
 
 .service-selection {
