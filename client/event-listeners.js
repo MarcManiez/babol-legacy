@@ -1,7 +1,4 @@
 if (document.getElementById('search')) {
-  const form = document.querySelector('form');
-  form.addEventListener('submit', helpers.translateLink);
-
   const copy = document.getElementById('permalink').children[1];
   copy.onclick = helpers.copyToClipboard;
 
