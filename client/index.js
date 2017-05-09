@@ -8,7 +8,7 @@ const app = {
   setService(service) {
     document.cookie = `service=${service}; path=/ ; ${!service ? ' expires=Thu, 01 Jan 1970 00:00:01 GMT;' : ''}`;
   },
-  getLinks(event) {
+  getLinks(event) { // currently unused. Keeping this handy in case we decide to stop using the form's action attribute.
     event.preventDefault();
     const link = document.getElementById('link').value;
     document.querySelector('.loader').classList.add('fade-in');
